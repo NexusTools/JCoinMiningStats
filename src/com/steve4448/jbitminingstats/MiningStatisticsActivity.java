@@ -9,6 +9,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -27,33 +28,26 @@ public class MiningStatisticsActivity extends Activity {
         String content = "";
         Toast.makeText(getBaseContext(), "Connecting to JSON supplier...", Toast.LENGTH_SHORT).show();
         try {
-        	HttpEntity ent = client.execute(new HttpPost("http://api.geonames.org/postalCodeSearchJSON?formatted=true&postalcode=9791&maxRows=10&username=chris&style=full")).getEntity();
+        	HttpEntity ent = client.execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
         	InputStreamReader reader = new InputStreamReader(ent.getContent());
-        	int len = 0;
-        	int curLen = 0;
         	char[] data = new char[512];
-        	while((curLen=reader.read(data)) != -1) {
-        		String constructedString = new String(data);
-        		sb.append(constructedString);
-        		len += curLen;
-        		Log.i("MiningStatisticsActivity", "Read: " + curLen + ",\n" + constructedString);
-        	}
-        	Log.i("MiningStatisticsActivity", "Content length: " + ent.getContentLength() + ", fetched length: " + sb.length() + ". " + len);
-        	Toast.makeText(getBaseContext(), "Obtained data!", Toast.LENGTH_SHORT).show();
+        	int read = -1;
+        	while((read = reader.read(data)) != -1)
+        		sb.append(data, 0, read);
+        	content = sb.toString();
+        	Toast.makeText(getBaseContext(), "Obtained " + content.length() + " bytes of data!", Toast.LENGTH_SHORT).show();
+        	try {
+            	Toast.makeText(getBaseContext(), "Parsing JSON content...", Toast.LENGTH_SHORT).show();
+    			JSONObject jsonContent = new JSONObject(content);
+    			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
+    		} catch (JSONException e) {
+    			e.printStackTrace();
+    			Toast.makeText(getBaseContext(), "Error parsing JSON content!", Toast.LENGTH_LONG).show();
+    		}
         } catch(Exception e) {
 			e.printStackTrace();
 			Toast.makeText(getBaseContext(), "Error recieving data!", Toast.LENGTH_LONG).show();
 		}
-        content = sb.toString();
-        try {
-        	Toast.makeText(getBaseContext(), "Parsing JSON content...", Toast.LENGTH_SHORT).show();
-			JSONArray jsonContent = new JSONArray(content);
-			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Toast.makeText(getBaseContext(), "Error parsing JSON content!", Toast.LENGTH_LONG).show();
-		}
-        Log.i("MiningStatisticsActivity", content);
     }
 
 
