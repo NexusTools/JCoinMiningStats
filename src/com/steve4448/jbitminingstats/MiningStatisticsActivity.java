@@ -4,8 +4,9 @@ import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -21,17 +22,23 @@ public class MiningStatisticsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mining_statistics);
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client = new DefaultHttpClient(new BasicHttpParams());
         StringBuffer sb = new StringBuffer();
         String content = "";
         Toast.makeText(getBaseContext(), "Connecting to JSON supplier...", Toast.LENGTH_SHORT).show();
         try {
-        	HttpEntity ent = client.execute(new HttpGet("https://mining.bitcoin.cz/stats/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
+        	HttpEntity ent = client.execute(new HttpPost("http://api.geonames.org/postalCodeSearchJSON?formatted=true&postalcode=9791&maxRows=10&username=chris&style=full")).getEntity();
         	InputStreamReader reader = new InputStreamReader(ent.getContent());
-        	char[] data = new char[1024];
-        	while(reader.read(data) != -1)
-        		sb.append(data);
-        	Log.i("MiningStatisticsActivity", "Content length: " + ent.getContentLength() + ", fetched length: " + sb.length() + ".");
+        	int len = 0;
+        	int curLen = 0;
+        	char[] data = new char[512];
+        	while((curLen=reader.read(data)) != -1) {
+        		String constructedString = new String(data);
+        		sb.append(constructedString);
+        		len += curLen;
+        		Log.i("MiningStatisticsActivity", "Read: " + curLen + ",\n" + constructedString);
+        	}
+        	Log.i("MiningStatisticsActivity", "Content length: " + ent.getContentLength() + ", fetched length: " + sb.length() + ". " + len);
         	Toast.makeText(getBaseContext(), "Obtained data!", Toast.LENGTH_SHORT).show();
         } catch(Exception e) {
 			e.printStackTrace();
@@ -41,10 +48,10 @@ public class MiningStatisticsActivity extends Activity {
         try {
         	Toast.makeText(getBaseContext(), "Parsing JSON content...", Toast.LENGTH_SHORT).show();
 			JSONArray jsonContent = new JSONArray(content);
-			Log.i("MiningStatisticsActivity", jsonContent.getJSONObject(0).toString());
 			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
 		} catch (JSONException e) {
 			e.printStackTrace();
+			Toast.makeText(getBaseContext(), "Error parsing JSON content!", Toast.LENGTH_LONG).show();
 		}
         Log.i("MiningStatisticsActivity", content);
     }
