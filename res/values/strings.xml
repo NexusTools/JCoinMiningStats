@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">JBitMiningStats</string>
+    <string name="action_settings">Settings</string>
+    <string name="confirmed_reward">Confirmed Reward:</string>
+    <string name="unconfirmed_reward">Unconfirmed Reward:</string>
+    <string name="number_stub">N/A</string>
+    <string name="estimated_reward">Estimated Reward:</string>
+    <string name="total_potential_reward">Total Potential Reward:</string>
+    <string name="worker_rate">Worker Rate:</string>
+    <string name="block_confirmations_remaining">Block Confirmations Remaining</string>
+    <string name="worker_list_title">Workers:</string>
+    <string name="worker_table_header_name">Name</string>
+    <string name="worker_table_header_rate">Rate</string>
+    <string name="worker_table_header_share">Share</string>
+    <string name="worker_table_header_score">Score</string>
+
+</resources>
