@@ -17,7 +17,6 @@
 
         <TableRow>
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
@@ -25,7 +24,6 @@
                 android:text="@string/worker_table_header_name" />
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
@@ -33,7 +31,6 @@
                 android:text="@string/worker_table_header_rate" />
 
             <TextView
-                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
@@ -41,7 +38,6 @@
                 android:text="@string/worker_table_header_share" />
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
@@ -55,9 +51,11 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
+                android:id="@+id/worker_table_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
             </LinearLayout>
         </ScrollView>
 

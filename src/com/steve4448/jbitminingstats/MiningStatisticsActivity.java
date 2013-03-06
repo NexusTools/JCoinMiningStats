@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,11 +45,12 @@ public class MiningStatisticsActivity extends Activity {
     			JSONObject jsonContent = new JSONObject(content);
     			JSONArray workerNames = jsonContent.getJSONObject("workers").names();
     			JSONObject workerList = jsonContent.getJSONObject("workers");
-    			TableLayout workerTable = (TableLayout)findViewById(R.id.worker_table);
+    			LinearLayout workerTable = (LinearLayout)findViewById(R.id.worker_table_layout);
     			for(int i = 0; i < workerNames.length(); i++) {
     				TableRow workerRow = new TableRow(this);
     				
     				JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
+    				
     				TextView workerName = new TextView(this);
     				workerName.setText(workerNames.getString(i));
     				workerRow.addView(workerName);
