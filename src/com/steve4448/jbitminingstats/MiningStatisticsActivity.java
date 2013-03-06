@@ -6,17 +6,16 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,12 +26,11 @@ public class MiningStatisticsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mining_statistics);
-        HttpClient client = new DefaultHttpClient(new BasicHttpParams());
-        StringBuffer sb = new StringBuffer();
-        String content = "";
-        Toast.makeText(getBaseContext(), "Connecting to JSON supplier...", Toast.LENGTH_SHORT).show();
         try {
-        	HttpEntity ent = client.execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
+        	StringBuffer sb = new StringBuffer();
+        	String content = "";
+        	Toast.makeText(getBaseContext(), "Connecting to JSON supplier...", Toast.LENGTH_SHORT).show();
+        	HttpEntity ent = new DefaultHttpClient().execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
         	InputStreamReader reader = new InputStreamReader(ent.getContent());
         	char[] data = new char[512];
         	int read = -1;
@@ -51,6 +49,10 @@ public class MiningStatisticsActivity extends Activity {
     				
     				JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
     				
+    				ImageView workerStatus = new ImageView(this);
+    				workerStatus.setImageResource(worker.getBoolean("alive") ? R.drawable.worker_online : R.drawable.worker_offline);
+    				workerRow.addView(workerStatus);
+    				
     				TextView workerName = new TextView(this);
     				workerName.setText(workerNames.getString(i));
     				workerRow.addView(workerName);
@@ -59,13 +61,16 @@ public class MiningStatisticsActivity extends Activity {
     				workerRate.setText(worker.getString("hashrate") + "mh/s");
     				workerRow.addView(workerRate);
     				
-    				TextView workerAlive = new TextView(this);
-    				workerAlive.setText(worker.getString("alive"));
-    				workerRow.addView(workerAlive);
+    				TextView workerShares = new TextView(this);
+    				workerShares.setText(worker.getString("shares"));
+    				workerRow.addView(workerShares);
     				
     				workerTable.addView(workerRow);
     			}
-    			
+    			((TextView)findViewById(R.id.number_val_confirmed_reward)).setText("" + jsonContent.getDouble("confirmed_reward"));
+    			((TextView)findViewById(R.id.number_val_uncomfirmed_reward)).setText("" + jsonContent.getDouble("unconfirmed_reward"));
+    			((TextView)findViewById(R.id.number_val_estimated_reward)).setText("" + jsonContent.getDouble("estimated_reward"));
+    			((TextView)findViewById(R.id.number_val_potential_reward)).setText("" + (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward")));
     			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
     		} catch (JSONException e) {
     			e.printStackTrace();
@@ -80,7 +85,6 @@ public class MiningStatisticsActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.mining_statistics, menu);
         return true;
     }
