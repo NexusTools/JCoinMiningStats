@@ -3,7 +3,6 @@ package com.steve4448.jbitminingstats;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -15,7 +14,6 @@ import android.app.Activity;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +24,7 @@ public class MiningStatisticsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mining_statistics);
+        
         try {
         	StringBuffer sb = new StringBuffer();
         	String content = "";
@@ -67,10 +66,11 @@ public class MiningStatisticsActivity extends Activity {
     				
     				workerTable.addView(workerRow);
     			}
-    			((TextView)findViewById(R.id.number_val_confirmed_reward)).setText("" + jsonContent.getDouble("confirmed_reward"));
-    			((TextView)findViewById(R.id.number_val_uncomfirmed_reward)).setText("" + jsonContent.getDouble("unconfirmed_reward"));
-    			((TextView)findViewById(R.id.number_val_estimated_reward)).setText("" + jsonContent.getDouble("estimated_reward"));
-    			((TextView)findViewById(R.id.number_val_potential_reward)).setText("" + (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward")));
+    			((TextView)findViewById(R.id.number_val_confirmed_reward)).setText(String.format("%.5f", jsonContent.getDouble("confirmed_reward")));
+    			((TextView)findViewById(R.id.number_val_confirmed_namecoin_reward)).setText(String.format("%.5f", jsonContent.getDouble("confirmed_nmc_reward")));
+    			((TextView)findViewById(R.id.number_val_uncomfirmed_reward)).setText(String.format("%.5f", jsonContent.getDouble("unconfirmed_reward")));
+    			((TextView)findViewById(R.id.number_val_estimated_reward)).setText(String.format("%.5f", jsonContent.getDouble("estimated_reward")));
+    			((TextView)findViewById(R.id.number_val_potential_reward)).setText(String.format("%.5f", (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward"))));
     			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
     		} catch (JSONException e) {
     			e.printStackTrace();

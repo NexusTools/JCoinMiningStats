@@ -3,7 +3,9 @@
 
     <string name="app_name">JBitMiningStats</string>
     <string name="action_settings">Settings</string>
+    <string name="action_more_statistics">More Statistics</string>
     <string name="confirmed_reward">Confirmed Reward:</string>
+    <string name="confirmed_namecoin_reward">Confirmed Namecoin Reward:</string>
     <string name="unconfirmed_reward">Unconfirmed Reward:</string>
     <string name="number_stub">N/A</string>
     <string name="estimated_reward">Estimated Reward:</string>

@@ -53,9 +53,7 @@
             <LinearLayout
                 android:id="@+id/worker_table_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
+                android:layout_height="wrap_content" >
             </LinearLayout>
         </ScrollView>
 
@@ -65,36 +63,9 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/confirmed_namecoin_reward_label"
         android:layout_marginTop="6dp"
-        android:layout_below="@+id/total_potential_reward_label"
         android:text="@string/worker_list_title" />
-
-    <TextView
-        android:id="@+id/total_potential_reward_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/estimated_reward_label"
-        android:text="@string/total_potential_reward" />
-
-    <TextView
-        android:id="@+id/estimated_reward_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/unconfirmed_reward_label"
-        android:text="@string/estimated_reward" />
-
-    <TextView
-        android:id="@+id/unconfirmed_reward_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="6dp"
-        android:layout_below="@+id/confirmed_reward_label"
-        android:text="@string/unconfirmed_reward" />
 
     <TextView
         android:id="@+id/confirmed_reward_label"
@@ -106,41 +77,30 @@
         android:text="@string/confirmed_reward" />
 
     <TextView
-        android:id="@+id/number_val_estimated_reward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/estimated_reward_label"
-        android:layout_alignBottom="@+id/estimated_reward_label"
-        android:layout_alignParentRight="true"
-        android:text="@string/number_stub"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/number_val_uncomfirmed_reward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/unconfirmed_reward_label"
-        android:layout_alignBottom="@+id/unconfirmed_reward_label"
-        android:layout_alignParentRight="true"
-        android:text="@string/number_stub"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/number_val_potential_reward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/total_potential_reward_label"
-        android:layout_alignBottom="@+id/total_potential_reward_label"
-        android:layout_alignParentRight="true"
-        android:text="@string/number_stub"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
         android:id="@+id/number_val_confirmed_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/confirmed_reward_label"
         android:layout_alignBottom="@+id/confirmed_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/number_stub"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/confirmed_namecoin_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/confirmed_reward_label"
+        android:layout_marginTop="6dp"
+        android:text="@string/confirmed_namecoin_reward" />
+
+    <TextView
+        android:id="@+id/number_val_confirmed_namecoin_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/confirmed_namecoin_reward_label"
+        android:layout_alignBottom="@+id/confirmed_namecoin_reward_label"
         android:layout_alignParentRight="true"
         android:text="@string/number_stub"
         android:textAppearance="?android:attr/textAppearanceLarge" />
