@@ -15,6 +15,9 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
@@ -39,6 +42,28 @@ public class MiningStatisticsActivity extends Activity {
         	try {
             	Toast.makeText(getBaseContext(), "Parsing JSON content...", Toast.LENGTH_SHORT).show();
     			JSONObject jsonContent = new JSONObject(content);
+    			JSONArray workerNames = jsonContent.getJSONObject("workers").names();
+    			JSONObject workerList = jsonContent.getJSONObject("workers");
+    			TableLayout workerTable = (TableLayout)findViewById(R.id.worker_table);
+    			for(int i = 0; i < workerNames.length(); i++) {
+    				TableRow workerRow = new TableRow(this);
+    				
+    				JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
+    				TextView workerName = new TextView(this);
+    				workerName.setText(workerNames.getString(i));
+    				workerRow.addView(workerName);
+    				
+    				TextView workerRate = new TextView(this);
+    				workerRate.setText(worker.getString("hashrate") + "mh/s");
+    				workerRow.addView(workerRate);
+    				
+    				TextView workerAlive = new TextView(this);
+    				workerAlive.setText(worker.getString("alive"));
+    				workerRow.addView(workerAlive);
+    				
+    				workerTable.addView(workerRow);
+    			}
+    			
     			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
     		} catch (JSONException e) {
     			e.printStackTrace();
