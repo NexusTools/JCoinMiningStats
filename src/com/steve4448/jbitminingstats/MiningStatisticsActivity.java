@@ -11,7 +11,9 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
@@ -68,9 +70,9 @@ public class MiningStatisticsActivity extends Activity {
     			}
     			((TextView)findViewById(R.id.number_val_confirmed_reward)).setText(String.format("%.5f", jsonContent.getDouble("confirmed_reward")));
     			((TextView)findViewById(R.id.number_val_confirmed_namecoin_reward)).setText(String.format("%.5f", jsonContent.getDouble("confirmed_nmc_reward")));
-    			((TextView)findViewById(R.id.number_val_uncomfirmed_reward)).setText(String.format("%.5f", jsonContent.getDouble("unconfirmed_reward")));
-    			((TextView)findViewById(R.id.number_val_estimated_reward)).setText(String.format("%.5f", jsonContent.getDouble("estimated_reward")));
-    			((TextView)findViewById(R.id.number_val_potential_reward)).setText(String.format("%.5f", (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward"))));
+    			//((TextView)findViewById(R.id.number_val_uncomfirmed_reward)).setText(String.format("%.5f", jsonContent.getDouble("unconfirmed_reward")));
+    			//((TextView)findViewById(R.id.number_val_estimated_reward)).setText(String.format("%.5f", jsonContent.getDouble("estimated_reward")));
+    			//((TextView)findViewById(R.id.number_val_potential_reward)).setText(String.format("%.5f", (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward"))));
     			Toast.makeText(getBaseContext(), "Parsed!", Toast.LENGTH_SHORT).show();
     		} catch (JSONException e) {
     			e.printStackTrace();
@@ -87,6 +89,15 @@ public class MiningStatisticsActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mining_statistics, menu);
         return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	if(item.getItemId() == R.id.action_more_statistics) {
+    		startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
+    		return true;
+    	}
+    	return false;
     }
     
 }
