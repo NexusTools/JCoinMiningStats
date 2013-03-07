@@ -29,7 +29,7 @@ public class MiningStatisticsActivity extends Activity {
 	public NumberVal confirmedNamecoinReward;
 	public boolean hasInitialized = false;
 	public static Thread workerThread;
-	public Handler handler = new Handler();
+	public static Handler handler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +110,10 @@ public class MiningStatisticsActivity extends Activity {
 						});
 						Thread.sleep(5000);
 					}
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 		workerThread.start();
