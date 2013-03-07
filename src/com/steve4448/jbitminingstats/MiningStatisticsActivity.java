@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -25,9 +24,9 @@ import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
 	public LinearLayout workerTable;
-	public TextView workerRate;
-	public TextView confirmedReward;
-	public TextView confirmedNamecoinReward;
+	public NumberVal workerRate;
+	public NumberVal confirmedReward;
+	public NumberVal confirmedNamecoinReward;
 	public boolean hasInitialized = false;
 	public static Thread workerThread;
 	public Handler handler = new Handler();
@@ -36,9 +35,11 @@ public class MiningStatisticsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
-		workerRate = ((TextView)findViewById(R.id.number_val_worker_hash_rate));
-		confirmedReward = ((TextView)findViewById(R.id.number_val_confirmed_reward));
-		confirmedNamecoinReward = ((TextView)findViewById(R.id.number_val_confirmed_namecoin_reward));
+		workerRate = ((NumberVal)findViewById(R.id.number_val_worker_hash_rate));
+		confirmedReward = ((NumberVal)findViewById(R.id.number_val_confirmed_reward));
+		confirmedReward.setFormatting("%.5f");
+		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
+		confirmedNamecoinReward.setFormatting("%.5f");
 		workerTable = ((LinearLayout)findViewById(R.id.worker_table_layout));
 		if(savedInstanceState == null || !savedInstanceState.getBoolean("hasInitialized"))
 			workerThread = new Thread() {
@@ -86,17 +87,16 @@ public class MiningStatisticsActivity extends Activity {
 											workerRow.addView(workerShares);
 
 											workerTable.addView(workerRow);
-										}
-										workerRate.setText("" + jsonContent.getDouble("hashrate"));
-										confirmedReward.setText(String.format("%.5f", jsonContent.getDouble("confirmed_reward")));
-										confirmedNamecoinReward.setText(String.format("%.5f", jsonContent.getDouble("confirmed_nmc_reward")));
+										}										
+										workerRate.setValue(jsonContent.getDouble("hashrate"));
+										confirmedReward.setValue(jsonContent.getDouble("confirmed_reward"));
+										confirmedNamecoinReward.setValue(jsonContent.getDouble("confirmed_nmc_reward"));
 										if(MoreMiningStatisticsActivity.active) {
-											MoreMiningStatisticsActivity.unconfirmedReward.setText(String.format("%.5f", jsonContent.getDouble("unconfirmed_reward")));
-											MoreMiningStatisticsActivity.estimatedReward.setText(String.format("%.5f", jsonContent.getDouble("estimated_reward")));
-											MoreMiningStatisticsActivity.potentialReward.setText(String.format("%.5f", (jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward"))));
+											MoreMiningStatisticsActivity.unconfirmedReward.setValue(jsonContent.getDouble("unconfirmed_reward"));
+											MoreMiningStatisticsActivity.estimatedReward.setValue(jsonContent.getDouble("estimated_reward"));
+											MoreMiningStatisticsActivity.potentialReward.setValue((jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward")));
 										}
 										hasInitialized = true;
-										Log.i("La", "la.");
 										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 									} catch (JSONException e) {
 										e.printStackTrace();

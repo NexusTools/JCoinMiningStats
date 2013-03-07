@@ -67,7 +67,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/worker_list_title" />
 
-    <TextView
+    <com.steve4448.jbitminingstats.NumberVal
         android:id="@+id/number_val_confirmed_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/confirmed_namecoin_reward" />
 
-    <TextView
+    <com.steve4448.jbitminingstats.NumberVal
         android:id="@+id/number_val_confirmed_namecoin_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/worker_rate" />
 
-    <TextView
+    <com.steve4448.jbitminingstats.NumberVal
         android:id="@+id/number_val_worker_hash_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
