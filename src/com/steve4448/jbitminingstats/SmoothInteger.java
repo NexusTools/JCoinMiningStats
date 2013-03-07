@@ -1,7 +1,7 @@
 package com.steve4448.jbitminingstats;
 /**
  * 
- * @author anonymous
+ * @author Ktaeyln
  */
 public class SmoothInteger {
 
