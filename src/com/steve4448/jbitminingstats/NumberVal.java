@@ -1,16 +1,13 @@
 package com.steve4448.jbitminingstats;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 public class NumberVal extends TextView {
 	private double val = 0;
 	private String formatting;
-	public SmoothInteger curColorRed = new SmoothInteger(0, 6);
-	public SmoothInteger curColorGreen = new SmoothInteger(0, 6);
-	public SmoothInteger curColorBlue = new SmoothInteger(0, 6);
+	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 6);
 	public NumberVal(Context context) {super(context);}
 	public NumberVal(Context context, AttributeSet set) {super(context, set);}
 	public NumberVal(Context context, AttributeSet set, int defStyle) {super(context, set, defStyle);}
@@ -18,26 +15,26 @@ public class NumberVal extends TextView {
 	
 	public void setValue(double val) {
 		if(this.val > val)
-			curColorRed.set(255);
+			curColor.set(255, 0, 0);
 		else if(this.val < val)
-			curColorGreen.set(255);
-		setBackgroundColor(Color.rgb(curColorRed.value(), curColorGreen.value(), curColorBlue.value()));
+			curColor.set(0, 255, 0);
+		setBackgroundColor(curColor.value());
 		this.val = val;
+		if(transition != null && transition.isAlive())
+			transition.interrupt();
 		transition = new Thread() {
 			@Override
 			public void run() {
 				try {
-				while(!(curColorRed.done() && curColorGreen.done() && curColorBlue.done())) {
+				while(!curColor.done()) {
 					MiningStatisticsActivity.handler.post(new Runnable() {
 						@Override
 						public void run() {
-							setBackgroundColor(Color.rgb(curColorRed.value(), curColorGreen.value(), curColorBlue.value()));
+							setBackgroundColor(curColor.value());
 						}
 					});
-					curColorRed.process();
-					curColorGreen.process();
-					curColorBlue.process();
-					Thread.sleep(1000/30);
+					curColor.process();
+					Thread.sleep(1000/20);
 				}
 				} catch(InterruptedException e) {}
 				catch(Exception e) {
