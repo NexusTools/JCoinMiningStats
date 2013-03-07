@@ -26,20 +26,22 @@ public final class R {
         public static final int worker_online=0x7f020002;
     }
     public static final class id {
-        public static final int action_back=0x7f080010;
-        public static final int action_more_statistics=0x7f08000f;
-        public static final int action_settings=0x7f08000e;
+        public static final int action_back=0x7f080012;
+        public static final int action_more_statistics=0x7f080011;
+        public static final int action_settings=0x7f080010;
         public static final int confirmed_namecoin_reward_label=0x7f080004;
-        public static final int confirmed_reward_label=0x7f080005;
-        public static final int estimated_reward_label=0x7f08000c;
+        public static final int confirmed_reward_label=0x7f080006;
+        public static final int estimated_reward_label=0x7f08000e;
         public static final int number_val_confirmed_namecoin_reward=0x7f080007;
-        public static final int number_val_confirmed_reward=0x7f080006;
-        public static final int number_val_estimated_reward=0x7f08000b;
-        public static final int number_val_potential_reward=0x7f080009;
-        public static final int number_val_uncomfirmed_reward=0x7f08000d;
+        public static final int number_val_confirmed_reward=0x7f080005;
+        public static final int number_val_estimated_reward=0x7f08000d;
+        public static final int number_val_potential_reward=0x7f08000b;
+        public static final int number_val_uncomfirmed_reward=0x7f08000f;
+        public static final int number_val_worker_hash_rate=0x7f080009;
         public static final int textView5=0x7f080001;
-        public static final int total_potential_reward_label=0x7f08000a;
-        public static final int unconfirmed_reward_label=0x7f080008;
+        public static final int total_potential_reward_label=0x7f08000c;
+        public static final int unconfirmed_reward_label=0x7f08000a;
+        public static final int worker_hash_rate_label=0x7f080008;
         public static final int worker_table=0x7f080000;
         public static final int worker_table_data=0x7f080002;
         public static final int worker_table_layout=0x7f080003;

@@ -68,15 +68,6 @@
         android:text="@string/worker_list_title" />
 
     <TextView
-        android:id="@+id/confirmed_reward_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="6dp"
-        android:text="@string/confirmed_reward" />
-
-    <TextView
         android:id="@+id/number_val_confirmed_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,5 +95,32 @@
         android:layout_alignParentRight="true"
         android:text="@string/number_stub"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/worker_hash_rate_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="6dp"
+        android:text="@string/worker_rate" />
+
+    <TextView
+        android:id="@+id/number_val_worker_hash_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/number_stub"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/confirmed_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/worker_hash_rate_label"
+        android:layout_marginTop="6dp"
+        android:text="@string/confirmed_reward" />
 
 </RelativeLayout>
