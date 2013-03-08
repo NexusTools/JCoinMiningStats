@@ -7,6 +7,7 @@ import android.widget.TextView;
 public class NumberVal extends TextView {
 	private double val = 0;
 	private String formatting;
+	private String affix = "";
 	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 6);
 	public NumberVal(Context context) {super(context);}
 	public NumberVal(Context context, AttributeSet set) {super(context, set);}
@@ -43,7 +44,11 @@ public class NumberVal extends TextView {
 			}
 		};
 		transition.start();
-		setText(formatting == null ? Double.toString(val) : String.format(formatting, val));
+		formText();
+	}
+	
+	public void formText() {
+		setText((formatting == null ? Double.toString(val) : String.format(formatting, val) + affix));
 	}
 	
 	public double getValue() {
@@ -52,9 +57,19 @@ public class NumberVal extends TextView {
 	
 	public void setFormatting(String formatting) {
 		this.formatting = formatting;
+		formText();
 	}
 	
 	public String getFormatting() {
 		return formatting;
+	}
+	
+	public void setAffix(String affix) {
+		this.affix = affix;
+		formText();
+	}
+	
+	public String getAffix() {
+		return affix;
 	}
 }

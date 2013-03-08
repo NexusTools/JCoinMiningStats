@@ -81,6 +81,7 @@ public class MiningStatisticsActivity extends Activity {
 
 								NumberVal workerRate = new NumberVal(context);
 								workerRate.setValue(worker.getDouble("hashrate"));
+								workerRate.setAffix("mh/s");
 								workerRow.addView(workerRate);
 
 								NumberVal workerShares = new NumberVal(context);
