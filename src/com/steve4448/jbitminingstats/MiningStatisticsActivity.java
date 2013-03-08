@@ -1,5 +1,6 @@
 package com.steve4448.jbitminingstats;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
@@ -11,8 +12,11 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,78 +45,99 @@ public class MiningStatisticsActivity extends Activity {
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
 		workerTable = ((LinearLayout)findViewById(R.id.worker_table_layout));
+		final Context context = this;
 		if(savedInstanceState == null || !savedInstanceState.getBoolean("hasInitialized"))
 			workerThread = new Thread() {
 			@Override
 			public void run() {
+				Looper.prepare();
 				try {
 					while(true) {
-						handler.post(new Runnable() {
-							@Override
-							public void run() {
-								Context context = workerTable.getContext();
-								try {
-									StringBuffer sb = new StringBuffer();
-									String content = "";
-									HttpEntity ent = new DefaultHttpClient().execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
-									InputStreamReader reader = new InputStreamReader(ent.getContent());
-									char[] data = new char[512];
-									int read = -1;
-									while((read = reader.read(data)) != -1)
-										sb.append(data, 0, read);
-									content = sb.toString();
-									try {
-										JSONObject jsonContent = new JSONObject(content);
-										JSONArray workerNames = jsonContent.getJSONObject("workers").names();
-										JSONObject workerList = jsonContent.getJSONObject("workers");
-										for(int i = 0; i < workerNames.length(); i++) {
-											TableRow workerRow = new TableRow(context);
+						StringBuffer sb = new StringBuffer();
+						HttpEntity ent = new DefaultHttpClient().execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
+						InputStreamReader reader = new InputStreamReader(ent.getContent());
+						char[] data = new char[512];
+						int read = -1;
+						while((read = reader.read(data)) != -1)
+							sb.append(data, 0, read);
+						String content = sb.toString();
+						try {
+							JSONObject jsonContent = new JSONObject(content);
+							JSONArray workerNames = jsonContent.getJSONObject("workers").names();
+							JSONObject workerList = jsonContent.getJSONObject("workers");
+							for(int i = 0; i < workerNames.length(); i++) {
+								TableRow workerRow = new TableRow(context);
+								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
 
-											JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
+								ImageView workerStatus = new ImageView(context);
+								workerStatus.setImageResource(worker.getBoolean("alive") ? R.drawable.worker_online : R.drawable.worker_offline);
+								workerRow.addView(workerStatus);
 
-											ImageView workerStatus = new ImageView(context);
-											workerStatus.setImageResource(worker.getBoolean("alive") ? R.drawable.worker_online : R.drawable.worker_offline);
-											workerRow.addView(workerStatus);
+								TextView workerName = new TextView(context);
+								workerName.setText(workerNames.getString(i));
+								workerRow.addView(workerName);
 
-											TextView workerName = new TextView(context);
-											workerName.setText(workerNames.getString(i));
-											workerRow.addView(workerName);
+								TextView workerRate = new TextView(context);
+								workerRate.setText(worker.getString("hashrate") + "mh/s");
+								workerRow.addView(workerRate);
 
-											TextView workerRate = new TextView(context);
-											workerRate.setText(worker.getString("hashrate") + "mh/s");
-											workerRow.addView(workerRate);
+								TextView workerShares = new TextView(context);
+								workerShares.setText(worker.getString("shares"));
+								workerRow.addView(workerShares);
 
-											TextView workerShares = new TextView(context);
-											workerShares.setText(worker.getString("shares"));
-											workerRow.addView(workerShares);
-
-											workerTable.addView(workerRow);
-										}										
-										workerRate.setValue(jsonContent.getDouble("hashrate"));
-										confirmedReward.setValue(jsonContent.getDouble("confirmed_reward"));
-										confirmedNamecoinReward.setValue(jsonContent.getDouble("confirmed_nmc_reward"));
-										if(MoreMiningStatisticsActivity.active) {
-											MoreMiningStatisticsActivity.unconfirmedReward.setValue(jsonContent.getDouble("unconfirmed_reward"));
-											MoreMiningStatisticsActivity.estimatedReward.setValue(jsonContent.getDouble("estimated_reward"));
-											MoreMiningStatisticsActivity.potentialReward.setValue((jsonContent.getDouble("confirmed_reward") + jsonContent.getDouble("unconfirmed_reward") + jsonContent.getDouble("estimated_reward")));
-										}
-										hasInitialized = true;
-										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
-									} catch (JSONException e) {
-										e.printStackTrace();
-										Toast.makeText(context, "Error parsing JSON content!", Toast.LENGTH_LONG).show();
-									}
-								} catch(Exception e) {
-									e.printStackTrace();
-									Toast.makeText(context, "Error recieving data!", Toast.LENGTH_LONG).show();
-								}
+								//workerTable.addView(workerRow);
 							}
-						});
+							final double hashRateVal = jsonContent.getDouble("hashrate");
+							final double confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
+							final double confirmedNamecoinRewardVal = jsonContent.getDouble("confirmed_nmc_reward");
+							final double unconfirmedRewardVal = jsonContent.getDouble("unconfirmed_reward");
+							final double estimatedRewardVal = jsonContent.getDouble("estimated_reward");
+							final double potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
+							handler.post(new Runnable() {
+								public void run() {
+									workerRate.setValue(hashRateVal);
+									confirmedReward.setValue(confirmedRewardVal);
+									confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
+									if(MoreMiningStatisticsActivity.active) {
+										MoreMiningStatisticsActivity.unconfirmedReward.setValue(unconfirmedRewardVal);
+										MoreMiningStatisticsActivity.estimatedReward.setValue(estimatedRewardVal);
+										MoreMiningStatisticsActivity.potentialReward.setValue(potentialRewardVal);
+									}
+									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
+								}
+							});
+							hasInitialized = true;
+							Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
+						} catch (JSONException e) {
+							e.printStackTrace();
+							Toast.makeText(context, "Error parsing JSON content!", Toast.LENGTH_LONG).show();
+						}
 						Thread.sleep(5000);
 					}
 				} catch (InterruptedException e) {
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (IOException e) {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							AlertDialog.Builder alert = new AlertDialog.Builder(context);
+							alert.setTitle("Connection Error");
+							alert.setMessage("There's been some error while retriving the JSON data...\nWould you like to try connecting again?");
+							alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									
+								}
+							});
+							alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									
+								}
+							});
+							alert.setIcon(R.drawable.ic_launcher);
+							alert.create().show();
+						}
+					});
 				}
 			}
 		};
