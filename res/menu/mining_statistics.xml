@@ -11,5 +11,11 @@
         android:orderInCategory="101"
         android:showAsAction="never"
         android:title="@string/action_more_statistics"/>
+    
+    <item
+        android:id="@+id/action_connect_now" 
+        android:orderInCategory="102"
+        android:title="@string/action_connect_now"
+        android:showAsAction="never" />
 
 </menu>

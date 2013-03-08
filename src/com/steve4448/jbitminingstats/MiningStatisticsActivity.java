@@ -138,7 +138,7 @@ public class MiningStatisticsActivity extends Activity {
 							Toast.makeText(context, "Failed to connect.", Toast.LENGTH_SHORT).show();
 							AlertDialog.Builder alert = new AlertDialog.Builder(context);
 							alert.setTitle("Connection Error");
-							alert.setMessage("There's been some error while retriving the JSON data...\nWould you like to try connecting again?");
+							alert.setMessage("There's been some error while connecting to the JSON supplier...\nWould you like to try connecting again?");
 							alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
@@ -193,8 +193,13 @@ public class MiningStatisticsActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == R.id.action_more_statistics) {
-			startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
+		switch(item.getItemId()) {
+			case R.id.action_more_statistics:
+				startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
+			return true;
+			
+			case R.id.action_connect_now:
+				startJSONFetching();
 			return true;
 		}
 		return false;
