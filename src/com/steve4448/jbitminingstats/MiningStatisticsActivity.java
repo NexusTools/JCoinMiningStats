@@ -2,6 +2,7 @@ package com.steve4448.jbitminingstats;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -65,6 +66,7 @@ public class MiningStatisticsActivity extends Activity {
 							JSONObject jsonContent = new JSONObject(content);
 							JSONArray workerNames = jsonContent.getJSONObject("workers").names();
 							JSONObject workerList = jsonContent.getJSONObject("workers");
+							final ArrayList<TableRow> createdRows = new ArrayList<TableRow>();
 							for(int i = 0; i < workerNames.length(); i++) {
 								TableRow workerRow = new TableRow(context);
 								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
@@ -77,15 +79,15 @@ public class MiningStatisticsActivity extends Activity {
 								workerName.setText(workerNames.getString(i));
 								workerRow.addView(workerName);
 
-								TextView workerRate = new TextView(context);
-								workerRate.setText(worker.getString("hashrate") + "mh/s");
+								NumberVal workerRate = new NumberVal(context);
+								workerRate.setValue(worker.getDouble("hashrate"));
 								workerRow.addView(workerRate);
 
-								TextView workerShares = new TextView(context);
-								workerShares.setText(worker.getString("shares"));
+								NumberVal workerShares = new NumberVal(context);
+								workerShares.setValue(worker.getDouble("shares"));
 								workerRow.addView(workerShares);
 
-								//workerTable.addView(workerRow);
+								createdRows.add(workerRow);
 							}
 							final double hashRateVal = jsonContent.getDouble("hashrate");
 							final double confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
@@ -103,14 +105,20 @@ public class MiningStatisticsActivity extends Activity {
 										MoreMiningStatisticsActivity.estimatedReward.setValue(estimatedRewardVal);
 										MoreMiningStatisticsActivity.potentialReward.setValue(potentialRewardVal);
 									}
+									for(TableRow nR : createdRows)
+										workerTable.addView(nR);
 									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
 							});
 							hasInitialized = true;
-							Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 						} catch (JSONException e) {
 							e.printStackTrace();
-							Toast.makeText(context, "Error parsing JSON content!", Toast.LENGTH_LONG).show();
+							handler.post(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(context, "Error parsing JSON content!", Toast.LENGTH_LONG).show();
+								}
+							});
 						}
 						Thread.sleep(5000);
 					}
