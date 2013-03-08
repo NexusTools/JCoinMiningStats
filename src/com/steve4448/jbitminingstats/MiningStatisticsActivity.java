@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,9 +47,15 @@ public class MiningStatisticsActivity extends Activity {
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
 		workerTable = ((LinearLayout)findViewById(R.id.worker_table_layout));
-		final Context context = this;
 		if(savedInstanceState == null || !savedInstanceState.getBoolean("hasInitialized"))
-			workerThread = new Thread() {
+			startJSONFetching();
+	}
+	
+	public void startJSONFetching() {
+		if(workerThread != null && workerThread.isAlive())
+			workerThread.interrupt();
+		final Context context = this;
+		workerThread = new Thread() {
 			@Override
 			public void run() {
 				Looper.prepare();
@@ -128,19 +135,27 @@ public class MiningStatisticsActivity extends Activity {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
+							Toast.makeText(context, "Failed to connect.", Toast.LENGTH_SHORT).show();
 							AlertDialog.Builder alert = new AlertDialog.Builder(context);
 							alert.setTitle("Connection Error");
 							alert.setMessage("There's been some error while retriving the JSON data...\nWould you like to try connecting again?");
 							alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									
+									startJSONFetching();
+									Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
 								}
 							});
 							alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									
+									Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+								}
+							});
+							alert.setOnCancelListener(new OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
 								}
 							});
 							alert.setIcon(R.drawable.ic_launcher);
