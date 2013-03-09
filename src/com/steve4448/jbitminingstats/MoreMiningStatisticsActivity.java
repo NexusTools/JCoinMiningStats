@@ -21,6 +21,13 @@ public class MoreMiningStatisticsActivity extends Activity {
 		estimatedReward.setFormatting("%.5f");
 		potentialReward = ((NumberVal)findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
+		updateValues();
+	}
+	
+	public static void updateValues() {
+		unconfirmedReward.setValue(MiningStatisticsActivity.unconfirmedRewardVal);
+		estimatedReward.setValue(MiningStatisticsActivity.estimatedRewardVal);
+		potentialReward.setValue(MiningStatisticsActivity.potentialRewardVal);
 	}
 
 	@Override

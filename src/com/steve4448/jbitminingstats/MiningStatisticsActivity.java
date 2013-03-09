@@ -44,11 +44,13 @@ public class MiningStatisticsActivity extends Activity {
 	public static Handler handler = new Handler();
 	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
 
+	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
 		workerRate = ((NumberVal)findViewById(R.id.number_val_worker_hash_rate));
+		workerRate.setAffix("mh/s");
 		confirmedReward = ((NumberVal)findViewById(R.id.number_val_confirmed_reward));
 		confirmedReward.setFormatting("%.5f");
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
@@ -93,22 +95,19 @@ public class MiningStatisticsActivity extends Activity {
 								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
 								workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getDouble("hashrate"), worker.getDouble("shares"), worker.getDouble("score")));
 							}
-							final double hashRateVal = jsonContent.getDouble("hashrate");
-							final double confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
-							final double confirmedNamecoinRewardVal = jsonContent.getDouble("confirmed_nmc_reward");
-							final double unconfirmedRewardVal = jsonContent.getDouble("unconfirmed_reward");
-							final double estimatedRewardVal = jsonContent.getDouble("estimated_reward");
-							final double potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
+							hashRateVal = jsonContent.getDouble("hashrate");
+							confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
+							confirmedNamecoinRewardVal = jsonContent.getDouble("confirmed_nmc_reward");
+							unconfirmedRewardVal = jsonContent.getDouble("unconfirmed_reward");
+							estimatedRewardVal = jsonContent.getDouble("estimated_reward");
+							potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
 							handler.post(new Runnable() {
 								public void run() {
 									workerRate.setValue(hashRateVal);
 									confirmedReward.setValue(confirmedRewardVal);
 									confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
-									if(MoreMiningStatisticsActivity.active) {
-										MoreMiningStatisticsActivity.unconfirmedReward.setValue(unconfirmedRewardVal);
-										MoreMiningStatisticsActivity.estimatedReward.setValue(estimatedRewardVal);
-										MoreMiningStatisticsActivity.potentialReward.setValue(potentialRewardVal);
-									}
+									if(MoreMiningStatisticsActivity.active)
+										MoreMiningStatisticsActivity.updateValues();
 									for(MiningWorkerStub worker : workers) {
 										if(createdRows.containsKey(worker.name)) {
 											TableRow workerRow = createdRows.get(worker.name);
@@ -240,7 +239,6 @@ public class MiningStatisticsActivity extends Activity {
 			
 			case R.id.action_more_statistics:
 				startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
-				startJSONFetching();
 			return true;
 			
 			case R.id.action_connect_now:
