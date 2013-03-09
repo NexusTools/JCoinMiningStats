@@ -49,6 +49,13 @@
                     android:layout_column="2"
                     android:layout_weight="1"
                     android:text="@string/label_worker_table_header_share" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_score" />
+
             </TableRow>
         </TableLayout>
 

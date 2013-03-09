@@ -91,7 +91,7 @@ public class MiningStatisticsActivity extends Activity {
 							final ArrayList<MiningWorkerStub> workers = new ArrayList<MiningWorkerStub>();
 							for(int i = 0; i < workerNames.length(); i++) {
 								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
-								workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getDouble("hashrate"), worker.getDouble("shares")));
+								workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getDouble("hashrate"), worker.getDouble("shares"), worker.getDouble("score")));
 							}
 							final double hashRateVal = jsonContent.getDouble("hashrate");
 							final double confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
@@ -119,8 +119,11 @@ public class MiningStatisticsActivity extends Activity {
 											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
 											
-											NumberVal workerShares = (NumberVal)workerRow.getChildAt(3);
-											workerShares.setValue(worker.shares);
+											NumberVal workerShare = (NumberVal)workerRow.getChildAt(3);
+											workerShare.setValue(worker.share);
+											
+											NumberVal workerScore = (NumberVal)workerRow.getChildAt(4);
+											workerScore.setValue(worker.score);
 										} else {
 											TableRow workerRow = new TableRow(context);
 											ImageView workerStatus = new ImageView(context);
@@ -139,10 +142,15 @@ public class MiningStatisticsActivity extends Activity {
 											workerRate.setAffix("mh/s");
 											workerRow.addView(workerRate);
 											
-											NumberVal workerShares = new NumberVal(context);
-											workerShares.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-											workerShares.setValue(worker.shares);
-											workerRow.addView(workerShares);
+											NumberVal workerShare = new NumberVal(context);
+											workerShare.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerShare.setValue(worker.share);
+											workerRow.addView(workerShare);
+											
+											NumberVal workerScore = new NumberVal(context);
+											workerScore.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerScore.setValue(worker.score);
+											workerRow.addView(workerScore);
 											
 											workerTable.addView(workerRow);
 											createdRows.put(worker.name, workerRow);
