@@ -37,6 +37,9 @@ public class MiningStatisticsActivity extends Activity {
 	public NumberVal workerRate;
 	public NumberVal confirmedReward;
 	public NumberVal confirmedNamecoinReward;
+	public NumberVal unconfirmedReward;
+	public NumberVal estimatedReward;
+	public NumberVal potentialReward;
 	public int connectionDelay;
 	public String slushsDomain;
 	public String slushsAPIKey;
@@ -57,6 +60,12 @@ public class MiningStatisticsActivity extends Activity {
 		confirmedReward.setFormatting("%.5f");
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
+		unconfirmedReward = ((NumberVal)findViewById(R.id.number_val_uncomfirmed_reward));
+		unconfirmedReward.setFormatting("%.5f");
+		estimatedReward = ((NumberVal)findViewById(R.id.number_val_estimated_reward));
+		estimatedReward.setFormatting("%.5f");
+		potentialReward = ((NumberVal)findViewById(R.id.number_val_potential_reward));
+		potentialReward.setFormatting("%.5f");
 		workerTable = ((TableLayout)findViewById(R.id.worker_table));
 		startJSONFetching();
 	}
@@ -104,8 +113,9 @@ public class MiningStatisticsActivity extends Activity {
 									workerRate.setValue(hashRateVal);
 									confirmedReward.setValue(confirmedRewardVal);
 									confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
-									if(MoreMiningStatisticsActivity.active)
-										MoreMiningStatisticsActivity.updateValues();
+									unconfirmedReward.setValue(unconfirmedRewardVal);
+									estimatedReward.setValue(estimatedRewardVal);
+									potentialReward.setValue(potentialRewardVal);
 									for(MiningWorkerStub worker : workers) {
 										if(createdRows.containsKey(worker.name)) {
 											TableRow workerRow = createdRows.get(worker.name);
@@ -237,10 +247,6 @@ public class MiningStatisticsActivity extends Activity {
 		switch(item.getItemId()) {
 			case R.id.action_settings:
 				startActivity(new Intent(this, MiningStatisticsSettingsActivity.class));
-			return true;
-			
-			case R.id.action_more_statistics:
-				startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
 			return true;
 			
 			case R.id.action_connect_now:

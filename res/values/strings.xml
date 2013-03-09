@@ -3,7 +3,6 @@
 
     <string name="app_name">JBitMiningStats</string>
     <string name="action_settings">Settings</string>
-    <string name="action_more_statistics">More Statistics</string>
     <string name="action_back">Back</string>
     <string name="action_connect_now">Connect Now</string>
     <string name="label_confirmed_reward">Confirmed Reward:</string>

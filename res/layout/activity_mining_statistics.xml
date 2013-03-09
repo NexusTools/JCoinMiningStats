@@ -55,7 +55,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/label_worker_table_header_score" />
-
             </TableRow>
         </TableLayout>
 
@@ -63,7 +62,7 @@
             android:id="@+id/workers_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/confirmed_namecoin_reward_label"
+            android:layout_below="@+id/total_potential_reward_label"
             android:layout_marginTop="6dp"
             android:text="@string/label_worker_list_title" />
 
@@ -122,6 +121,59 @@
             android:layout_below="@+id/worker_hash_rate_label"
             android:layout_marginTop="6dp"
             android:text="@string/label_confirmed_reward" />
+
+        <TextView
+            android:id="@+id/unconfirmed_reward_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/workers_label"
+            android:layout_below="@+id/confirmed_namecoin_reward_label"
+            android:layout_marginTop="6dp"
+            android:text="@string/label_unconfirmed_reward" />
+
+        <TextView
+            android:id="@+id/estimated_reward_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/workers_label"
+            android:layout_below="@+id/unconfirmed_reward_label"
+            android:text="@string/label_estimated_reward" />
+
+        <TextView
+            android:id="@+id/total_potential_reward_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/workers_label"
+            android:layout_below="@+id/estimated_reward_label"
+            android:text="@string/label_total_potential_reward" />
+
+        <com.steve4448.jbitminingstats.NumberVal
+            android:id="@+id/number_val_potential_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/total_potential_reward_label"
+            android:layout_alignBottom="@+id/total_potential_reward_label"
+            android:layout_alignParentRight="true"
+            android:text="@string/label_number_stub" />
+
+        <com.steve4448.jbitminingstats.NumberVal
+            android:id="@+id/number_val_uncomfirmed_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/unconfirmed_reward_label"
+            android:layout_alignBottom="@+id/unconfirmed_reward_label"
+            android:layout_alignParentRight="true"
+            android:text="@string/label_number_stub" />
+
+        <com.steve4448.jbitminingstats.NumberVal
+            android:id="@+id/number_val_estimated_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/estimated_reward_label"
+            android:layout_alignBottom="@+id/estimated_reward_label"
+            android:layout_alignParentRight="true"
+            android:text="@string/label_number_stub" />
+
     </RelativeLayout>
 
 </ScrollView>
