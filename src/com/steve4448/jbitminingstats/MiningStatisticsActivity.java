@@ -3,6 +3,7 @@ package com.steve4448.jbitminingstats;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -41,6 +42,7 @@ public class MiningStatisticsActivity extends Activity {
 	public String slushsAPIKey;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
+	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,34 +88,10 @@ public class MiningStatisticsActivity extends Activity {
 							JSONObject jsonContent = new JSONObject(content);
 							JSONArray workerNames = jsonContent.getJSONObject("workers").names();
 							JSONObject workerList = jsonContent.getJSONObject("workers");
-							final ArrayList<TableRow> createdRows = new ArrayList<TableRow>();
+							final ArrayList<MiningWorkerStub> workers = new ArrayList<MiningWorkerStub>();
 							for(int i = 0; i < workerNames.length(); i++) {
-								TableRow workerRow = new TableRow(context);
-								//workerRow.setLayoutParams(new TableRow.LayoutParams(i));
 								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
-
-								ImageView workerStatus = new ImageView(context);
-								workerStatus.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-								workerStatus.setImageResource(worker.getBoolean("alive") ? R.drawable.worker_online : R.drawable.worker_offline);
-								workerRow.addView(workerStatus);
-
-								TextView workerName = new TextView(context);
-								workerName.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-								workerName.setText(workerNames.getString(i));
-								workerRow.addView(workerName);
-
-								NumberVal workerRate = new NumberVal(context);
-								workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-								workerRate.setValue(worker.getDouble("hashrate"));
-								workerRate.setAffix("mh/s");
-								workerRow.addView(workerRate);
-
-								NumberVal workerShares = new NumberVal(context);
-								workerShares.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-								workerShares.setValue(worker.getDouble("shares"));
-								workerRow.addView(workerShares);
-								
-								createdRows.add(workerRow);
+								workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getDouble("hashrate"), worker.getDouble("shares")));
 							}
 							final double hashRateVal = jsonContent.getDouble("hashrate");
 							final double confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
@@ -131,8 +109,45 @@ public class MiningStatisticsActivity extends Activity {
 										MoreMiningStatisticsActivity.estimatedReward.setValue(estimatedRewardVal);
 										MoreMiningStatisticsActivity.potentialReward.setValue(potentialRewardVal);
 									}
-									for(TableRow nR : createdRows)
-										workerTable.addView(nR);
+									for(MiningWorkerStub worker : workers) {
+										if(createdRows.containsKey(worker.name)) {
+											TableRow workerRow = createdRows.get(worker.name);
+											
+											ImageView workerStatus = (ImageView)workerRow.getChildAt(0);
+											workerStatus.setImageResource(worker.online ? R.drawable.worker_online : R.drawable.worker_offline);
+										
+											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
+											workerRate.setValue(worker.hashRate);
+											
+											NumberVal workerShares = (NumberVal)workerRow.getChildAt(3);
+											workerShares.setValue(worker.shares);
+										} else {
+											TableRow workerRow = new TableRow(context);
+											ImageView workerStatus = new ImageView(context);
+											workerStatus.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerStatus.setImageResource(worker.online ? R.drawable.worker_online : R.drawable.worker_offline);
+											workerRow.addView(workerStatus);
+											
+											TextView workerName = new TextView(context);
+											workerName.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerName.setText(worker.name);
+											workerRow.addView(workerName);
+											
+											NumberVal workerRate = new NumberVal(context);
+											workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerRate.setValue(worker.hashRate);
+											workerRate.setAffix("mh/s");
+											workerRow.addView(workerRate);
+											
+											NumberVal workerShares = new NumberVal(context);
+											workerShares.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerShares.setValue(worker.shares);
+											workerRow.addView(workerShares);
+											
+											workerTable.addView(workerRow);
+											createdRows.put(worker.name, workerRow);
+										}
+									}
 									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
 							});
