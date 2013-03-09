@@ -41,7 +41,7 @@ public class MiningStatisticsActivity extends Activity {
 	public String slushsDomain;
 	public String slushsAPIKey;
 	public boolean autoConnect;
-	public boolean showMHSAffix;
+	public boolean showHashrateUnit;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
 	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
@@ -251,9 +251,9 @@ public class MiningStatisticsActivity extends Activity {
 	public void loadSettings() {
 		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
 		autoConnect = prefs.getBoolean("autoConnect", true);
-		showMHSAffix = prefs.getBoolean("showMHSAffix", true);
+		showHashrateUnit = prefs.getBoolean("showHashrateUnit", true);
 		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
-		if(showMHSAffix) {
+		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))
 				workerRate.setAffix("mh/s");
 			if(!rateColumn.getText().toString().endsWith("(mh/s)"))

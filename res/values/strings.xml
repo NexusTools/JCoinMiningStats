@@ -19,7 +19,7 @@
     <string name="label_worker_table_header_rate">Rate\n(mh/s)</string>
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
-    <string name="label_option_auto_connect">Auto Connect</string>
+    <string name="label_option_auto_connect">Auto connect</string>
     <string name="label_option_connection_delay">Connection delay:</string>
     <string name="label_option_where_to_connect_to">Connection settings:</string>
     <string name="label_option_connect_to_slushs_api">Connect to Slush\'s API</string>
@@ -28,5 +28,5 @@
     <string name="label_option_slushs_api_key">API key:</string>
     <string name="option_slushs_api_key"></string>
     <string name="number_option_connection_delay">5000</string>
-    <string name="label_option_affix_hashrates_text">Attach MH/S to hashrates</string>
+    <string name="label_option_affix_hashrates_text">Show hashrate units</string>
 </resources>

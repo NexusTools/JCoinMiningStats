@@ -86,7 +86,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <CheckBox
-            android:id="@+id/button_use_mh_affix"
+            android:id="@+id/button_use_hashrate_affix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button_use_mh_affix"
+            android:layout_below="@+id/button_use_hashrate_affix"
             android:checked="true"
             android:text="@string/label_option_auto_connect" />
 

@@ -35,7 +35,7 @@ public final class R {
         public static final int action_more_statistics=0x7f08001c;
         public static final int action_settings=0x7f08001b;
         public static final int button_auto_connect_check_box=0x7f080016;
-        public static final int button_use_mh_affix=0x7f08001a;
+        public static final int button_use_hashrate_affix=0x7f08001a;
         public static final int button_use_slushs_pool=0x7f080012;
         public static final int confirmed_namecoin_reward_label=0x7f080003;
         public static final int confirmed_reward_label=0x7f080005;
