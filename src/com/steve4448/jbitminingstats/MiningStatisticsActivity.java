@@ -40,6 +40,7 @@ public class MiningStatisticsActivity extends Activity {
 	public int connectionDelay;
 	public String slushsDomain;
 	public String slushsAPIKey;
+	public boolean autoConnect;
 	public boolean showMHSAffix;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
@@ -162,7 +163,10 @@ public class MiningStatisticsActivity extends Activity {
 								}
 							});
 						}
-						Thread.sleep(connectionDelay);
+						if(autoConnect)
+							Thread.sleep(connectionDelay);
+						else
+							break;
 					}
 				} catch (InterruptedException e) {
 				} catch (IOException e) {
@@ -245,6 +249,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public void loadSettings() {
 		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
+		autoConnect = prefs.getBoolean("autoConnect", true);
 		showMHSAffix = prefs.getBoolean("showMHSAffix", true);
 		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
 		if(showMHSAffix) {

@@ -13,14 +13,13 @@
     <string name="label_estimated_reward">Estimated Reward:</string>
     <string name="label_total_potential_reward">Total Potential Reward:</string>
     <string name="label_worker_rate">Worker Rate:</string>
-    <string name="label_block_confirmations_remaining">Block Confirmations Remaining</string>
     <string name="label_worker_list_title">Workers:</string>
     <string name="label_worker_table_header_status">Status</string>
     <string name="label_worker_table_header_name">Name</string>
     <string name="label_worker_table_header_rate">Rate\n(mh/s)</string>
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
-    <string name="label_option_auto_reconnect">Auto Reconnect</string>
+    <string name="label_option_auto_connect">Auto Connect</string>
     <string name="label_option_connection_delay">Connection delay:</string>
     <string name="label_option_where_to_connect_to">Connection settings:</string>
     <string name="label_option_connect_to_slushs_api">Connect to Slush\'s API</string>
