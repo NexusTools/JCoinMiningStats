@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/auto_reconnect_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:checked="true"
+            android:text="@string/label_option_auto_reconnect" />
+
+        <RadioButton
+            android:id="@+id/button_use_slushs_pool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/label_option_connection_delay"
+            android:layout_marginTop="15dp"
+            android:checked="true"
+            android:text="@string/label_option_connect_to_slushs_api" />
+
+        <TextView
+            android:id="@+id/label_option_slushs_domain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/button_use_slushs_pool"
+            android:layout_marginLeft="20dp"
+            android:text="@string/label_slushs_option_site_domain" />
+
+        <EditText
+            android:id="@+id/option_connection_delay_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/auto_reconnect_check_box"
+            android:layout_toRightOf="@+id/auto_reconnect_check_box"
+            android:ems="10"
+            android:inputType="number"
+            android:singleLine="true"
+            android:text="@string/number_option_connection_delay" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/label_option_connection_delay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/option_connection_delay_text"
+            android:text="@string/label_option_connection_delay"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/text_option_slushs_domain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/label_option_slushs_domain"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/label_option_slushs_domain"
+            android:ems="10"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:text="@string/option_slushs_domain" />
+
+        <TextView
+            android:id="@+id/label_option_slushs_api_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/label_option_slushs_domain"
+            android:layout_below="@+id/text_option_slushs_domain"
+            android:text="@string/label_option_slushs_api_key" />
+
+        <EditText
+            android:id="@+id/text_option_slushs_api_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/label_option_slushs_api_key"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/label_option_slushs_api_key"
+            android:ems="10"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:text="@string/option_slushs_api_key" />
+
+    </RelativeLayout>
+
+</ScrollView>

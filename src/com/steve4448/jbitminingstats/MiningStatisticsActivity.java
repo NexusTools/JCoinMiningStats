@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -29,16 +30,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
+	public static final String PREFERENCES_TAG = "MiningStatisticsSettings";
 	public LinearLayout workerTable;
 	public NumberVal workerRate;
 	public NumberVal confirmedReward;
 	public NumberVal confirmedNamecoinReward;
-	public boolean hasInitialized = false;
+	public int connectionDelay;
+	public String slushsDomain;
+	public String slushsAPIKey;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
 		workerRate = ((NumberVal)findViewById(R.id.number_val_worker_hash_rate));
@@ -52,8 +56,16 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void startJSONFetching() {
+		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
+		connectionDelay = prefs.getInt("connectionDelay", 5000);
+		slushsDomain = prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/");
+		slushsAPIKey = prefs.getString("slushsAPIKey", "");
 		if(workerThread != null && workerThread.isAlive())
 			workerThread.interrupt();
+		if(slushsAPIKey.toString().trim().length() == 0) {
+			Toast.makeText(this, "Slush's API key has not been set, it's required to fetch JSON data. Please set the API key in the settings.", Toast.LENGTH_LONG).show();
+			return;
+		}
 		final Context context = this;
 		workerThread = new Thread() {
 			@Override
@@ -62,7 +74,7 @@ public class MiningStatisticsActivity extends Activity {
 				try {
 					while(true) {
 						StringBuffer sb = new StringBuffer();
-						HttpEntity ent = new DefaultHttpClient().execute(new HttpPost("https://mining.bitcoin.cz/accounts/profile/json/149845-8e60ac1e3ae4489add732c1d2b377965")).getEntity();
+						HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsDomain + slushsAPIKey)).getEntity();
 						InputStreamReader reader = new InputStreamReader(ent.getContent());
 						char[] data = new char[512];
 						int read = -1;
@@ -118,7 +130,6 @@ public class MiningStatisticsActivity extends Activity {
 									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
 							});
-							hasInitialized = true;
 						} catch (JSONException e) {
 							e.printStackTrace();
 							handler.post(new Runnable() {
@@ -128,7 +139,7 @@ public class MiningStatisticsActivity extends Activity {
 								}
 							});
 						}
-						Thread.sleep(5000);
+						Thread.sleep(connectionDelay);
 					}
 				} catch (InterruptedException e) {
 				} catch (IOException e) {
@@ -167,16 +178,22 @@ public class MiningStatisticsActivity extends Activity {
 		};
 		workerThread.start();
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		startJSONFetching();
+	}
 
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		super.onStart();
 	}
 
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
-		workerThread.interrupt();
+		if(workerThread != null) workerThread.interrupt();
 	}
 
 	@Override
@@ -186,14 +203,12 @@ public class MiningStatisticsActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle saveState) {
-		super.onSaveInstanceState(saveState);
-		saveState.putBoolean("hasInitialized", hasInitialized);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
+			case R.id.action_settings:
+				startActivity(new Intent(this, MiningStatisticsSettingsActivity.class));
+			return true;
+			
 			case R.id.action_more_statistics:
 				startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
 			return true;

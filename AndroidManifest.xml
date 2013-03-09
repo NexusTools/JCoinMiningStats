@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name="MoreMiningStatisticsActivity"></activity>
+        <activity android:name="MiningStatisticsSettingsActivity"></activity>
     </application>
 
 </manifest>
