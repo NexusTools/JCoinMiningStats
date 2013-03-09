@@ -15,6 +15,7 @@
     <string name="label_worker_rate">Worker Rate:</string>
     <string name="label_block_confirmations_remaining">Block Confirmations Remaining</string>
     <string name="label_worker_list_title">Workers:</string>
+    <string name="label_worker_table_header_status">Status</string>
     <string name="label_worker_table_header_name">Name</string>
     <string name="label_worker_table_header_rate">Rate</string>
     <string name="label_worker_table_header_share">Share</string>

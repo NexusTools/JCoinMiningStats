@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollPane"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    tools:ignore="UselessParent" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -18,9 +19,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView5" >
+            android:layout_below="@+id/workers_label" >
 
             <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_status" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -42,18 +49,11 @@
                     android:layout_column="2"
                     android:layout_weight="1"
                     android:text="@string/label_worker_table_header_share" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="3"
-                    android:layout_weight="1"
-                    android:text="@string/label_worker_table_header_score" />
             </TableRow>
         </TableLayout>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/workers_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/confirmed_namecoin_reward_label"

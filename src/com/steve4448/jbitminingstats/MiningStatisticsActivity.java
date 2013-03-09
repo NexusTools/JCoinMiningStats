@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -88,25 +89,30 @@ public class MiningStatisticsActivity extends Activity {
 							final ArrayList<TableRow> createdRows = new ArrayList<TableRow>();
 							for(int i = 0; i < workerNames.length(); i++) {
 								TableRow workerRow = new TableRow(context);
+								//workerRow.setLayoutParams(new TableRow.LayoutParams(i));
 								JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
 
 								ImageView workerStatus = new ImageView(context);
+								workerStatus.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 								workerStatus.setImageResource(worker.getBoolean("alive") ? R.drawable.worker_online : R.drawable.worker_offline);
 								workerRow.addView(workerStatus);
 
 								TextView workerName = new TextView(context);
+								workerName.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 								workerName.setText(workerNames.getString(i));
 								workerRow.addView(workerName);
 
 								NumberVal workerRate = new NumberVal(context);
+								workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 								workerRate.setValue(worker.getDouble("hashrate"));
 								workerRate.setAffix("mh/s");
 								workerRow.addView(workerRate);
 
 								NumberVal workerShares = new NumberVal(context);
+								workerShares.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 								workerShares.setValue(worker.getDouble("shares"));
 								workerRow.addView(workerShares);
-
+								
 								createdRows.add(workerRow);
 							}
 							final double hashRateVal = jsonContent.getDouble("hashrate");

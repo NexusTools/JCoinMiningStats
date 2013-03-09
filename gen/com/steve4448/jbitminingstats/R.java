@@ -49,13 +49,13 @@ public final class R {
         public static final int number_val_uncomfirmed_reward=0x7f08000f;
         public static final int number_val_worker_hash_rate=0x7f080008;
         public static final int option_connection_delay_text=0x7f080016;
-        public static final int textView5=0x7f080002;
         public static final int text_option_slushs_api_key=0x7f080019;
         public static final int text_option_slushs_domain=0x7f080017;
         public static final int total_potential_reward_label=0x7f08000c;
         public static final int unconfirmed_reward_label=0x7f08000a;
         public static final int worker_hash_rate_label=0x7f080007;
         public static final int worker_table=0x7f080001;
+        public static final int workers_label=0x7f080002;
     }
     public static final class layout {
         public static final int activity_mining_statistics=0x7f030000;
@@ -78,23 +78,24 @@ public final class R {
         public static final int label_confirmed_reward=0x7f050005;
         public static final int label_estimated_reward=0x7f050009;
         public static final int label_number_stub=0x7f050008;
-        public static final int label_option_auto_reconnect=0x7f050012;
-        public static final int label_option_connect_to_slushs_api=0x7f050015;
-        public static final int label_option_connection_delay=0x7f050013;
-        public static final int label_option_slushs_api_key=0x7f050018;
-        public static final int label_option_where_to_connect_to=0x7f050014;
-        public static final int label_slushs_option_site_domain=0x7f050016;
+        public static final int label_option_auto_reconnect=0x7f050013;
+        public static final int label_option_connect_to_slushs_api=0x7f050016;
+        public static final int label_option_connection_delay=0x7f050014;
+        public static final int label_option_slushs_api_key=0x7f050019;
+        public static final int label_option_where_to_connect_to=0x7f050015;
+        public static final int label_slushs_option_site_domain=0x7f050017;
         public static final int label_total_potential_reward=0x7f05000a;
         public static final int label_unconfirmed_reward=0x7f050007;
         public static final int label_worker_list_title=0x7f05000d;
         public static final int label_worker_rate=0x7f05000b;
-        public static final int label_worker_table_header_name=0x7f05000e;
-        public static final int label_worker_table_header_rate=0x7f05000f;
-        public static final int label_worker_table_header_score=0x7f050011;
-        public static final int label_worker_table_header_share=0x7f050010;
-        public static final int number_option_connection_delay=0x7f05001a;
-        public static final int option_slushs_api_key=0x7f050019;
-        public static final int option_slushs_domain=0x7f050017;
+        public static final int label_worker_table_header_name=0x7f05000f;
+        public static final int label_worker_table_header_rate=0x7f050010;
+        public static final int label_worker_table_header_score=0x7f050012;
+        public static final int label_worker_table_header_share=0x7f050011;
+        public static final int label_worker_table_header_status=0x7f05000e;
+        public static final int number_option_connection_delay=0x7f05001b;
+        public static final int option_slushs_api_key=0x7f05001a;
+        public static final int option_slushs_domain=0x7f050018;
     }
     public static final class style {
         /** 
