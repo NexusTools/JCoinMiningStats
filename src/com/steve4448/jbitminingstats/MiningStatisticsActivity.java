@@ -110,7 +110,7 @@ public class MiningStatisticsActivity extends Activity {
 											TableRow workerRow = createdRows.get(worker.name);
 											
 											ImageView workerStatus = (ImageView)workerRow.getChildAt(0);
-											workerStatus.setImageResource(worker.online ? R.drawable.worker_online : R.drawable.worker_offline);
+											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
 										
 											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
@@ -124,7 +124,7 @@ public class MiningStatisticsActivity extends Activity {
 											TableRow workerRow = new TableRow(context);
 											ImageView workerStatus = new ImageView(context);
 											workerStatus.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-											workerStatus.setImageResource(worker.online ? R.drawable.worker_online : R.drawable.worker_offline);
+											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
 											workerRow.addView(workerStatus);
 											
 											TextView workerName = new TextView(context);
@@ -145,6 +145,7 @@ public class MiningStatisticsActivity extends Activity {
 											NumberVal workerScore = new NumberVal(context);
 											workerScore.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerScore.setValue(worker.score);
+											workerScore.setFormatting("%.1f");
 											workerRow.addView(workerScore);
 											
 											workerTable.addView(workerRow);
