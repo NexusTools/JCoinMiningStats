@@ -48,7 +48,7 @@ public class NumberVal extends TextView {
 	}
 	
 	public void formText() {
-		setText((formatting == null ? Double.toString(val) : String.format(formatting, val) + affix));
+		setText((formatting == null ? Double.toString(val) : String.format(formatting, val)) + affix);
 	}
 	
 	public double getValue() {

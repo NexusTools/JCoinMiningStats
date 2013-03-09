@@ -240,6 +240,7 @@ public class MiningStatisticsActivity extends Activity {
 			
 			case R.id.action_more_statistics:
 				startActivity(new Intent(this, MoreMiningStatisticsActivity.class));
+				startJSONFetching();
 			return true;
 			
 			case R.id.action_connect_now:
