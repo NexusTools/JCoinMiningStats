@@ -24,14 +24,14 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
 	public static final String PREFERENCES_TAG = "MiningStatisticsSettings";
-	public LinearLayout workerTable;
+	public TableLayout workerTable;
 	public NumberVal workerRate;
 	public NumberVal confirmedReward;
 	public NumberVal confirmedNamecoinReward;
@@ -50,7 +50,7 @@ public class MiningStatisticsActivity extends Activity {
 		confirmedReward.setFormatting("%.5f");
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
-		workerTable = ((LinearLayout)findViewById(R.id.worker_table_layout));
+		workerTable = ((TableLayout)findViewById(R.id.worker_table));
 		if(savedInstanceState == null || !savedInstanceState.getBoolean("hasInitialized"))
 			startJSONFetching();
 	}
