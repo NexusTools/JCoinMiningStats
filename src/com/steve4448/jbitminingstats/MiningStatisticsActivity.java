@@ -113,13 +113,6 @@ public class MiningStatisticsActivity extends Activity {
 										
 											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
-											if(showMHSAffix) {
-												if(workerRate.getAffix().equals(""))
-													workerRate.setAffix("mh/s");
-											} else {
-												if(!workerRate.getAffix().equals(""))
-													workerRate.setAffix("");
-											}
 											
 											NumberVal workerShare = (NumberVal)workerRow.getChildAt(3);
 											workerShare.setValue(worker.share);
@@ -141,7 +134,6 @@ public class MiningStatisticsActivity extends Activity {
 											NumberVal workerRate = new NumberVal(context);
 											workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerRate.setValue(worker.hashRate);
-											if(showMHSAffix) workerRate.setAffix("mh/s");
 											workerRow.addView(workerRate);
 											
 											NumberVal workerShare = new NumberVal(context);
@@ -254,12 +246,17 @@ public class MiningStatisticsActivity extends Activity {
 	public void loadSettings() {
 		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
 		showMHSAffix = prefs.getBoolean("showMHSAffix", true);
+		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
 		if(showMHSAffix) {
 			if(workerRate.getAffix().equals(""))
 				workerRate.setAffix("mh/s");
+			if(!rateColumn.getText().toString().endsWith("(mh/s)"))
+				rateColumn.setText("Rate\n(mh/s)");
 		} else {
 			if(!workerRate.getAffix().equals(""))
 				workerRate.setAffix("");
+			if(rateColumn.getText().toString().endsWith("(mh/s)"))
+				rateColumn.setText("Rate");
 		}
 		connectionDelay = prefs.getInt("connectionDelay", 5000);
 		slushsDomain = prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/");

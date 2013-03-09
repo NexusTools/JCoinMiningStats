@@ -17,7 +17,7 @@
     <string name="label_worker_list_title">Workers:</string>
     <string name="label_worker_table_header_status">Status</string>
     <string name="label_worker_table_header_name">Name</string>
-    <string name="label_worker_table_header_rate">Rate</string>
+    <string name="label_worker_table_header_rate">Rate\n(mh/s)</string>
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
     <string name="label_option_auto_reconnect">Auto Reconnect</string>
