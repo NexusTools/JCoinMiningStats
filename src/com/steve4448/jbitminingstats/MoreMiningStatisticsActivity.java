@@ -17,11 +17,13 @@ public class MoreMiningStatisticsActivity extends Activity {
 		setContentView(R.layout.activity_mining_statistics_more);
 		unconfirmedReward = ((NumberVal)findViewById(R.id.number_val_uncomfirmed_reward));
 		unconfirmedReward.setFormatting("%.5f");
+		unconfirmedReward.setValue(MiningStatisticsActivity.unconfirmedRewardVal, false);
 		estimatedReward = ((NumberVal)findViewById(R.id.number_val_estimated_reward));
 		estimatedReward.setFormatting("%.5f");
+		estimatedReward.setValue(MiningStatisticsActivity.estimatedRewardVal, false);
 		potentialReward = ((NumberVal)findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
-		updateValues();
+		potentialReward.setValue(MiningStatisticsActivity.potentialRewardVal, false);
 	}
 	
 	public static void updateValues() {
