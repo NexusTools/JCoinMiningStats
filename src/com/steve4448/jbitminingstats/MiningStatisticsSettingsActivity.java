@@ -22,6 +22,7 @@ public class MiningStatisticsSettingsActivity extends Activity {
 		SharedPreferences prefs = getSharedPreferences(MiningStatisticsActivity.PREFERENCES_TAG, Activity.MODE_PRIVATE);
 		((CheckBox)findViewById(R.id.button_auto_connect_check_box)).setChecked(prefs.getBoolean("autoConnect", true));
 		((CheckBox)findViewById(R.id.button_use_hashrate_affix)).setChecked(prefs.getBoolean("showHashrateUnit", true));
+		((CheckBox)findViewById(R.id.button_show_when_parsed)).setChecked(prefs.getBoolean("showParseMessage", false));
 		((TextView)findViewById(R.id.option_connection_delay_text)).setText("" + prefs.getInt("connectionDelay", 5000));
 		((TextView)findViewById(R.id.text_option_slushs_domain)).setText(prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/"));
 		((TextView)findViewById(R.id.text_option_slushs_api_key)).setText(prefs.getString("slushsAPIKey", ""));
@@ -40,6 +41,7 @@ public class MiningStatisticsSettingsActivity extends Activity {
 				SharedPreferences.Editor prefs = getSharedPreferences(MiningStatisticsActivity.PREFERENCES_TAG, Activity.MODE_PRIVATE).edit();
 				prefs.putBoolean("autoConnect", ((CheckBox)findViewById(R.id.button_auto_connect_check_box)).isChecked());
 				prefs.putBoolean("showHashrateUnit", ((CheckBox)findViewById(R.id.button_use_hashrate_affix)).isChecked());
+				prefs.putBoolean("showParseMessage", ((CheckBox)findViewById(R.id.button_show_when_parsed)).isChecked());
 				prefs.putInt("connectionDelay", Integer.parseInt(((TextView)findViewById(R.id.option_connection_delay_text)).getText().toString()));
 				prefs.putString("slushsDomain", ((TextView)findViewById(R.id.text_option_slushs_domain)).getText().toString());
 				prefs.putString("slushsAPIKey", ((TextView)findViewById(R.id.text_option_slushs_api_key)).getText().toString());

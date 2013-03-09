@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/button_auto_connect_check_box"
+            android:layout_below="@+id/button_show_when_parsed"
             android:layout_toRightOf="@+id/label_option_connection_delay"
             android:ems="10"
             android:inputType="number"
@@ -86,22 +86,30 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <CheckBox
-            android:id="@+id/button_use_hashrate_affix"
+            android:id="@+id/button_auto_connect_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:checked="true"
-            android:text="@string/label_option_affix_hashrates_text" />
+            android:text="@string/label_option_auto_connect" />
 
         <CheckBox
-            android:id="@+id/button_auto_connect_check_box"
+            android:id="@+id/button_show_when_parsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/button_use_hashrate_affix"
+            android:text="@string/label_option_show_when_parsed" />
+
+        <CheckBox
+            android:id="@+id/button_use_hashrate_affix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/button_auto_connect_check_box"
             android:checked="true"
-            android:text="@string/label_option_auto_connect" />
+            android:text="@string/label_option_affix_hashrates_text" />
 
     </RelativeLayout>
 

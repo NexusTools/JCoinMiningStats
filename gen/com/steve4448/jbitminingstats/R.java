@@ -30,12 +30,13 @@ public final class R {
         public static final int ScrollPane=0x7f080000;
         public static final int ScrollView=0x7f080010;
         public static final int ScrollingPane=0x7f080009;
-        public static final int action_back=0x7f08001e;
-        public static final int action_connect_now=0x7f08001d;
-        public static final int action_more_statistics=0x7f08001c;
-        public static final int action_settings=0x7f08001b;
-        public static final int button_auto_connect_check_box=0x7f080016;
-        public static final int button_use_hashrate_affix=0x7f08001a;
+        public static final int action_back=0x7f08001f;
+        public static final int action_connect_now=0x7f08001e;
+        public static final int action_more_statistics=0x7f08001d;
+        public static final int action_settings=0x7f08001c;
+        public static final int button_auto_connect_check_box=0x7f08001a;
+        public static final int button_show_when_parsed=0x7f080016;
+        public static final int button_use_hashrate_affix=0x7f08001b;
         public static final int button_use_slushs_pool=0x7f080012;
         public static final int confirmed_namecoin_reward_label=0x7f080003;
         public static final int confirmed_reward_label=0x7f080005;
@@ -82,6 +83,7 @@ public final class R {
         public static final int label_option_auto_connect=0x7f050012;
         public static final int label_option_connect_to_slushs_api=0x7f050015;
         public static final int label_option_connection_delay=0x7f050013;
+        public static final int label_option_show_when_parsed=0x7f05001c;
         public static final int label_option_slushs_api_key=0x7f050018;
         public static final int label_option_where_to_connect_to=0x7f050014;
         public static final int label_slushs_option_site_domain=0x7f050016;

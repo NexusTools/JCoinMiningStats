@@ -42,6 +42,7 @@ public class MiningStatisticsActivity extends Activity {
 	public String slushsAPIKey;
 	public boolean autoConnect;
 	public boolean showHashrateUnit;
+	public boolean showParseMessage;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
 	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
@@ -152,7 +153,8 @@ public class MiningStatisticsActivity extends Activity {
 											createdRows.put(worker.name, workerRow);
 										}
 									}
-									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
+									if(showParseMessage)
+										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
 							});
 						} catch (JSONException e) {
@@ -252,6 +254,7 @@ public class MiningStatisticsActivity extends Activity {
 		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
 		autoConnect = prefs.getBoolean("autoConnect", true);
 		showHashrateUnit = prefs.getBoolean("showHashrateUnit", true);
+		showParseMessage = prefs.getBoolean("showParseMessage", false);
 		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))

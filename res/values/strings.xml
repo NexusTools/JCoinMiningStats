@@ -29,4 +29,5 @@
     <string name="option_slushs_api_key"></string>
     <string name="number_option_connection_delay">5000</string>
     <string name="label_option_affix_hashrates_text">Show hashrate units</string>
+    <string name="label_option_show_when_parsed">Show messages when parsed</string>
 </resources>
