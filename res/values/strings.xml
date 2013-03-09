@@ -29,4 +29,5 @@
     <string name="label_option_slushs_api_key">API key:</string>
     <string name="option_slushs_api_key"></string>
     <string name="number_option_connection_delay">5000</string>
+    <string name="label_option_affix_hashrates_text">Attach MH/S to hashrates</string>
 </resources>

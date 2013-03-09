@@ -10,16 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <CheckBox
-            android:id="@+id/auto_reconnect_check_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="15dp"
-            android:checked="true"
-            android:text="@string/label_option_auto_reconnect" />
-
         <RadioButton
             android:id="@+id/button_use_slushs_pool"
             android:layout_width="wrap_content"
@@ -49,17 +39,7 @@
             android:ems="10"
             android:inputType="number"
             android:singleLine="true"
-            android:text="@string/number_option_connection_delay" >
-        </EditText>
-
-        <TextView
-            android:id="@+id/label_option_connection_delay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@+id/option_connection_delay_text"
-            android:text="@string/label_option_connection_delay"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/number_option_connection_delay" />
 
         <EditText
             android:id="@+id/text_option_slushs_domain"
@@ -92,6 +72,34 @@
             android:inputType="textUri"
             android:singleLine="true"
             android:text="@string/option_slushs_api_key" />
+
+        <TextView
+            android:id="@+id/label_option_connection_delay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/option_connection_delay_text"
+            android:layout_alignBottom="@+id/option_connection_delay_text"
+            android:layout_alignParentLeft="true"
+            android:text="@string/label_option_connection_delay"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <CheckBox
+            android:id="@+id/button_use_mh_affix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:checked="true"
+            android:text="@string/label_option_affix_hashrates_text" />
+
+        <CheckBox
+            android:id="@+id/auto_reconnect_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/button_use_mh_affix"
+            android:checked="true"
+            android:text="@string/label_option_auto_reconnect" />
 
     </RelativeLayout>
 

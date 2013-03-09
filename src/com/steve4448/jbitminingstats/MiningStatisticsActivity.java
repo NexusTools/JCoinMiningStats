@@ -40,6 +40,7 @@ public class MiningStatisticsActivity extends Activity {
 	public int connectionDelay;
 	public String slushsDomain;
 	public String slushsAPIKey;
+	public boolean showMHSAffix;
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
 	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
@@ -50,21 +51,16 @@ public class MiningStatisticsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
 		workerRate = ((NumberVal)findViewById(R.id.number_val_worker_hash_rate));
-		workerRate.setAffix("mh/s");
 		confirmedReward = ((NumberVal)findViewById(R.id.number_val_confirmed_reward));
 		confirmedReward.setFormatting("%.5f");
 		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
 		workerTable = ((TableLayout)findViewById(R.id.worker_table));
-		if(savedInstanceState == null || !savedInstanceState.getBoolean("hasInitialized"))
-			startJSONFetching();
+		startJSONFetching();
 	}
 	
 	public void startJSONFetching() {
-		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
-		connectionDelay = prefs.getInt("connectionDelay", 5000);
-		slushsDomain = prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/");
-		slushsAPIKey = prefs.getString("slushsAPIKey", "");
+		loadSettings();
 		if(workerThread != null && workerThread.isAlive())
 			workerThread.interrupt();
 		if(slushsAPIKey.toString().trim().length() == 0) {
@@ -117,6 +113,13 @@ public class MiningStatisticsActivity extends Activity {
 										
 											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
+											if(showMHSAffix) {
+												if(workerRate.getAffix().equals(""))
+													workerRate.setAffix("mh/s");
+											} else {
+												if(!workerRate.getAffix().equals(""))
+													workerRate.setAffix("");
+											}
 											
 											NumberVal workerShare = (NumberVal)workerRow.getChildAt(3);
 											workerShare.setValue(worker.share);
@@ -138,7 +141,7 @@ public class MiningStatisticsActivity extends Activity {
 											NumberVal workerRate = new NumberVal(context);
 											workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerRate.setValue(worker.hashRate);
-											workerRate.setAffix("mh/s");
+											if(showMHSAffix) workerRate.setAffix("mh/s");
 											workerRow.addView(workerRate);
 											
 											NumberVal workerShare = new NumberVal(context);
@@ -246,5 +249,20 @@ public class MiningStatisticsActivity extends Activity {
 			return true;
 		}
 		return false;
+	}
+	
+	public void loadSettings() {
+		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
+		showMHSAffix = prefs.getBoolean("showMHSAffix", true);
+		if(showMHSAffix) {
+			if(workerRate.getAffix().equals(""))
+				workerRate.setAffix("mh/s");
+		} else {
+			if(!workerRate.getAffix().equals(""))
+				workerRate.setAffix("");
+		}
+		connectionDelay = prefs.getInt("connectionDelay", 5000);
+		slushsDomain = prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/");
+		slushsAPIKey = prefs.getString("slushsAPIKey", "");
 	}
 }
