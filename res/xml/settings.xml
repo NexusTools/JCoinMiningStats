@@ -11,7 +11,7 @@
         <EditTextPreference
                 android:key="setting_connect_delay"
                 android:title="@string/label_option_connection_delay"
-                android:defaultValue="@string/number_option_connection_delay" />
+                android:defaultValue="@string/default_option_connection_delay" />
         
         <CheckBoxPreference
                 android:key="settings_show_hashrates"
@@ -34,13 +34,13 @@
                 android:key="settings_slushs_api_domain"
                 android:title="@string/label_slushs_option_site_domain"
                 android:summary="@string/label_slushs_option_site_domain_summary"
-                android:defaultValue="@string/option_slushs_domain" />
+                android:defaultValue="@string/default_option_slushs_domain" />
         
         <EditTextPreference
                 android:key="settings_slushs_api_key"
                 android:title="@string/label_option_slushs_api_key"
                 android:summary="@string/label_option_slushs_api_key_summary"
-                android:defaultValue="@string/option_slushs_api_key" />
+                android:defaultValue="@string/default_option_slushs_api_key" />
 
     </PreferenceCategory>
 </PreferenceScreen>

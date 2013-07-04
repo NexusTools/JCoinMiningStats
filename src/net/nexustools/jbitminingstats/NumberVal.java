@@ -1,4 +1,4 @@
-package com.steve4448.jbitminingstats;
+package net.nexustools.jbitminingstats;
 
 import android.content.Context;
 import android.util.AttributeSet;

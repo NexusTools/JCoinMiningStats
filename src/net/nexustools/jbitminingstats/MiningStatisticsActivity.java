@@ -1,4 +1,4 @@
-package com.steve4448.jbitminingstats;
+package net.nexustools.jbitminingstats;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,6 +11,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import net.nexustools.jbitminingstats.R;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,7 +76,7 @@ public class MiningStatisticsActivity extends Activity {
 		loadSettings();
 		if(workerThread != null && workerThread.isAlive())
 			workerThread.interrupt();
-		if(slushsAPIKey.toString().trim().length() == 0) {
+		if(slushsAPIKey == null || slushsAPIKey.toString().trim().length() == 0) {
 			Toast.makeText(this, "Slush's API key has not been set, it's required to fetch JSON data. Please set the API key in the settings.", Toast.LENGTH_LONG).show();
 			return;
 		}

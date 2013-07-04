@@ -1,4 +1,6 @@
-package com.steve4448.jbitminingstats;
+package net.nexustools.jbitminingstats;
+
+import net.nexustools.jbitminingstats.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -6,6 +8,7 @@ import android.preference.PreferenceActivity;
 
 public class MiningStatisticsSettingsActivity extends PreferenceActivity {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

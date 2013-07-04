@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.steve4448.jbitminingstats"
+    package="net.nexustools.jbitminingstats"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" android:logo="@drawable/ic_launcher">
         <activity
-            android:name="com.steve4448.jbitminingstats.MiningStatisticsActivity"
+            android:name="net.nexustools.jbitminingstats.MiningStatisticsActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

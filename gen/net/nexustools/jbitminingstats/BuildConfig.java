@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.steve4448.jbitminingstats;
+package net.nexustools.jbitminingstats;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;
