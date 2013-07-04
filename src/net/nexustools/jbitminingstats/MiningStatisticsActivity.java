@@ -36,12 +36,12 @@ import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
 	public TableLayout workerTable;
-	public NumberVal workerRate;
-	public NumberVal confirmedReward;
-	public NumberVal confirmedNamecoinReward;
-	public NumberVal unconfirmedReward;
-	public NumberVal estimatedReward;
-	public NumberVal potentialReward;
+	public FormattableNumberView workerRate;
+	public FormattableNumberView confirmedReward;
+	public FormattableNumberView confirmedNamecoinReward;
+	public FormattableNumberView unconfirmedReward;
+	public FormattableNumberView estimatedReward;
+	public FormattableNumberView potentialReward;
 	public int connectionDelay;
 	public String slushsDomain;
 	public String slushsAPIKey;
@@ -57,16 +57,16 @@ public class MiningStatisticsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
-		workerRate = ((NumberVal)findViewById(R.id.number_val_worker_hash_rate));
-		confirmedReward = ((NumberVal)findViewById(R.id.number_val_confirmed_reward));
+		workerRate = ((FormattableNumberView)findViewById(R.id.number_val_worker_hash_rate));
+		confirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_reward));
 		confirmedReward.setFormatting("%.5f");
-		confirmedNamecoinReward = ((NumberVal)findViewById(R.id.number_val_confirmed_namecoin_reward));
+		confirmedNamecoinReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
-		unconfirmedReward = ((NumberVal)findViewById(R.id.number_val_uncomfirmed_reward));
+		unconfirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_uncomfirmed_reward));
 		unconfirmedReward.setFormatting("%.5f");
-		estimatedReward = ((NumberVal)findViewById(R.id.number_val_estimated_reward));
+		estimatedReward = ((FormattableNumberView)findViewById(R.id.number_val_estimated_reward));
 		estimatedReward.setFormatting("%.5f");
-		potentialReward = ((NumberVal)findViewById(R.id.number_val_potential_reward));
+		potentialReward = ((FormattableNumberView)findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
 		workerTable = ((TableLayout)findViewById(R.id.worker_table));
 		startJSONFetching();
@@ -125,13 +125,13 @@ public class MiningStatisticsActivity extends Activity {
 											ImageView workerStatus = (ImageView)workerRow.getChildAt(0);
 											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
 										
-											NumberVal workerRate = (NumberVal)workerRow.getChildAt(2);
+											FormattableNumberView workerRate = (FormattableNumberView)workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
 											
-											NumberVal workerShare = (NumberVal)workerRow.getChildAt(3);
+											FormattableNumberView workerShare = (FormattableNumberView)workerRow.getChildAt(3);
 											workerShare.setValue(worker.share);
 											
-											NumberVal workerScore = (NumberVal)workerRow.getChildAt(4);
+											FormattableNumberView workerScore = (FormattableNumberView)workerRow.getChildAt(4);
 											workerScore.setValue(worker.score);
 										} else {
 											TableRow workerRow = new TableRow(context);
@@ -145,17 +145,17 @@ public class MiningStatisticsActivity extends Activity {
 											workerName.setText(worker.name);
 											workerRow.addView(workerName);
 											
-											NumberVal workerRate = new NumberVal(context);
+											FormattableNumberView workerRate = new FormattableNumberView(context);
 											workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerRate.setValue(worker.hashRate);
 											workerRow.addView(workerRate);
 											
-											NumberVal workerShare = new NumberVal(context);
+											FormattableNumberView workerShare = new FormattableNumberView(context);
 											workerShare.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerShare.setValue(worker.share);
 											workerRow.addView(workerShare);
 											
-											NumberVal workerScore = new NumberVal(context);
+											FormattableNumberView workerScore = new FormattableNumberView(context);
 											workerScore.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 											workerScore.setValue(worker.score);
 											workerScore.setFormatting("%.1f");

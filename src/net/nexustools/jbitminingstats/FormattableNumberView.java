@@ -4,14 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class NumberVal extends TextView {
+public class FormattableNumberView extends TextView {
 	private double val = 0;
 	private String formatting;
 	private String affix = "";
 	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 6);
-	public NumberVal(Context context) {super(context); setValue(0, false);}
-	public NumberVal(Context context, AttributeSet set) {super(context, set); setValue(0, false);}
-	public NumberVal(Context context, AttributeSet set, int defStyle) {super(context, set, defStyle); setValue(0, false);}
+	public FormattableNumberView(Context context) {super(context); setValue(0, false);}
+	public FormattableNumberView(Context context, AttributeSet set) {super(context, set); setValue(0, false);}
+	public FormattableNumberView(Context context, AttributeSet set, int defStyle) {super(context, set, defStyle); setValue(0, false);}
 	private Thread transition;
 
 	public void setValue(double val) {

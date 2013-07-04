@@ -23,7 +23,7 @@
     <string name="label_option_auto_connect">Auto connect</string>
     <string name="label_option_auto_connect_summary">Automatically fetches the next json data within the connection delay specified.</string>
     <string name="label_option_connection_delay">Connection delay:</string>
-    <string name="default_option_connection_delay">5000</string>
+    <string name="default_option_connection_delay">15000</string>
     <string name="label_option_affix_hashrates_text">Show hashrate units</string>
     <string name="label_option_affix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
     <string name="label_option_show_when_parsed">Show parsed messages</string>
