@@ -19,14 +19,21 @@
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
     <string name="label_option_auto_connect">Auto connect</string>
+    <string name="label_option_auto_connect_summary">Automatically fetches the next json data within the connection delay specified.</string>
     <string name="label_option_connection_delay">Connection delay:</string>
     <string name="label_option_where_to_connect_to">Connection settings:</string>
     <string name="label_option_connect_to_slushs_api">Connect to Slush\'s API</string>
     <string name="label_slushs_option_site_domain">Domain:</string>
+    <string name="label_slushs_option_site_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.</string>
     <string name="option_slushs_domain">https://mining.bitcoin.cz/accounts/profile/json/</string>
     <string name="label_option_slushs_api_key">API key:</string>
+    <string name="label_option_slushs_api_key_summary">This is the API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
     <string name="option_slushs_api_key"></string>
     <string name="number_option_connection_delay">5000</string>
     <string name="label_option_affix_hashrates_text">Show hashrate units</string>
-    <string name="label_option_show_when_parsed">Show messages when parsed</string>
+    <string name="label_option_affix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
+    <string name="label_option_show_when_parsed">Show parsed messages</string>
+    <string name="label_option_show_when_parsed_summary">Whenever a connection is being attempted it\'ll display a toast saying the result.</string>
+    <string name="label_option_category_general">General Settings</string>
+    <string name="label_option_category_pool">Pool Settings</string>
 </resources>

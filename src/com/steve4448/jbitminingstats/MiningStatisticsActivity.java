@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -32,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
-	public static final String PREFERENCES_TAG = "MiningStatisticsSettings";
 	public TableLayout workerTable;
 	public NumberVal workerRate;
 	public NumberVal confirmedReward;
@@ -257,10 +257,10 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void loadSettings() {
-		SharedPreferences prefs = getSharedPreferences(PREFERENCES_TAG, Activity.MODE_PRIVATE);
-		autoConnect = prefs.getBoolean("autoConnect", true);
-		showHashrateUnit = prefs.getBoolean("showHashrateUnit", true);
-		showParseMessage = prefs.getBoolean("showParseMessage", false);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		autoConnect = prefs.getBoolean("setting_auto_connect", false);
+		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", false);
+		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
 		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))
@@ -273,8 +273,8 @@ public class MiningStatisticsActivity extends Activity {
 			if(rateColumn.getText().toString().endsWith("(mh/s)"))
 				rateColumn.setText("Rate");
 		}
-		connectionDelay = prefs.getInt("connectionDelay", 5000);
-		slushsDomain = prefs.getString("slushsDomain", "https://mining.bitcoin.cz/accounts/profile/json/");
-		slushsAPIKey = prefs.getString("slushsAPIKey", "");
+		connectionDelay = Integer.parseInt(prefs.getString("setting_connect_delay", "0"));
+		slushsDomain = prefs.getString("settings_slushs_api_domain", null);
+		slushsAPIKey = prefs.getString("settings_slushs_api_key", null);
 	}
 }

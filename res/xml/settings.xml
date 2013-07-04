@@ -1,0 +1,46 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="@string/label_option_category_general">
+
+        <CheckBoxPreference
+                android:key="setting_auto_connect"
+                android:title="@string/label_option_auto_connect"
+                android:summary="@string/label_option_auto_connect_summary"
+                android:defaultValue="true" />
+        
+        <EditTextPreference
+                android:key="setting_connect_delay"
+                android:title="@string/label_option_connection_delay"
+                android:defaultValue="@string/number_option_connection_delay" />
+        
+        <CheckBoxPreference
+                android:key="settings_show_hashrates"
+                android:title="@string/label_option_affix_hashrates_text"
+                android:summary="@string/label_option_affix_hashrates_text_summary" 
+                android:defaultValue="true"/>
+        
+        <CheckBoxPreference
+                android:key="settings_show_messages_when_parsed"
+                android:title="@string/label_option_show_when_parsed"
+                android:summary="@string/label_option_show_when_parsed_summary"
+                android:defaultValue="false" />
+
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+            android:title="@string/label_option_category_pool">
+
+        <EditTextPreference
+                android:key="settings_slushs_api_domain"
+                android:title="@string/label_slushs_option_site_domain"
+                android:summary="@string/label_slushs_option_site_domain_summary"
+                android:defaultValue="@string/option_slushs_domain" />
+        
+        <EditTextPreference
+                android:key="settings_slushs_api_key"
+                android:title="@string/label_option_slushs_api_key"
+                android:summary="@string/label_option_slushs_api_key_summary"
+                android:defaultValue="@string/option_slushs_api_key" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
