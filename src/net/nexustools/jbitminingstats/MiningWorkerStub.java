@@ -6,6 +6,7 @@ public class MiningWorkerStub {
 	double hashRate;
 	double share;
 	double score;
+	
 	public MiningWorkerStub(String name, boolean online, double hashRate, double share, double score) {
 		this.name = name;
 		this.online = online;

@@ -6,9 +6,9 @@
         android:title="@string/action_settings" />
     
     <item
-        android:id="@+id/action_show_blocks" 
-        android:orderInCategory="101"
-        android:title="@string/action_show_blocks" />
+        android:id="@+id/action_back" 
+        android:orderInCategory="102"
+        android:title="@string/action_back" />
     
     <item
         android:id="@+id/action_connect_now" 

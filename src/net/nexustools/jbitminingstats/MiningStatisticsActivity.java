@@ -12,10 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,9 +19,12 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -49,29 +48,28 @@ public class MiningStatisticsActivity extends Activity {
 	public static Thread workerThread;
 	public static Handler handler = new Handler();
 	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
-
+	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
-		workerRate = ((FormattableNumberView)findViewById(R.id.number_val_worker_hash_rate));
-		confirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_reward));
+		workerRate = ((FormattableNumberView) findViewById(R.id.number_val_worker_hash_rate));
+		confirmedReward = ((FormattableNumberView) findViewById(R.id.number_val_confirmed_reward));
 		confirmedReward.setFormatting("%.5f");
-		confirmedNamecoinReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_namecoin_reward));
+		confirmedNamecoinReward = ((FormattableNumberView) findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
-		unconfirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_uncomfirmed_reward));
+		unconfirmedReward = ((FormattableNumberView) findViewById(R.id.number_val_uncomfirmed_reward));
 		unconfirmedReward.setFormatting("%.5f");
-		estimatedReward = ((FormattableNumberView)findViewById(R.id.number_val_estimated_reward));
+		estimatedReward = ((FormattableNumberView) findViewById(R.id.number_val_estimated_reward));
 		estimatedReward.setFormatting("%.5f");
-		potentialReward = ((FormattableNumberView)findViewById(R.id.number_val_potential_reward));
+		potentialReward = ((FormattableNumberView) findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
-		workerTable = ((TableLayout)findViewById(R.id.worker_table));
-		startJSONFetching();
+		workerTable = ((TableLayout) findViewById(R.id.worker_table));
 	}
 	
 	public void startJSONFetching() {
-		loadSettings();
 		if(workerThread != null && workerThread.isAlive())
 			workerThread.interrupt();
 		if(slushsAPIKey == null || slushsAPIKey.toString().trim().length() == 0) {
@@ -93,6 +91,14 @@ public class MiningStatisticsActivity extends Activity {
 						while((read = reader.read(data)) != -1)
 							sb.append(data, 0, read);
 						String content = sb.toString();
+						if(content.equals("Invalid token")) {
+							handler.post(new Runnable() {
+								public void run() {
+									Toast.makeText(context, "Invalid API key!", Toast.LENGTH_LONG).show();
+								}
+							});
+							break;
+						}
 						try {
 							JSONObject jsonContent = new JSONObject(content);
 							JSONArray workerNames = jsonContent.getJSONObject("workers").names();
@@ -109,6 +115,7 @@ public class MiningStatisticsActivity extends Activity {
 							estimatedRewardVal = jsonContent.getDouble("estimated_reward");
 							potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
 							handler.post(new Runnable() {
+								@Override
 								public void run() {
 									workerRate.setValue(hashRateVal);
 									confirmedReward.setValue(confirmedRewardVal);
@@ -120,41 +127,41 @@ public class MiningStatisticsActivity extends Activity {
 										if(createdRows.containsKey(worker.name)) {
 											TableRow workerRow = createdRows.get(worker.name);
 											
-											ImageView workerStatus = (ImageView)workerRow.getChildAt(0);
+											ImageView workerStatus = (ImageView) workerRow.getChildAt(0);
 											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
-										
-											FormattableNumberView workerRate = (FormattableNumberView)workerRow.getChildAt(2);
+											
+											FormattableNumberView workerRate = (FormattableNumberView) workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
 											
-											FormattableNumberView workerShare = (FormattableNumberView)workerRow.getChildAt(3);
+											FormattableNumberView workerShare = (FormattableNumberView) workerRow.getChildAt(3);
 											workerShare.setValue(worker.share);
 											
-											FormattableNumberView workerScore = (FormattableNumberView)workerRow.getChildAt(4);
+											FormattableNumberView workerScore = (FormattableNumberView) workerRow.getChildAt(4);
 											workerScore.setValue(worker.score);
 										} else {
 											TableRow workerRow = new TableRow(context);
 											ImageView workerStatus = new ImageView(context);
-											workerStatus.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerStatus.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
 											workerRow.addView(workerStatus);
 											
 											TextView workerName = new TextView(context);
-											workerName.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerName.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerName.setText(worker.name);
 											workerRow.addView(workerName);
 											
 											FormattableNumberView workerRate = new FormattableNumberView(context);
-											workerRate.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerRate.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerRate.setValue(worker.hashRate);
 											workerRow.addView(workerRate);
 											
 											FormattableNumberView workerShare = new FormattableNumberView(context);
-											workerShare.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerShare.setValue(worker.share);
 											workerRow.addView(workerShare);
 											
 											FormattableNumberView workerScore = new FormattableNumberView(context);
-											workerScore.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+											workerScore.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerScore.setValue(worker.score);
 											workerScore.setFormatting("%.1f");
 											workerRow.addView(workerScore);
@@ -167,7 +174,7 @@ public class MiningStatisticsActivity extends Activity {
 										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
 							});
-						} catch (JSONException e) {
+						} catch(JSONException e) {
 							e.printStackTrace();
 							handler.post(new Runnable() {
 								@Override
@@ -181,8 +188,8 @@ public class MiningStatisticsActivity extends Activity {
 						else
 							break;
 					}
-				} catch (InterruptedException e) {
-				} catch (IOException e) {
+				} catch(InterruptedException e) {} catch(IOException e) {
+					e.printStackTrace();
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -222,36 +229,42 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		loadSettings();
 		startJSONFetching();
 	}
-
+	
 	@Override
 	public void onStart() {
 		super.onStart();
 	}
-
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if(workerThread != null) workerThread.interrupt();
+		if(workerThread != null)
+			workerThread.interrupt();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.mining_statistics, menu);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case R.id.action_settings:
 				startActivity(new Intent(this, MiningStatisticsSettingsActivity.class));
-			return true;
-			
+				return true;
+				
+			case R.id.action_show_blocks:
+				startActivity(new Intent(this, MiningBlockStatisticsActivity.class));
+				return true;
+				
 			case R.id.action_connect_now:
 				startJSONFetching();
-			return true;
+				return true;
 		}
 		return false;
 	}
@@ -261,7 +274,7 @@ public class MiningStatisticsActivity extends Activity {
 		autoConnect = prefs.getBoolean("setting_auto_connect", false);
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", false);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
-		TextView rateColumn = ((TextView)((TableRow)workerTable.getChildAt(0)).getChildAt(2));
+		TextView rateColumn = ((TextView) ((TableRow) workerTable.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))
 				workerRate.setAffix("mh/s");
