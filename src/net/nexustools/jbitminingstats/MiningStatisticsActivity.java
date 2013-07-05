@@ -12,8 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.nexustools.jbitminingstats.R;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
