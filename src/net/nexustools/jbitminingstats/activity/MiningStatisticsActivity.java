@@ -1,4 +1,4 @@
-package net.nexustools.jbitminingstats;
+package net.nexustools.jbitminingstats.activity;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+
+import net.nexustools.jbitminingstats.R;
+import net.nexustools.jbitminingstats.util.MiningWorkerStub;
+import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;

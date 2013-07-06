@@ -1,11 +1,11 @@
-package net.nexustools.jbitminingstats;
+package net.nexustools.jbitminingstats.util;
 
 public class MiningWorkerStub {
-	String name;
-	boolean online;
-	double hashRate;
-	double share;
-	double score;
+	public String name;
+	public boolean online;
+	public double hashRate;
+	public double share;
+	public double score;
 	
 	public MiningWorkerStub(String name, boolean online, double hashRate, double share, double score) {
 		this.name = name;

@@ -71,7 +71,7 @@
                 android:layout_marginTop="6dp"
                 android:text="@string/label_worker_list_title" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_confirmed_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:layout_marginTop="6dp"
                 android:text="@string/label_confirmed_namecoin_reward" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_confirmed_namecoin_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                 android:layout_marginTop="6dp"
                 android:text="@string/label_worker_rate" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_worker_hash_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:layout_below="@+id/estimated_reward_label"
                 android:text="@string/label_total_potential_reward" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_potential_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                 android:layout_alignParentRight="true"
                 android:text="@string/label_number_stub" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_uncomfirmed_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                 android:layout_alignParentRight="true"
                 android:text="@string/label_number_stub" />
 
-            <net.nexustools.jbitminingstats.FormattableNumberView
+            <net.nexustools.jbitminingstats.view.FormattableNumberView
                 android:id="@+id/number_val_estimated_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

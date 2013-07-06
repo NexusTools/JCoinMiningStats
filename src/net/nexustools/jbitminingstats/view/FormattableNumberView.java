@@ -1,5 +1,7 @@
-package net.nexustools.jbitminingstats;
+package net.nexustools.jbitminingstats.view;
 
+import net.nexustools.jbitminingstats.activity.MiningStatisticsActivity;
+import net.nexustools.jbitminingstats.util.SmoothColorChanger;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;

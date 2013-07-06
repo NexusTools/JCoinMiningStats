@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="net.nexustools.jbitminingstats.MiningStatisticsActivity"
+            android:name="net.nexustools.jbitminingstats.activity.MiningStatisticsActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.nexustools.jbitminingstats.MiningBlockStatisticsActivity">
+            android:name="net.nexustools.jbitminingstats.activity.MiningBlockStatisticsActivity">
             
         </activity>
         <activity 
-            android:name="net.nexustools.jbitminingstats.MiningStatisticsSettingsActivity">
+            android:name="net.nexustools.jbitminingstats.activity.MiningStatisticsSettingsActivity">
             
         </activity>
     </application>

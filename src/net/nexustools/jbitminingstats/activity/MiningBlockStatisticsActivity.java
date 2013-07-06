@@ -1,5 +1,6 @@
-package net.nexustools.jbitminingstats;
+package net.nexustools.jbitminingstats.activity;
 
+import net.nexustools.jbitminingstats.R;
 import android.app.Activity;
 import android.os.Bundle;
 

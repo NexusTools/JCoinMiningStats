@@ -1,4 +1,4 @@
-package net.nexustools.jbitminingstats;
+package net.nexustools.jbitminingstats.util;
 
 import android.graphics.Color;
 
@@ -71,7 +71,7 @@ public class SmoothColorChanger {
 		}
 	}
 	
-	void set(int newRed, int newGreen, int newBlue) {
+	public void set(int newRed, int newGreen, int newBlue) {
 		synchronized(lock) {
 			this.red = newRed;
 			this.green = newGreen;
