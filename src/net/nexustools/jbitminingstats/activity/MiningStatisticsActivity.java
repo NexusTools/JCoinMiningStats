@@ -31,14 +31,15 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
-	public TableLayout workerTable;
+	public LinearLayout workerTableHeader;
+	public LinearLayout workerTableEntries;
 	public FormattableNumberView workerRate;
 	public FormattableNumberView confirmedReward;
 	public FormattableNumberView confirmedNamecoinReward;
@@ -79,8 +80,9 @@ public class MiningStatisticsActivity extends Activity {
 		estimatedReward.setFormatting("%.5f");
 		potentialReward = ((FormattableNumberView) findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
-		workerTable = ((TableLayout) findViewById(R.id.worker_table));
-		progressBar = ((ProgressBar) findViewById(R.id.progressBar1));
+		workerTableHeader = ((LinearLayout) findViewById(R.id.worker_table_header));
+		workerTableEntries = ((LinearLayout) findViewById(R.id.worker_table_entries));
+		progressBar = ((ProgressBar) findViewById(R.id.progress_until_connection));
 		workScheduler = new Timer();
 	}
 	
@@ -198,14 +200,14 @@ public class MiningStatisticsActivity extends Activity {
 										workerScore.setFormatting("%.1f");
 										workerRow.addView(workerScore);
 										
-										workerTable.addView(workerRow);
+										workerTableEntries.addView(workerRow);
 										createdRows.put(worker.name, workerRow);
 									}
 									workersFound.add(worker.name);
 								}
 								for(String entry : createdRows.keySet()) {
 									if(!workersFound.contains(entry)) {
-										workerTable.removeView(createdRows.get(entry));
+										workerTableEntries.removeView(createdRows.get(entry));
 										createdRows.remove(entry);
 									}
 								}
@@ -314,12 +316,12 @@ public class MiningStatisticsActivity extends Activity {
 		autoConnect = prefs.getBoolean("setting_auto_connect", false);
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", false);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
-		TextView rateColumn = ((TextView) ((TableRow) workerTable.getChildAt(0)).getChildAt(2));
+		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))
 				workerRate.setAffix("mh/s");
 			if(!rateColumn.getText().toString().endsWith("(mh/s)"))
-				rateColumn.setText("Rate\n(mh/s)");
+				rateColumn.setText("Rate (mh/s)");
 		} else {
 			if(!workerRate.getAffix().equals(""))
 				workerRate.setAffix("");

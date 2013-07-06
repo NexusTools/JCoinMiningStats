@@ -1,194 +1,192 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Base"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:id="@+id/base"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MiningBlockStatisticsActivity" >
 
-    <ScrollView
-        android:id="@+id/ScrollPane"
+    <TextView
+        android:id="@+id/worker_hash_rate_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/label_worker_rate" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_worker_hash_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/worker_hash_rate_label"
+        android:layout_alignBottom="@+id/worker_hash_rate_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/confirmed_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/worker_hash_rate_label"
+        android:layout_marginTop="6dp"
+        android:text="@string/label_confirmed_reward" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_confirmed_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/confirmed_reward_label"
+        android:layout_alignBottom="@+id/confirmed_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/confirmed_namecoin_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirmed_reward_label"
+        android:layout_marginTop="6dp"
+        android:text="@string/label_confirmed_namecoin_reward" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_confirmed_namecoin_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/confirmed_namecoin_reward_label"
+        android:layout_alignBottom="@+id/confirmed_namecoin_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/unconfirmed_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirmed_namecoin_reward_label"
+        android:layout_marginTop="6dp"
+        android:text="@string/label_unconfirmed_reward" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_uncomfirmed_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/unconfirmed_reward_label"
+        android:layout_alignBottom="@+id/unconfirmed_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub" />
+
+    <TextView
+        android:id="@+id/estimated_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/unconfirmed_reward_label"
+        android:text="@string/label_estimated_reward" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_estimated_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/estimated_reward_label"
+        android:layout_alignBottom="@+id/estimated_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub" />
+
+    <TextView
+        android:id="@+id/total_potential_reward_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/estimated_reward_label"
+        android:text="@string/label_total_potential_reward" />
+
+    <net.nexustools.jbitminingstats.view.FormattableNumberView
+        android:id="@+id/number_val_potential_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/total_potential_reward_label"
+        android:layout_alignBottom="@+id/total_potential_reward_label"
+        android:layout_alignParentRight="true"
+        android:text="@string/label_number_stub" />
+
+    <TextView
+        android:id="@+id/workers_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/number_val_potential_reward"
+        android:layout_marginTop="6dp"
+        android:text="@string/label_worker_list_title" />
+
+    <LinearLayout
+        android:id="@+id/worker_table_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="UselessParent" >
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/progress_until_connection"
+        android:layout_below="@id/workers_label"
+        android:orientation="vertical" >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context=".MiningBlockStatisticsActivity" >
-
-            <TableLayout
-                android:id="@+id/worker_table"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/workers_label" >
-
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/label_worker_table_header_status" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="0"
-                        android:layout_weight="1"
-                        android:text="@string/label_worker_table_header_name" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_weight="1"
-                        android:text="@string/label_worker_table_header_rate" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="2"
-                        android:layout_weight="1"
-                        android:text="@string/label_worker_table_header_share" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/label_worker_table_header_score" />
-                </TableRow>
-            </TableLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/workers_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/total_potential_reward_label"
-                android:layout_marginTop="6dp"
-                android:text="@string/label_worker_list_title" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_confirmed_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/confirmed_reward_label"
-                android:layout_alignBottom="@+id/confirmed_reward_label"
-                android:layout_alignParentRight="true"
-                android:text="@string/label_number_stub"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:layout_weight="1"
+                android:text="@string/label_worker_table_header_status" />
 
             <TextView
-                android:id="@+id/confirmed_namecoin_reward_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/confirmed_reward_label"
-                android:layout_marginTop="6dp"
-                android:text="@string/label_confirmed_namecoin_reward" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_confirmed_namecoin_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/confirmed_namecoin_reward_label"
-                android:layout_alignBottom="@+id/confirmed_namecoin_reward_label"
-                android:layout_alignParentRight="true"
-                android:text="@string/label_number_stub"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:text="@string/label_worker_table_header_name" />
 
             <TextView
-                android:id="@+id/worker_hash_rate_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="6dp"
-                android:text="@string/label_worker_rate" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_worker_hash_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="@string/label_number_stub"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:layout_column="1"
+                android:layout_weight="1"
+                android:text="@string/label_worker_table_header_rate" />
 
             <TextView
-                android:id="@+id/confirmed_reward_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/worker_hash_rate_label"
-                android:layout_marginTop="6dp"
-                android:text="@string/label_confirmed_reward" />
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:text="@string/label_worker_table_header_share" />
 
             <TextView
-                android:id="@+id/unconfirmed_reward_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/workers_label"
-                android:layout_below="@+id/confirmed_namecoin_reward_label"
-                android:layout_marginTop="6dp"
-                android:text="@string/label_unconfirmed_reward" />
+                android:layout_weight="1"
+                android:text="@string/label_worker_table_header_score" />
+        </TableRow>
 
-            <TextView
-                android:id="@+id/estimated_reward_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/workers_label"
-                android:layout_below="@+id/unconfirmed_reward_label"
-                android:text="@string/label_estimated_reward" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            
+	            <LinearLayout
+	                android:id="@+id/worker_table_entries"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:orientation="vertical" >
+	            </LinearLayout>
+        </ScrollView>
 
-            <TextView
-                android:id="@+id/total_potential_reward_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/workers_label"
-                android:layout_below="@+id/estimated_reward_label"
-                android:text="@string/label_total_potential_reward" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_potential_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/total_potential_reward_label"
-                android:layout_alignBottom="@+id/total_potential_reward_label"
-                android:layout_alignParentRight="true"
-                android:text="@string/label_number_stub" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_uncomfirmed_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/unconfirmed_reward_label"
-                android:layout_alignBottom="@+id/unconfirmed_reward_label"
-                android:layout_alignParentRight="true"
-                android:text="@string/label_number_stub" />
-
-            <net.nexustools.jbitminingstats.view.FormattableNumberView
-                android:id="@+id/number_val_estimated_reward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/estimated_reward_label"
-                android:layout_alignBottom="@+id/estimated_reward_label"
-                android:layout_alignParentRight="true"
-                android:text="@string/label_number_stub" />
-        </RelativeLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/progress_until_connection"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:indeterminate="false" />
 
 </RelativeLayout>
