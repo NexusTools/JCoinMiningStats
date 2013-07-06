@@ -77,17 +77,17 @@ public class MiningStatisticsActivity extends Activity {
 		potentialReward.setFormatting("%.5f");
 		workerTable = ((TableLayout) findViewById(R.id.worker_table));
 		progressBar = ((ProgressBar) findViewById(R.id.progressBar1));
+		workScheduler = new Timer();
 	}
 	
 	public void beginFetch() {
-		elapsedTime = connectionDelay;
 		final Context context = this;
-		if(workScheduler == null)
-			workScheduler = new Timer();
 		if(currentTask != null)
 			currentTask.cancel();
 		
+		elapsedTime = connectionDelay;
 		canContinue = true;
+		
 		if(slushsAPIKey == null || slushsAPIKey.toString().trim().length() == 0) {
 			Toast.makeText(this, "Slush's API key has not been set, it's required to fetch JSON data. Please set the API key in the settings.", Toast.LENGTH_LONG).show();
 			return;
@@ -318,5 +318,6 @@ public class MiningStatisticsActivity extends Activity {
 		slushsDomain = prefs.getString("settings_slushs_api_domain", null);
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", null);
 		progressBar.setMax(connectionDelay);
+		progressBar.setProgress(connectionDelay);
 	}
 }

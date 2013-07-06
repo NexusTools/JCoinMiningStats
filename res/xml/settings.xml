@@ -12,7 +12,8 @@
         <EditTextPreference
                 android:key="setting_connect_delay"
                 android:title="@string/label_option_connection_delay"
-                android:defaultValue="@string/default_option_connection_delay" />
+                android:defaultValue="@string/default_option_connection_delay"
+                android:inputType="number" />
         
         <CheckBoxPreference
                 android:key="settings_show_hashrates"
