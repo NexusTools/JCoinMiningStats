@@ -3,9 +3,9 @@ package net.nexustools.jbitminingstats;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -54,7 +54,7 @@ public class MiningStatisticsActivity extends Activity {
 	public static Handler handler = new Handler();
 	public static Timer workScheduler;
 	public static TimerTask currentTask;
-	public HashMap<String, TableRow> createdRows = new HashMap<String, TableRow>();
+	public ConcurrentHashMap<String, TableRow> createdRows = new ConcurrentHashMap<String, TableRow>();
 	public static final int TIME_STEP = 1000 / 20;
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
@@ -150,6 +150,7 @@ public class MiningStatisticsActivity extends Activity {
 								unconfirmedReward.setValue(unconfirmedRewardVal);
 								estimatedReward.setValue(estimatedRewardVal);
 								potentialReward.setValue(potentialRewardVal);
+								ArrayList<String> workersFound = new ArrayList<String>();
 								for(MiningWorkerStub worker : workers) {
 									if(createdRows.containsKey(worker.name)) {
 										TableRow workerRow = createdRows.get(worker.name);
@@ -195,6 +196,13 @@ public class MiningStatisticsActivity extends Activity {
 										
 										workerTable.addView(workerRow);
 										createdRows.put(worker.name, workerRow);
+									}
+									workersFound.add(worker.name);
+								}
+								for(String entry : createdRows.keySet()) {
+									if(!workersFound.contains(entry)) {
+										workerTable.removeView(createdRows.get(entry));
+										createdRows.remove(entry);
 									}
 								}
 								if(showParseMessage)
