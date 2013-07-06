@@ -3,6 +3,7 @@ package net.nexustools.jbitminingstats.view;
 import net.nexustools.jbitminingstats.activity.MiningStatisticsActivity;
 import net.nexustools.jbitminingstats.util.SmoothColorChanger;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -10,7 +11,7 @@ public class FormattableNumberView extends TextView {
 	private double val = 0;
 	private String formatting;
 	private String affix = "";
-	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 6);
+	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 0, 0, 12);
 	
 	public FormattableNumberView(Context context) {
 		super(context);
@@ -36,9 +37,9 @@ public class FormattableNumberView extends TextView {
 	public void setValue(double val, boolean doTransition) {
 		if(doTransition) {
 			if(this.val > val)
-				curColor.set(255, 0, 0);
+				curColor.set(255, 0, 0, 255);
 			else if(this.val < val)
-				curColor.set(0, 255, 0);
+				curColor.set(0, 255, 0, 255);
 			setBackgroundColor(curColor.value());
 			if(transition != null && transition.isAlive())
 				transition.interrupt();
@@ -66,6 +67,11 @@ public class FormattableNumberView extends TextView {
 		
 		this.val = val;
 		formText();
+	}
+	
+	@Override
+	public void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 	}
 	
 	public void formText() {
