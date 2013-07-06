@@ -120,65 +120,109 @@
         android:layout_marginTop="6dp"
         android:text="@string/label_worker_list_title" />
 
-    <LinearLayout
+    <TableLayout
         android:id="@+id/worker_table_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/progress_until_connection"
-        android:layout_below="@id/workers_label"
-        android:orientation="vertical" >
+        android:layout_below="@id/workers_label" >
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_worker_table_header_status" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="0"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_worker_table_header_name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_worker_table_header_rate" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="2"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_worker_table_header_share" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_worker_table_header_score" />
         </TableRow>
+    </TableLayout>
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/progress_until_connection"
+        android:layout_below="@+id/worker_table_header" >
+
+        <TableLayout
+            android:id="@+id/worker_table_entries"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-            
-	            <LinearLayout
-	                android:id="@+id/worker_table_entries"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:orientation="vertical" >
-	            </LinearLayout>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    </LinearLayout>
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_status" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_rate" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_share" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_worker_table_header_score" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progress_until_connection"
@@ -187,6 +231,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:minHeight="10dip" />
 
 </RelativeLayout>

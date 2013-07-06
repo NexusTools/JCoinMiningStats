@@ -33,13 +33,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
-	public LinearLayout workerTableHeader;
-	public LinearLayout workerTableEntries;
+	public TableLayout workerTableHeader;
+	public TableLayout workerTableEntries;
 	public FormattableNumberView workerRate;
 	public FormattableNumberView confirmedReward;
 	public FormattableNumberView confirmedNamecoinReward;
@@ -80,8 +81,8 @@ public class MiningStatisticsActivity extends Activity {
 		estimatedReward.setFormatting("%.5f");
 		potentialReward = ((FormattableNumberView) findViewById(R.id.number_val_potential_reward));
 		potentialReward.setFormatting("%.5f");
-		workerTableHeader = ((LinearLayout) findViewById(R.id.worker_table_header));
-		workerTableEntries = ((LinearLayout) findViewById(R.id.worker_table_entries));
+		workerTableHeader = ((TableLayout) findViewById(R.id.worker_table_header));
+		workerTableEntries = ((TableLayout) findViewById(R.id.worker_table_entries));
 		progressBar = ((ProgressBar) findViewById(R.id.progress_until_connection));
 		workScheduler = new Timer();
 	}
@@ -157,6 +158,7 @@ public class MiningStatisticsActivity extends Activity {
 								estimatedReward.setValue(estimatedRewardVal);
 								potentialReward.setValue(potentialRewardVal);
 								ArrayList<String> workersFound = new ArrayList<String>();
+								workersFound.add(getString(R.string.label_worker_table_header_name));
 								for(MiningWorkerStub worker : workers) {
 									if(createdRows.containsKey(worker.name)) {
 										TableRow workerRow = createdRows.get(worker.name);
@@ -174,6 +176,8 @@ public class MiningStatisticsActivity extends Activity {
 										workerScore.setValue(worker.score);
 									} else {
 										TableRow workerRow = new TableRow(context);
+										workerRow.setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+										
 										ImageView workerStatus = new ImageView(context);
 										workerStatus.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 										workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
@@ -317,16 +321,21 @@ public class MiningStatisticsActivity extends Activity {
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", false);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
 		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
+		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
 			if(workerRate.getAffix().equals(""))
 				workerRate.setAffix("mh/s");
-			if(!rateColumn.getText().toString().endsWith("(mh/s)"))
+			if(!rateColumn.getText().toString().endsWith("(mh/s)")) {
 				rateColumn.setText("Rate (mh/s)");
+				rateColumnStub.setText("Rate (mh/s)");
+			}
 		} else {
 			if(!workerRate.getAffix().equals(""))
 				workerRate.setAffix("");
-			if(rateColumn.getText().toString().endsWith("(mh/s)"))
+			if(rateColumn.getText().toString().endsWith("(mh/s)")) {
 				rateColumn.setText("Rate");
+				rateColumnStub.setText("Rate");
+			}
 		}
 		connectionDelay = Integer.parseInt(prefs.getString("setting_connect_delay", "0"));
 		slushsDomain = prefs.getString("settings_slushs_api_domain", null);
