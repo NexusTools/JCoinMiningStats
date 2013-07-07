@@ -135,7 +135,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
-                android:layout_weight="1"
                 android:text="@string/label_worker_table_header_status" />
 
             <TextView
@@ -232,6 +231,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:indeterminate="false"
-        android:minHeight="10dip" />
+        android:minHeight="10dp" />
 
 </RelativeLayout>

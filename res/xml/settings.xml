@@ -4,13 +4,13 @@
             android:title="@string/label_option_category_general">
 
         <CheckBoxPreference
-                android:key="setting_auto_connect"
+                android:key="settings_auto_connect"
                 android:title="@string/label_option_auto_connect"
                 android:summary="@string/label_option_auto_connect_summary"
                 android:defaultValue="true" />
         
         <EditTextPreference
-                android:key="setting_connect_delay"
+                android:key="settings_connect_delay"
                 android:title="@string/label_option_connection_delay"
                 android:defaultValue="@string/default_option_connection_delay"
                 android:inputType="number" />
@@ -33,10 +33,16 @@
             android:title="@string/label_option_category_pool">
 
         <EditTextPreference
-                android:key="settings_slushs_api_domain"
-                android:title="@string/label_slushs_option_site_domain"
-                android:summary="@string/label_slushs_option_site_domain_summary"
-                android:defaultValue="@string/default_option_slushs_domain" />
+                android:key="settings_slushs_account_api_domain"
+                android:title="@string/label_slushs_option_site_miner_domain"
+                android:summary="@string/label_slushs_option_site_miner_domain_summary"
+                android:defaultValue="@string/default_option_slushs_miner_domain" />
+        
+        <EditTextPreference
+                android:key="settings_slushs_block_api_domain"
+                android:title="@string/label_slushs_option_site_block_domain"
+                android:summary="@string/label_slushs_option_site_block_domain_summary"
+                android:defaultValue="@string/default_option_slushs_block_domain" />
         
         <EditTextPreference
                 android:key="settings_slushs_api_key"

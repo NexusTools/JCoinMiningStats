@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_connect_now">Connect Now</string>
     <string name="action_show_blocks">Show Blocks</string>
+    <string name="action_show_miners">Show Miners</string>
     <string name="label_worker_rate">Worker Rate:</string>
     <string name="label_confirmed_reward">Confirmed Reward:</string>
     <string name="label_confirmed_namecoin_reward">Confirmed Namecoin Reward:</string>
@@ -19,6 +20,13 @@
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
     <string name="label_number_stub">N/A</string>
+    <!-- Block Activity -->
+    <string name="label_block_table_header_block">Block</string>
+    <string name="label_block_table_header_confirmations">Confirmations</string>
+    <string name="label_block_table_header_reward">Reward</string>
+    <string name="label_block_table_header_namecoin_reward">NMC Reward</string>
+    <string name="label_block_table_header_score">Score</string>
+    <string name="label_block_table_header_share">Share</string>
     <!-- Settings Activity -->
     <string name="label_option_category_general">General Settings</string>
     <string name="label_option_auto_connect">Auto connect</string>
@@ -30,9 +38,12 @@
     <string name="label_option_show_when_parsed">Show parsed messages</string>
     <string name="label_option_show_when_parsed_summary">Whenever a connection is being attempted it\'ll display a toast saying the result.</string>
     <string name="label_option_category_pool">Pool Settings</string>
-    <string name="label_slushs_option_site_domain">Domain:</string>
-    <string name="label_slushs_option_site_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.</string>
-    <string name="default_option_slushs_domain">https://mining.bitcoin.cz/accounts/profile/json/</string>
+    <string name="label_slushs_option_site_miner_domain">Miner API domain:</string>
+    <string name="label_slushs_option_site_miner_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Miners)</string>
+    <string name="default_option_slushs_miner_domain">https://mining.bitcoin.cz/accounts/profile/json/</string>
+    <string name="label_slushs_option_site_block_domain">Block API domain:</string>
+    <string name="label_slushs_option_site_block_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Blocks)</string>
+    <string name="default_option_slushs_block_domain">https://mining.bitcoin.cz/stats/json/</string>
     <string name="label_option_slushs_api_key">API key:</string>
     <string name="label_option_slushs_api_key_summary">This is the API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
     <string name="default_option_slushs_api_key"></string>

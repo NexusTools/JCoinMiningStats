@@ -52,6 +52,7 @@ public class MiningStatisticsActivity extends Activity {
 	public int connectionDelay;
 	public String slushsDomain;
 	public String slushsAPIKey;
+	public boolean showingBlocks;
 	public boolean autoConnect;
 	public boolean showHashrateUnit;
 	public boolean showParseMessage;
@@ -84,11 +85,12 @@ public class MiningStatisticsActivity extends Activity {
 		workerTableHeader = ((TableLayout) findViewById(R.id.worker_table_header));
 		workerTableEntries = ((TableLayout) findViewById(R.id.worker_table_entries));
 		progressBar = ((ProgressBar) findViewById(R.id.progress_until_connection));
-		workScheduler = new Timer();
 	}
 	
 	public void beginFetch() {
 		final Context context = this;
+		if(workScheduler == null)
+			workScheduler = new Timer();
 		if(currentTask != null)
 			currentTask.cancel();
 		
@@ -231,6 +233,14 @@ public class MiningStatisticsActivity extends Activity {
 		}, 0, TIME_STEP);
 	}
 	
+	public void stopFetch() {
+		if(workScheduler != null) {
+			workScheduler.cancel();
+			workScheduler.purge();
+			workScheduler = null;
+		}
+	}
+	
 	public int fetchJSONData() {
 		try {
 			StringBuffer sb = new StringBuffer();
@@ -282,18 +292,39 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	@Override
+	public void onStop() {
+		super.onStop();
+		stopFetch();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    SharedPreferences.Editor editor = prefs.edit(); {
+	    	editor.putBoolean("showing_blocks", showingBlocks);
+	    }
+	    editor.commit();
+	}
+	
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		stopFetch();
+	}
+	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if(workScheduler != null) {
-			workScheduler.cancel();
-			workScheduler.purge();
-			workScheduler = null;
-		}
+		stopFetch();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.mining_statistics, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.action_show_blocks).setVisible(!showingBlocks);
+		menu.findItem(R.id.action_show_miners).setVisible(showingBlocks);
 		return true;
 	}
 	
@@ -305,7 +336,11 @@ public class MiningStatisticsActivity extends Activity {
 				return true;
 				
 			case R.id.action_show_blocks:
-				startActivity(new Intent(this, MiningBlockStatisticsActivity.class));
+				showingBlocks = true;
+				return true;
+				
+			case R.id.action_show_miners:
+				showingBlocks = false;
 				return true;
 				
 			case R.id.action_connect_now:
@@ -317,8 +352,9 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public void loadSettings() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		autoConnect = prefs.getBoolean("setting_auto_connect", false);
-		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", false);
+		showingBlocks = prefs.getBoolean("showing_blocks", true);
+		autoConnect = prefs.getBoolean("settings_auto_connect", true);
+		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
 		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
@@ -337,9 +373,9 @@ public class MiningStatisticsActivity extends Activity {
 				rateColumnStub.setText("Rate");
 			}
 		}
-		connectionDelay = Integer.parseInt(prefs.getString("setting_connect_delay", "0"));
-		slushsDomain = prefs.getString("settings_slushs_api_domain", null);
-		slushsAPIKey = prefs.getString("settings_slushs_api_key", null);
+		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
+		slushsDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
+		slushsAPIKey = prefs.getString("settings_slushs_api_key", getString(R.string.default_option_slushs_api_key));
 		progressBar.setMax(connectionDelay);
 		progressBar.setProgress(connectionDelay);
 	}
