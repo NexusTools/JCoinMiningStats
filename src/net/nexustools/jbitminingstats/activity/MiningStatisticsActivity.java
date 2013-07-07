@@ -120,37 +120,42 @@ public class MiningStatisticsActivity extends Activity {
 				if(elapsedTime >= connectionDelay) {
 					final int result = fetchMinerJSONData();
 					final int result2 = showingBlocks ? fetchBlockJSONData() : 0;
+					String pb = null;
+					switch(result) {
+						case JSON_FETCH_SUCCESS:
+						break;
+						case JSON_FETCH_PARSE_ERROR:
+							pb = "Error parsing JSON content for miners.";
+						break;
+						case JSON_FETCH_INVALID_TOKEN:
+							pb = "Invalid API key for miners.";
+						break;
+						case JSON_FETCH_CONNECTION_ERROR:
+							pb = "Error connecting to JSON supplier for miners.";
+						break;
+					}
+					switch(result2) {
+						case JSON_FETCH_SUCCESS:
+						break;
+						case JSON_FETCH_PARSE_ERROR:
+							pb = "Error parsing JSON content for blocks.";
+						break;
+						case JSON_FETCH_INVALID_TOKEN:
+							pb = "Invalid API key for blocks.";
+						break;
+						case JSON_FETCH_CONNECTION_ERROR:
+							pb = "Error connecting to JSON supplier for blocks.";
+						break;
+					}
+					final String problem = pb;
+					if(pb == null) {
+						canContinue = autoConnect;
+					} else {
+						canContinue = false;
+					}
 					handler.post(new Runnable() {
 						public void run() {
-							String problem = null;
-							switch(result) {
-								case JSON_FETCH_SUCCESS:
-								break;
-								case JSON_FETCH_PARSE_ERROR:
-									problem = "Error parsing JSON content for miners.";
-								break;
-								case JSON_FETCH_INVALID_TOKEN:
-									problem = "Invalid API key for miners.";
-								break;
-								case JSON_FETCH_CONNECTION_ERROR:
-									problem = "Error connecting to JSON supplier for miners.";
-								break;
-							}
-							switch(result2) {
-								case JSON_FETCH_SUCCESS:
-								break;
-								case JSON_FETCH_PARSE_ERROR:
-									problem = "Error parsing JSON content for blocks.";
-								break;
-								case JSON_FETCH_INVALID_TOKEN:
-									problem = "Invalid API key for blocks.";
-								break;
-								case JSON_FETCH_CONNECTION_ERROR:
-									problem = "Error connecting to JSON supplier for blocks.";
-								break;
-							}
 							if(problem != null) {
-								canContinue = false;
 								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
 								AlertDialog.Builder alert = new AlertDialog.Builder(context);
 								alert.setTitle("Connection Error");
@@ -177,7 +182,6 @@ public class MiningStatisticsActivity extends Activity {
 								alert.setIcon(R.drawable.ic_launcher);
 								alert.create().show();
 							} else {
-								canContinue = autoConnect;
 								workerRate.setValue(hashRateVal);
 								confirmedReward.setValue(confirmedRewardVal);
 								confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
@@ -316,8 +320,7 @@ public class MiningStatisticsActivity extends Activity {
 						}
 					});
 					if(!canContinue) {
-						this.cancel();
-						currentTask = null;
+						stopFetch();
 					} else
 						elapsedTime = 0;
 					return;
@@ -332,6 +335,7 @@ public class MiningStatisticsActivity extends Activity {
 			workScheduler.purge();
 			workScheduler = null;
 		}
+		progressBar.setProgress(0);
 	}
 	
 	public int fetchMinerJSONData() {
@@ -479,7 +483,9 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public void loadSettings() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		System.out.println(showingBlocks);
 		showingBlocks = prefs.getBoolean("showing_blocks", true);
+		System.out.println(showingBlocks);
 		autoConnect = prefs.getBoolean("settings_auto_connect", true);
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
