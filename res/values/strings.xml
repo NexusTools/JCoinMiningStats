@@ -32,6 +32,25 @@
     <string name="label_number_stub">N/A</string>
     
     <string name="label_hashrate_affix">mh/s</string>
+    
+    <string name="problem_json_no_api_key_set">Slush\'s API key has not been set, it\'s required to fetch JSON data. Please set the API key in the settings.</string>
+    <string name="problem_json">Connection Error</string>
+    <string name="problem_json_yes">Yes</string>
+    <string name="problem_json_no">No</string>
+    <string name="problem_json_trying_again">Trying to connect again&#8230;</string>
+    <string name="problem_json_not_trying_again">No more attempts to connect will be made.</string>
+    
+    <string name="problem_json_parse_error_miners">There\'s been an issue while parsing the JSON data. (Miners)</string>
+    <string name="problem_json_invalid_token_miners">The API key you\'ve provided appears to be invalid. (Miners)</string>
+    <string name="problem_json_connection_error_miners">There\'s been an error while connecting to the JSON supplier. (Miners)</string>
+    
+    <string name="problem_json_parse_error_blocks">There\'s been an issue while parsing the JSON data. (Blocks)</string>
+    <string name="problem_json_invalid_token_blocks">The API key you\'ve provided appears to be invalid. (Blocks)</string>
+    <string name="problem_json_connection_error_blocks">There\'s been an error while connecting to the JSON supplier. (Blocks)</string>
+    
+    <string name="problem_try_again">Would you like to try again?</string>
+    
+    <string name="json_parsed">JSON Parsed!</string>
     <!-- Settings Activity -->
     <string name="label_option_category_general">General Settings</string>
     <string name="label_option_auto_connect">Auto connect</string>

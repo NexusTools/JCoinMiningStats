@@ -108,8 +108,8 @@ public class MiningStatisticsActivity extends Activity {
 		elapsedTime = connectionDelay;
 		canContinue = true;
 		
-		if(slushsAPIKey == null || slushsAPIKey.toString().trim().length() == 0) {
-			Toast.makeText(this, "Slush's API key has not been set, it's required to fetch JSON data. Please set the API key in the settings.", Toast.LENGTH_LONG).show();
+		if(slushsAPIKey == null || slushsAPIKey.trim().length() == 0) {
+			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
 			return;
 		}
 		workScheduler.schedule(currentTask = new TimerTask() {
@@ -122,29 +122,25 @@ public class MiningStatisticsActivity extends Activity {
 					final int result2 = showingBlocks ? fetchBlockJSONData() : 0;
 					String pb = null;
 					switch(result) {
-						case JSON_FETCH_SUCCESS:
-						break;
 						case JSON_FETCH_PARSE_ERROR:
-							pb = "Error parsing JSON content for miners.";
+							pb = getString(R.string.problem_json_parse_error_miners);
 						break;
 						case JSON_FETCH_INVALID_TOKEN:
-							pb = "Invalid API key for miners.";
+							pb = getString(R.string.problem_json_invalid_token_miners);
 						break;
 						case JSON_FETCH_CONNECTION_ERROR:
-							pb = "Error connecting to JSON supplier for miners.";
+							pb = getString(R.string.problem_json_connection_error_miners);
 						break;
 					}
 					switch(result2) {
-						case JSON_FETCH_SUCCESS:
-						break;
 						case JSON_FETCH_PARSE_ERROR:
-							pb = "Error parsing JSON content for blocks.";
+							pb = pb == null ? getString(R.string.problem_json_parse_error_blocks) : pb + "\n" + getString(R.string.problem_json_parse_error_blocks);
 						break;
 						case JSON_FETCH_INVALID_TOKEN:
-							pb = "Invalid API key for blocks.";
+							pb = pb == null ? getString(R.string.problem_json_invalid_token_blocks) : pb + "\n" + getString(R.string.problem_json_invalid_token_blocks);
 						break;
 						case JSON_FETCH_CONNECTION_ERROR:
-							pb = "Error connecting to JSON supplier for blocks.";
+							pb = pb == null ? getString(R.string.problem_json_connection_error_blocks) : pb + "\n" + getString(R.string.problem_json_connection_error_blocks);
 						break;
 					}
 					final String problem = pb;
@@ -154,25 +150,25 @@ public class MiningStatisticsActivity extends Activity {
 							if(problem != null) {
 								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
 								AlertDialog.Builder alert = new AlertDialog.Builder(context);
-								alert.setTitle("Connection Error");
-								alert.setMessage(problem + "\nWould you like to try connecting again?");
-								alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+								alert.setTitle(R.string.problem_json);
+								alert.setMessage(problem + "\n" + getString(R.string.problem_try_again));
+								alert.setPositiveButton(R.string.problem_json_yes, new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
+										Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
 										beginFetch();
 									}
 								});
-								alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+								alert.setNegativeButton(R.string.problem_json_no, new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_LONG).show();
 									}
 								});
 								alert.setOnCancelListener(new OnCancelListener() {
 									@Override
 									public void onCancel(DialogInterface dialog) {
-										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_LONG).show();
 									}
 								});
 								alert.setIcon(R.drawable.ic_launcher);
@@ -311,7 +307,7 @@ public class MiningStatisticsActivity extends Activity {
 									}
 								}
 								if(showParseMessage)
-									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
+									Toast.makeText(context, R.string.json_parsed, Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
