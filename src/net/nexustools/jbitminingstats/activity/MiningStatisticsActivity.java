@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -119,54 +118,73 @@ public class MiningStatisticsActivity extends Activity {
 				elapsedTime += TIME_STEP;
 				progressBar.setProgress(elapsedTime > connectionDelay ? connectionDelay : elapsedTime);
 				if(elapsedTime >= connectionDelay) {
-					if(showingBlocks) {
-						final int result = fetchBlockJSONData();
-						handler.post(new Runnable() {
-							public void run() {
-								String problem = null;
-								switch(result) {
-									case JSON_FETCH_SUCCESS:
-									break;
-									case JSON_FETCH_PARSE_ERROR:
-										problem = "Error parsing JSON content!";
-									break;
-									case JSON_FETCH_INVALID_TOKEN:
-										problem = "Invalid API key!";
-									break;
-									case JSON_FETCH_CONNECTION_ERROR:
-										problem = "Error connecting to JSON supplier!";
-									break;
-								}
-								if(problem != null) {
-									canContinue = false;
-									Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
-									AlertDialog.Builder alert = new AlertDialog.Builder(context);
-									alert.setTitle("Connection Error");
-									alert.setMessage(problem + "\nWould you like to try connecting again?");
-									alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
-											beginFetch();
-										}
-									});
-									alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-										}
-									});
-									alert.setOnCancelListener(new OnCancelListener() {
-										@Override
-										public void onCancel(DialogInterface dialog) {
-											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-										}
-									});
-									alert.setIcon(R.drawable.ic_launcher);
-									alert.create().show();
-								} else {
-									canContinue = autoConnect;
-									
+					final int result = fetchMinerJSONData();
+					final int result2 = showingBlocks ? fetchBlockJSONData() : 0;
+					handler.post(new Runnable() {
+						public void run() {
+							String problem = null;
+							switch(result) {
+								case JSON_FETCH_SUCCESS:
+								break;
+								case JSON_FETCH_PARSE_ERROR:
+									problem = "Error parsing JSON content for miners.";
+								break;
+								case JSON_FETCH_INVALID_TOKEN:
+									problem = "Invalid API key for miners.";
+								break;
+								case JSON_FETCH_CONNECTION_ERROR:
+									problem = "Error connecting to JSON supplier for miners.";
+								break;
+							}
+							switch(result2) {
+								case JSON_FETCH_SUCCESS:
+								break;
+								case JSON_FETCH_PARSE_ERROR:
+									problem = "Error parsing JSON content for blocks.";
+								break;
+								case JSON_FETCH_INVALID_TOKEN:
+									problem = "Invalid API key for blocks.";
+								break;
+								case JSON_FETCH_CONNECTION_ERROR:
+									problem = "Error connecting to JSON supplier for blocks.";
+								break;
+							}
+							if(problem != null) {
+								canContinue = false;
+								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
+								AlertDialog.Builder alert = new AlertDialog.Builder(context);
+								alert.setTitle("Connection Error");
+								alert.setMessage(problem + "\nWould you like to try connecting again?");
+								alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
+										beginFetch();
+									}
+								});
+								alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+									}
+								});
+								alert.setOnCancelListener(new OnCancelListener() {
+									@Override
+									public void onCancel(DialogInterface dialog) {
+										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+									}
+								});
+								alert.setIcon(R.drawable.ic_launcher);
+								alert.create().show();
+							} else {
+								canContinue = autoConnect;
+								workerRate.setValue(hashRateVal);
+								confirmedReward.setValue(confirmedRewardVal);
+								confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
+								unconfirmedReward.setValue(unconfirmedRewardVal);
+								estimatedReward.setValue(estimatedRewardVal);
+								potentialReward.setValue(potentialRewardVal);
+								if(showingBlocks) {
 									ArrayList<String> blocksFound = new ArrayList<String>();
 									blocksFound.add(getString(R.string.label_block_table_header_block));
 									for(BlockStub block : blocks) {
@@ -232,65 +250,7 @@ public class MiningStatisticsActivity extends Activity {
 											createdBlockRows.remove(entry);
 										}
 									}
-									
-									if(showParseMessage)
-										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
-								}
-							}
-						});
-					} else {
-						final int result = fetchMinerJSONData();
-						handler.post(new Runnable() {
-							public void run() {
-								String problem = null;
-								switch(result) {
-									case JSON_FETCH_SUCCESS:
-									break;
-									case JSON_FETCH_PARSE_ERROR:
-										problem = "Error parsing JSON content!";
-									break;
-									case JSON_FETCH_INVALID_TOKEN:
-										problem = "Invalid API key!";
-									break;
-									case JSON_FETCH_CONNECTION_ERROR:
-										problem = "Error connecting to JSON supplier!";
-									break;
-								}
-								if(problem != null) {
-									canContinue = false;
-									Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
-									AlertDialog.Builder alert = new AlertDialog.Builder(context);
-									alert.setTitle("Connection Error");
-									alert.setMessage(problem + "\nWould you like to try connecting again?");
-									alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
-											beginFetch();
-										}
-									});
-									alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-										}
-									});
-									alert.setOnCancelListener(new OnCancelListener() {
-										@Override
-										public void onCancel(DialogInterface dialog) {
-											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-										}
-									});
-									alert.setIcon(R.drawable.ic_launcher);
-									alert.create().show();
 								} else {
-									canContinue = autoConnect;
-									workerRate.setValue(hashRateVal);
-									confirmedReward.setValue(confirmedRewardVal);
-									confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
-									unconfirmedReward.setValue(unconfirmedRewardVal);
-									estimatedReward.setValue(estimatedRewardVal);
-									potentialReward.setValue(potentialRewardVal);
 									ArrayList<String> workersFound = new ArrayList<String>();
 									workersFound.add(getString(R.string.label_worker_table_header_name));
 									for(MiningWorkerStub worker : workers) {
@@ -349,12 +309,12 @@ public class MiningStatisticsActivity extends Activity {
 											createdMinerRows.remove(entry);
 										}
 									}
-									if(showParseMessage)
-										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
+								if(showParseMessage)
+									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 							}
-						});
-					}
+						}
+					});
 					if(!canContinue) {
 						this.cancel();
 						currentTask = null;
@@ -553,15 +513,30 @@ public class MiningStatisticsActivity extends Activity {
 		if(showingBlocks) {
 			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
 			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
+			for(String entry : createdMinerRows.keySet()) {
+				workerTableEntries.removeView(createdMinerRows.get(entry));
+				createdMinerRows.remove(entry);
+			}
 			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
 			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
+			if(workers != null)
+				workers.clear();
+			createdMinerRows.clear();
 		} else {
 			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.GONE);
 			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.GONE);
+			for(String entry : createdBlockRows.keySet()) {
+				blockTableEntries.removeView(createdBlockRows.get(entry));
+				createdBlockRows.remove(entry);
+			}
 			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
 			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
+			if(blocks != null)
+				blocks.clear();
+			createdBlockRows.clear();
 		}
+		beginFetch();
 	}
 }
