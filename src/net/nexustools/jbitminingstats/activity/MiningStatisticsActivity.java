@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.nexustools.jbitminingstats.R;
+import net.nexustools.jbitminingstats.util.BlockStub;
 import net.nexustools.jbitminingstats.util.MiningWorkerStub;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
@@ -25,14 +26,17 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -47,10 +51,11 @@ public class MiningStatisticsActivity extends Activity {
 	public FormattableNumberView unconfirmedReward;
 	public FormattableNumberView estimatedReward;
 	public FormattableNumberView potentialReward;
-	public ArrayList<MiningWorkerStub> workers;
+	
 	public ProgressBar progressBar;
 	public int connectionDelay;
-	public String slushsDomain;
+	public String slushsAccountDomain;
+	public String slushsBlockDomain;
 	public String slushsAPIKey;
 	public boolean showingBlocks;
 	public boolean autoConnect;
@@ -61,6 +66,8 @@ public class MiningStatisticsActivity extends Activity {
 	public static Handler handler = new Handler();
 	public static Timer workScheduler;
 	public static TimerTask currentTask;
+	public ArrayList<MiningWorkerStub> workers;
+	public ArrayList<BlockStub> blocks;
 	public ConcurrentHashMap<String, TableRow> createdRows = new ConcurrentHashMap<String, TableRow>();
 	public static final int TIME_STEP = 1000 / 20;
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
@@ -107,121 +114,182 @@ public class MiningStatisticsActivity extends Activity {
 				elapsedTime += TIME_STEP;
 				progressBar.setProgress(elapsedTime > connectionDelay ? connectionDelay : elapsedTime);
 				if(elapsedTime >= connectionDelay) {
-					final int result = fetchJSONData();
-					handler.post(new Runnable() {
-						public void run() {
-							String problem = null;
-							switch(result) {
-								case JSON_FETCH_SUCCESS:
-								break;
-								case JSON_FETCH_PARSE_ERROR:
-									problem = "Error parsing JSON content!";
-								break;
-								case JSON_FETCH_INVALID_TOKEN:
-									problem = "Invalid API key!";
-								break;
-								case JSON_FETCH_CONNECTION_ERROR:
-									problem = "Error connecting to JSON supplier!";
-								break;
-							}
-							if(problem != null) {
-								canContinue = false;
-								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
-								AlertDialog.Builder alert = new AlertDialog.Builder(context);
-								alert.setTitle("Connection Error");
-								alert.setMessage(problem + "\nWould you like to try connecting again?");
-								alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
-										beginFetch();
-									}
-								});
-								alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-									}
-								});
-								alert.setOnCancelListener(new OnCancelListener() {
-									@Override
-									public void onCancel(DialogInterface dialog) {
-										Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
-									}
-								});
-								alert.setIcon(R.drawable.ic_launcher);
-								alert.create().show();
-							} else {
-								canContinue = autoConnect;
-								workerRate.setValue(hashRateVal);
-								confirmedReward.setValue(confirmedRewardVal);
-								confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
-								unconfirmedReward.setValue(unconfirmedRewardVal);
-								estimatedReward.setValue(estimatedRewardVal);
-								potentialReward.setValue(potentialRewardVal);
-								ArrayList<String> workersFound = new ArrayList<String>();
-								workersFound.add(getString(R.string.label_worker_table_header_name));
-								for(MiningWorkerStub worker : workers) {
-									if(createdRows.containsKey(worker.name)) {
-										TableRow workerRow = createdRows.get(worker.name);
-										
-										ImageView workerStatus = (ImageView) workerRow.getChildAt(0);
-										workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
-										
-										FormattableNumberView workerRate = (FormattableNumberView) workerRow.getChildAt(2);
-										workerRate.setValue(worker.hashRate);
-										
-										FormattableNumberView workerShare = (FormattableNumberView) workerRow.getChildAt(3);
-										workerShare.setValue(worker.share);
-										
-										FormattableNumberView workerScore = (FormattableNumberView) workerRow.getChildAt(4);
-										workerScore.setValue(worker.score);
-									} else {
-										TableRow workerRow = new TableRow(context);
-										workerRow.setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-										
-										ImageView workerStatus = new ImageView(context);
-										workerStatus.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-										workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
-										workerRow.addView(workerStatus);
-										
-										TextView workerName = new TextView(context);
-										workerName.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-										workerName.setText(worker.name);
-										workerRow.addView(workerName);
-										
-										FormattableNumberView workerRate = new FormattableNumberView(context);
-										workerRate.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-										workerRate.setValue(worker.hashRate);
-										workerRow.addView(workerRate);
-										
-										FormattableNumberView workerShare = new FormattableNumberView(context);
-										workerShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-										workerShare.setValue(worker.share);
-										workerRow.addView(workerShare);
-										
-										FormattableNumberView workerScore = new FormattableNumberView(context);
-										workerScore.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-										workerScore.setValue(worker.score);
-										workerScore.setFormatting("%.1f");
-										workerRow.addView(workerScore);
-										
-										workerTableEntries.addView(workerRow);
-										createdRows.put(worker.name, workerRow);
-									}
-									workersFound.add(worker.name);
+					if(showingBlocks) {
+						final int result = fetchBlockJSONData();
+						handler.post(new Runnable() {
+							public void run() {
+								String problem = null;
+								switch(result) {
+									case JSON_FETCH_SUCCESS:
+									break;
+									case JSON_FETCH_PARSE_ERROR:
+										problem = "Error parsing JSON content!";
+									break;
+									case JSON_FETCH_INVALID_TOKEN:
+										problem = "Invalid API key!";
+									break;
+									case JSON_FETCH_CONNECTION_ERROR:
+										problem = "Error connecting to JSON supplier!";
+									break;
 								}
-								for(String entry : createdRows.keySet()) {
-									if(!workersFound.contains(entry)) {
-										workerTableEntries.removeView(createdRows.get(entry));
-										createdRows.remove(entry);
+								if(problem != null) {
+									canContinue = false;
+									Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
+									AlertDialog.Builder alert = new AlertDialog.Builder(context);
+									alert.setTitle("Connection Error");
+									alert.setMessage(problem + "\nWould you like to try connecting again?");
+									alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
+											beginFetch();
+										}
+									});
+									alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										}
+									});
+									alert.setOnCancelListener(new OnCancelListener() {
+										@Override
+										public void onCancel(DialogInterface dialog) {
+											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										}
+									});
+									alert.setIcon(R.drawable.ic_launcher);
+									alert.create().show();
+								} else {
+									canContinue = autoConnect;
+									
+									ArrayList<String> blocksFound = new ArrayList<String>();
+									blocksFound.add(getString(R.string.label_worker_table_header_name));
+									for(BlockStub block : blocks) {
+										
 									}
+									
+									if(showParseMessage)
+										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 								}
-								if(showParseMessage)
-									Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
 							}
-						}
-					});
+						});
+					} else {
+						final int result = fetchMinerJSONData();
+						handler.post(new Runnable() {
+							public void run() {
+								String problem = null;
+								switch(result) {
+									case JSON_FETCH_SUCCESS:
+									break;
+									case JSON_FETCH_PARSE_ERROR:
+										problem = "Error parsing JSON content!";
+									break;
+									case JSON_FETCH_INVALID_TOKEN:
+										problem = "Invalid API key!";
+									break;
+									case JSON_FETCH_CONNECTION_ERROR:
+										problem = "Error connecting to JSON supplier!";
+									break;
+								}
+								if(problem != null) {
+									canContinue = false;
+									Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
+									AlertDialog.Builder alert = new AlertDialog.Builder(context);
+									alert.setTitle("Connection Error");
+									alert.setMessage(problem + "\nWould you like to try connecting again?");
+									alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Toast.makeText(context, "Trying to connect again...", Toast.LENGTH_SHORT).show();
+											beginFetch();
+										}
+									});
+									alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										}
+									});
+									alert.setOnCancelListener(new OnCancelListener() {
+										@Override
+										public void onCancel(DialogInterface dialog) {
+											Toast.makeText(context, "No more attempts to connect will be made.", Toast.LENGTH_LONG).show();
+										}
+									});
+									alert.setIcon(R.drawable.ic_launcher);
+									alert.create().show();
+								} else {
+									canContinue = autoConnect;
+									workerRate.setValue(hashRateVal);
+									confirmedReward.setValue(confirmedRewardVal);
+									confirmedNamecoinReward.setValue(confirmedNamecoinRewardVal);
+									unconfirmedReward.setValue(unconfirmedRewardVal);
+									estimatedReward.setValue(estimatedRewardVal);
+									potentialReward.setValue(potentialRewardVal);
+									ArrayList<String> workersFound = new ArrayList<String>();
+									workersFound.add(getString(R.string.label_worker_table_header_name));
+									for(MiningWorkerStub worker : workers) {
+										if(createdRows.containsKey(worker.name)) {
+											TableRow workerRow = createdRows.get(worker.name);
+											
+											ImageView workerStatus = (ImageView) workerRow.getChildAt(0);
+											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
+											
+											FormattableNumberView workerRate = (FormattableNumberView) workerRow.getChildAt(2);
+											workerRate.setValue(worker.hashRate);
+											
+											FormattableNumberView workerShare = (FormattableNumberView) workerRow.getChildAt(3);
+											workerShare.setValue(worker.share);
+											
+											FormattableNumberView workerScore = (FormattableNumberView) workerRow.getChildAt(4);
+											workerScore.setValue(worker.score);
+										} else {
+											TableRow workerRow = new TableRow(context);
+											workerRow.setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+											
+											ImageView workerStatus = new ImageView(context);
+											workerStatus.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
+											workerRow.addView(workerStatus);
+											
+											TextView workerName = new TextView(context);
+											workerName.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											workerName.setText(worker.name);
+											workerRow.addView(workerName);
+											
+											FormattableNumberView workerRate = new FormattableNumberView(context);
+											workerRate.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											workerRate.setValue(worker.hashRate);
+											workerRow.addView(workerRate);
+											
+											FormattableNumberView workerShare = new FormattableNumberView(context);
+											workerShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											workerShare.setValue(worker.share);
+											workerRow.addView(workerShare);
+											
+											FormattableNumberView workerScore = new FormattableNumberView(context);
+											workerScore.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											workerScore.setValue(worker.score);
+											workerScore.setFormatting("%.1f");
+											workerRow.addView(workerScore);
+											
+											workerTableEntries.addView(workerRow);
+											createdRows.put(worker.name, workerRow);
+										}
+										workersFound.add(worker.name);
+									}
+									for(String entry : createdRows.keySet()) {
+										if(!workersFound.contains(entry)) {
+											workerTableEntries.removeView(createdRows.get(entry));
+											createdRows.remove(entry);
+										}
+									}
+									if(showParseMessage)
+										Toast.makeText(context, "Parsed!", Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
+					}
 					if(!canContinue) {
 						this.cancel();
 						currentTask = null;
@@ -241,10 +309,10 @@ public class MiningStatisticsActivity extends Activity {
 		}
 	}
 	
-	public int fetchJSONData() {
+	public int fetchMinerJSONData() {
 		try {
 			StringBuffer sb = new StringBuffer();
-			HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsDomain + slushsAPIKey)).getEntity();
+			HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsAccountDomain + slushsAPIKey)).getEntity();
 			InputStreamReader reader = new InputStreamReader(ent.getContent());
 			char[] data = new char[512];
 			int read = -1;
@@ -279,6 +347,38 @@ public class MiningStatisticsActivity extends Activity {
 		}
 	}
 	
+	public int fetchBlockJSONData() {
+		try {
+			StringBuffer sb = new StringBuffer();
+			HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsBlockDomain + slushsAPIKey)).getEntity();
+			InputStreamReader reader = new InputStreamReader(ent.getContent());
+			char[] data = new char[512];
+			int read = -1;
+			while((read = reader.read(data)) != -1)
+				sb.append(data, 0, read);
+			String content = sb.toString();
+			if(content.equals("Invalid token"))
+				return JSON_FETCH_INVALID_TOKEN;
+			try {
+				JSONObject jsonContent = new JSONObject(content);
+				JSONArray blockArray = jsonContent.getJSONObject("blocks").names();
+				JSONObject block = jsonContent.getJSONObject("blocks");
+				blocks = new ArrayList<BlockStub>();
+				for(int i = 0; i < blockArray.length(); i++) {
+					JSONObject blockEntry = block.getJSONObject(blockArray.getString(i));
+					blocks.add(new BlockStub(blockArray.getInt(i), blockEntry.getInt("confirmations"), blockEntry.getDouble("reward"), blockEntry.getDouble("nmc_reward"), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
+				}
+				return JSON_FETCH_SUCCESS;
+			} catch(JSONException e) {
+				e.printStackTrace();
+				return JSON_FETCH_PARSE_ERROR;
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+			return JSON_FETCH_CONNECTION_ERROR;
+		}
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -296,12 +396,12 @@ public class MiningStatisticsActivity extends Activity {
 		super.onStop();
 		stopFetch();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-	    SharedPreferences.Editor editor = prefs.edit(); {
-	    	editor.putBoolean("showing_blocks", showingBlocks);
-	    }
-	    editor.commit();
+		SharedPreferences.Editor editor = prefs.edit();
+		{
+			editor.putBoolean("showing_blocks", showingBlocks);
+		}
+		editor.commit();
 	}
-	
 	
 	@Override
 	public void onPause() {
@@ -337,10 +437,12 @@ public class MiningStatisticsActivity extends Activity {
 				
 			case R.id.action_show_blocks:
 				showingBlocks = true;
+				switchTable();
 				return true;
 				
 			case R.id.action_show_miners:
 				showingBlocks = false;
+				switchTable();
 				return true;
 				
 			case R.id.action_connect_now:
@@ -374,9 +476,27 @@ public class MiningStatisticsActivity extends Activity {
 			}
 		}
 		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
-		slushsDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
+		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
+		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", getString(R.string.default_option_slushs_api_key));
 		progressBar.setMax(connectionDelay);
 		progressBar.setProgress(connectionDelay);
+		switchTable();
+	}
+	
+	public void switchTable() {
+		if(showingBlocks) {
+			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
+			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
+			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
+		} else {
+			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.GONE);
+			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.GONE);
+			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
+		}
 	}
 }
