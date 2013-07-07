@@ -148,11 +148,7 @@ public class MiningStatisticsActivity extends Activity {
 						break;
 					}
 					final String problem = pb;
-					if(pb == null) {
-						canContinue = autoConnect;
-					} else {
-						canContinue = false;
-					}
+					canContinue = (pb == null ? autoConnect : false);
 					handler.post(new Runnable() {
 						public void run() {
 							if(problem != null) {
@@ -483,9 +479,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public void loadSettings() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		System.out.println(showingBlocks);
 		showingBlocks = prefs.getBoolean("showing_blocks", true);
-		System.out.println(showingBlocks);
 		autoConnect = prefs.getBoolean("settings_auto_connect", true);
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
