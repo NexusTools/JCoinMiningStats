@@ -45,6 +45,8 @@ import android.widget.Toast;
 public class MiningStatisticsActivity extends Activity {
 	public TableLayout workerTableHeader;
 	public TableLayout workerTableEntries;
+	public TableLayout blockTableHeader;
+	public TableLayout blockTableEntries;
 	public FormattableNumberView workerRate;
 	public FormattableNumberView confirmedReward;
 	public FormattableNumberView confirmedNamecoinReward;
@@ -68,7 +70,8 @@ public class MiningStatisticsActivity extends Activity {
 	public static TimerTask currentTask;
 	public ArrayList<MiningWorkerStub> workers;
 	public ArrayList<BlockStub> blocks;
-	public ConcurrentHashMap<String, TableRow> createdRows = new ConcurrentHashMap<String, TableRow>();
+	public ConcurrentHashMap<String, TableRow> createdMinerRows = new ConcurrentHashMap<String, TableRow>();
+	public ConcurrentHashMap<String, TableRow> createdBlockRows = new ConcurrentHashMap<String, TableRow>();
 	public static final int TIME_STEP = 1000 / 20;
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
@@ -91,6 +94,8 @@ public class MiningStatisticsActivity extends Activity {
 		potentialReward.setFormatting("%.5f");
 		workerTableHeader = ((TableLayout) findViewById(R.id.worker_table_header));
 		workerTableEntries = ((TableLayout) findViewById(R.id.worker_table_entries));
+		blockTableHeader = ((TableLayout) findViewById(R.id.block_table_header));
+		blockTableEntries = ((TableLayout) findViewById(R.id.block_table_entries));
 		progressBar = ((ProgressBar) findViewById(R.id.progress_until_connection));
 	}
 	
@@ -163,9 +168,69 @@ public class MiningStatisticsActivity extends Activity {
 									canContinue = autoConnect;
 									
 									ArrayList<String> blocksFound = new ArrayList<String>();
-									blocksFound.add(getString(R.string.label_worker_table_header_name));
+									blocksFound.add(getString(R.string.label_block_table_header_block));
 									for(BlockStub block : blocks) {
-										
+										if(createdBlockRows.containsKey(block.id)) {
+											TableRow blockRow = createdBlockRows.get(block.id);
+											
+											FormattableNumberView blockConfirmation = (FormattableNumberView) blockRow.getChildAt(1);
+											blockConfirmation.setValue(block.confirmations);
+											
+											FormattableNumberView blockReward = (FormattableNumberView) blockRow.getChildAt(2);
+											blockReward.setValue(block.reward);
+											
+											FormattableNumberView blockNMCReward = (FormattableNumberView) blockRow.getChildAt(3);
+											blockNMCReward.setValue(block.nmcReward);
+											
+											FormattableNumberView blockScore = (FormattableNumberView) blockRow.getChildAt(4);
+											blockScore.setValue(block.score);
+											
+											FormattableNumberView blockShare = (FormattableNumberView) blockRow.getChildAt(5);
+											blockShare.setValue(block.share);
+										} else {
+											TableRow blockRow = new TableRow(context);
+											blockRow.setLayoutParams(new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+											
+											TextView blockName = new TextView(context);
+											blockName.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockName.setText(block.id);
+											blockRow.addView(blockName);
+											
+											FormattableNumberView blockConfirmations = new FormattableNumberView(context);
+											blockConfirmations.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockConfirmations.setValue(block.confirmations);
+											blockRow.addView(blockConfirmations);
+											
+											FormattableNumberView blockReward = new FormattableNumberView(context);
+											blockReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockReward.setValue(block.reward);
+											blockRow.addView(blockReward);
+											
+											FormattableNumberView blockNMCReward = new FormattableNumberView(context);
+											blockNMCReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockNMCReward.setValue(block.nmcReward);
+											blockRow.addView(blockNMCReward);
+											
+											FormattableNumberView blockScore = new FormattableNumberView(context);
+											blockScore.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockScore.setValue(block.score);
+											blockRow.addView(blockScore);
+											
+											FormattableNumberView blockShare = new FormattableNumberView(context);
+											blockShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockShare.setValue(block.share);
+											blockRow.addView(blockShare);
+											
+											blockTableEntries.addView(blockRow);
+											createdBlockRows.put(block.id, blockRow);
+										}
+										blocksFound.add(block.id);
+									}
+									for(String entry : createdBlockRows.keySet()) {
+										if(!blocksFound.contains(entry)) {
+											blockTableEntries.removeView(createdBlockRows.get(entry));
+											createdBlockRows.remove(entry);
+										}
 									}
 									
 									if(showParseMessage)
@@ -229,8 +294,8 @@ public class MiningStatisticsActivity extends Activity {
 									ArrayList<String> workersFound = new ArrayList<String>();
 									workersFound.add(getString(R.string.label_worker_table_header_name));
 									for(MiningWorkerStub worker : workers) {
-										if(createdRows.containsKey(worker.name)) {
-											TableRow workerRow = createdRows.get(worker.name);
+										if(createdMinerRows.containsKey(worker.name)) {
+											TableRow workerRow = createdMinerRows.get(worker.name);
 											
 											ImageView workerStatus = (ImageView) workerRow.getChildAt(0);
 											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
@@ -274,14 +339,14 @@ public class MiningStatisticsActivity extends Activity {
 											workerRow.addView(workerScore);
 											
 											workerTableEntries.addView(workerRow);
-											createdRows.put(worker.name, workerRow);
+											createdMinerRows.put(worker.name, workerRow);
 										}
 										workersFound.add(worker.name);
 									}
-									for(String entry : createdRows.keySet()) {
+									for(String entry : createdMinerRows.keySet()) {
 										if(!workersFound.contains(entry)) {
-											workerTableEntries.removeView(createdRows.get(entry));
-											createdRows.remove(entry);
+											workerTableEntries.removeView(createdMinerRows.get(entry));
+											createdMinerRows.remove(entry);
 										}
 									}
 									if(showParseMessage)
@@ -366,7 +431,7 @@ public class MiningStatisticsActivity extends Activity {
 				blocks = new ArrayList<BlockStub>();
 				for(int i = 0; i < blockArray.length(); i++) {
 					JSONObject blockEntry = block.getJSONObject(blockArray.getString(i));
-					blocks.add(new BlockStub(blockArray.getInt(i), blockEntry.getInt("confirmations"), blockEntry.getDouble("reward"), blockEntry.getDouble("nmc_reward"), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
+					blocks.add(new BlockStub(blockArray.getString(i), blockEntry.getInt("confirmations"), blockEntry.getDouble("reward"), blockEntry.getDouble("nmc_reward"), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
 				}
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
@@ -486,17 +551,17 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public void switchTable() {
 		if(showingBlocks) {
-			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
-			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
-			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
-			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
-			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
+			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
+			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
+			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
 		} else {
-			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.GONE);
-			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.GONE);
-			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
-			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
-			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
+			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.GONE);
+			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.GONE);
+			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
 		}
 	}
 }
