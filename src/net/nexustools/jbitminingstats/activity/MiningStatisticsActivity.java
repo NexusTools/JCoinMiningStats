@@ -486,19 +486,13 @@ public class MiningStatisticsActivity extends Activity {
 		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
-			if(workerRate.getAffix().equals(""))
-				workerRate.setAffix("mh/s");
-			if(!rateColumn.getText().toString().endsWith("(mh/s)")) {
-				rateColumn.setText("Rate (mh/s)");
-				rateColumnStub.setText("Rate (mh/s)");
-			}
+			workerRate.setAffix(getString(R.string.label_hashrate_affix));
+			rateColumn.setText(R.string.label_worker_table_header_rate_affixed);
+			rateColumnStub.setText(R.string.label_worker_table_header_rate_affixed);
 		} else {
-			if(!workerRate.getAffix().equals(""))
-				workerRate.setAffix("");
-			if(rateColumn.getText().toString().endsWith("(mh/s)")) {
-				rateColumn.setText("Rate");
-				rateColumnStub.setText("Rate");
-			}
+			workerRate.setAffix("");
+			rateColumn.setText(R.string.label_worker_table_header_rate);
+			rateColumnStub.setText(R.string.label_worker_table_header_rate);
 		}
 		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
 		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
