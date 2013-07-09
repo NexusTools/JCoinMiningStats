@@ -52,7 +52,6 @@ public class Settings {
 	
 	public void load() {
 		showingBlocks = prefs.getBoolean("showing_blocks", true);
-		
 		autoConnect = prefs.getBoolean("settings_auto_connect", true);
 		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", context.getString(R.string.default_option_connection_delay)));
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
@@ -98,7 +97,7 @@ public class Settings {
 	
 	public void setConnectionDelay(int connectionDelay) {
 		this.connectionDelay = connectionDelay;
-		prefs.edit().putInt("settings_connect_delay", connectionDelay).commit();
+		prefs.edit().putString("settings_connect_delay", Integer.toString(connectionDelay)).commit();
 	}
 	
 	public void setShowingBlocks(boolean showingBlocks) {
@@ -152,7 +151,7 @@ public class Settings {
 	}
 	
 	public void setMtGoxFetchDelay(int mtGoxFetchDelay) {
-		prefs.edit().putInt("settings_mtgox_fetch_rate", mtGoxFetchDelay).commit();
+		prefs.edit().putString("settings_mtgox_fetch_rate", Integer.toString(mtGoxFetchDelay)).commit();
 	}
 	
 	public String getMtGoxAPIDomain() {
