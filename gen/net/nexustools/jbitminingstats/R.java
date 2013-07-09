@@ -9,6 +9,7 @@ package net.nexustools.jbitminingstats;
 
 public final class R {
     public static final class array {
+        public static final int currency_type_to_symbol=0x7f050001;
         public static final int supported_currencies_convertable_from_btc=0x7f050000;
     }
     public static final class attr {

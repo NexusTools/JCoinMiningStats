@@ -1,7 +1,6 @@
 package net.nexustools.jbitminingstats.activity;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,9 +12,6 @@ import net.nexustools.jbitminingstats.util.ContentGrabber;
 import net.nexustools.jbitminingstats.util.MiningWorkerStub;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +41,17 @@ import android.widget.Toast;
 public class MiningStatisticsActivity extends Activity {
 	public static final int CONNECTION_DELAY_WARNING_CAP = 15000;
 	
+	public static String[] currencyType;
+	public static String[] currencySymbol;
+	
+	public static String httpUserAgent;
+	
+	public static Handler handler = new Handler();
+	public static Timer workScheduler;
+	public static TimerTask minerBlockFetchTask;
+	public static TimerTask mtGoxFetchTask;
+	public static boolean canContinue = true;
+	
 	public TableLayout workerTableHeader;
 	public TableLayout workerTableEntries;
 	public TableLayout blockTableHeader;
@@ -56,11 +63,10 @@ public class MiningStatisticsActivity extends Activity {
 	public FormattableNumberView estimatedReward;
 	public FormattableNumberView potentialReward;
 	
-	public static String httpUserAgent;
-	
 	public ProgressBar progressBar;
 	public int connectionDelay;
 	public int mtGoxFetchDelay;
+	public int elapsedTime = 0;
 	public String slushsAccountDomain;
 	public String slushsBlockDomain;
 	public String slushsAPIKey;
@@ -70,12 +76,6 @@ public class MiningStatisticsActivity extends Activity {
 	public boolean showHashrateUnit;
 	public boolean showParseMessage;
 	public boolean checkConnectionDelays;
-	public static boolean canContinue = true;
-	public int elapsedTime = 0;
-	public static Handler handler = new Handler();
-	public static Timer workScheduler;
-	public static TimerTask minerBlockFetchTask;
-	public static TimerTask mtGoxFetchTask;
 	public ArrayList<MiningWorkerStub> workers;
 	public ArrayList<BlockStub> blocks;
 	public ConcurrentHashMap<String, TableRow> createdMinerRows = new ConcurrentHashMap<String, TableRow>();
@@ -84,6 +84,8 @@ public class MiningStatisticsActivity extends Activity {
 	public boolean mtGoxFetchEnabled;
 	public String mtGoxAPIDomain;
 	public String mtGoxCurrencyType;
+	public double mtGoxBTCToCurrencyVal;
+	public String mtGoxBTCTOCurrencySymbol;
 	
 	public static final int TIME_STEP = 1000 / 20;
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
@@ -426,8 +428,14 @@ public class MiningStatisticsActivity extends Activity {
 		try {
 			String content = ContentGrabber.fetch(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
 			try {
-				JSONObject jsonContent = new JSONObject(content);
-				System.out.println(jsonContent);
+				mtGoxBTCToCurrencyVal = new JSONObject(content).getJSONObject("return").getJSONObject("last_local").getDouble("value");
+				mtGoxBTCTOCurrencySymbol = "$";
+				for(int i = 0; i < currencyType.length; i++)
+					if(currencyType[i].equals(mtGoxCurrencyType)) {
+						mtGoxBTCTOCurrencySymbol = currencySymbol[i];
+						break;
+					}
+				
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
 				e.printStackTrace();
@@ -449,6 +457,8 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
+		currencyType = getResources().getStringArray(R.array.supported_currencies_convertable_from_btc);
+		currencySymbol = getResources().getStringArray(R.array.currency_type_to_symbol);
 	}
 	
 	@Override

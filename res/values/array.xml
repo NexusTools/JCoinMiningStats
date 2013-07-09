@@ -20,4 +20,24 @@
 	    <item>NOK</item>
 	    <item>CZK</item>
 	</string-array>
+	<string-array name="currency_type_to_symbol">
+	    <item>$</item>
+	    <item>$</item>
+	    <item>$</item>
+	    <item>CHF</item>
+	    <item>¥</item>
+	    <item>kr</item>
+	    <item>€</item>
+	    <item>£</item>
+	    <item>$</item>
+	    <item>¥</item>
+	    <item>$</item>
+	    <item>zł</item>
+	    <item>руб</item>
+	    <item>kr</item>
+	    <item>$</item>
+	    <item>฿</item>
+	    <item>kr</item>
+	    <item>Kč</item>
+	</string-array>
 </resources>
