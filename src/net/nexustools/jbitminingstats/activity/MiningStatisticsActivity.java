@@ -581,7 +581,7 @@ public class MiningStatisticsActivity extends Activity {
 		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
 		forceUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", false);
-		String userAgent = prefs.getString("settings_backup_user_agent", null);
+		String userAgent = prefs.getString("settings_backup_user_agent", "");
 		userAgent = userAgent.equals("") ? null : userAgent;
 		httpUserAgent = forceUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
 		
