@@ -8,6 +8,9 @@
 package net.nexustools.jbitminingstats;
 
 public final class R {
+    public static final class array {
+        public static final int supported_currencies_convertable_from_btc=0x7f050000;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -17,8 +20,8 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
         public static final int accept=0x7f020000;
@@ -26,120 +29,128 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_back=0x7f090019;
-        public static final int action_connect_now=0x7f090018;
-        public static final int action_settings=0x7f090015;
-        public static final int action_show_blocks=0x7f090016;
-        public static final int action_show_miners=0x7f090017;
-        public static final int base=0x7f090000;
-        public static final int block_table_entries=0x7f090014;
-        public static final int block_table_header=0x7f090012;
-        public static final int block_table_view=0x7f090013;
-        public static final int confirmed_namecoin_reward_label=0x7f090005;
-        public static final int confirmed_reward_label=0x7f090003;
-        public static final int estimated_reward_label=0x7f090009;
-        public static final int number_val_confirmed_namecoin_reward=0x7f090006;
-        public static final int number_val_confirmed_reward=0x7f090004;
-        public static final int number_val_estimated_reward=0x7f09000a;
-        public static final int number_val_potential_reward=0x7f09000c;
-        public static final int number_val_uncomfirmed_reward=0x7f090008;
-        public static final int number_val_worker_hash_rate=0x7f090002;
-        public static final int progress_until_connection=0x7f090010;
-        public static final int tabel_label=0x7f09000d;
-        public static final int total_potential_reward_label=0x7f09000b;
-        public static final int unconfirmed_reward_label=0x7f090007;
-        public static final int worker_hash_rate_label=0x7f090001;
-        public static final int worker_table_entries=0x7f090011;
-        public static final int worker_table_header=0x7f09000e;
-        public static final int worker_table_view=0x7f09000f;
+        public static final int action_back=0x7f0a0019;
+        public static final int action_connect_now=0x7f0a0018;
+        public static final int action_settings=0x7f0a0015;
+        public static final int action_show_blocks=0x7f0a0016;
+        public static final int action_show_miners=0x7f0a0017;
+        public static final int base=0x7f0a0000;
+        public static final int block_table_entries=0x7f0a0014;
+        public static final int block_table_header=0x7f0a0012;
+        public static final int block_table_view=0x7f0a0013;
+        public static final int confirmed_namecoin_reward_label=0x7f0a0005;
+        public static final int confirmed_reward_label=0x7f0a0003;
+        public static final int estimated_reward_label=0x7f0a0009;
+        public static final int number_val_confirmed_namecoin_reward=0x7f0a0006;
+        public static final int number_val_confirmed_reward=0x7f0a0004;
+        public static final int number_val_estimated_reward=0x7f0a000a;
+        public static final int number_val_potential_reward=0x7f0a000c;
+        public static final int number_val_uncomfirmed_reward=0x7f0a0008;
+        public static final int number_val_worker_hash_rate=0x7f0a0002;
+        public static final int progress_until_connection=0x7f0a0010;
+        public static final int tabel_label=0x7f0a000d;
+        public static final int total_potential_reward_label=0x7f0a000b;
+        public static final int unconfirmed_reward_label=0x7f0a0007;
+        public static final int worker_hash_rate_label=0x7f0a0001;
+        public static final int worker_table_entries=0x7f0a0011;
+        public static final int worker_table_header=0x7f0a000e;
+        public static final int worker_table_view=0x7f0a000f;
     }
     public static final class layout {
         public static final int activity_mining_statistics=0x7f030000;
     }
     public static final class menu {
-        public static final int mining_statistics=0x7f080000;
-        public static final int mining_statistics_settings=0x7f080001;
+        public static final int mining_statistics=0x7f090000;
+        public static final int mining_statistics_settings=0x7f090001;
     }
     public static final class string {
-        public static final int action_back=0x7f060001;
-        public static final int action_connect_now=0x7f060003;
-        public static final int action_settings=0x7f060002;
-        public static final int action_show_blocks=0x7f060004;
-        public static final int action_show_miners=0x7f060005;
+        public static final int action_back=0x7f070001;
+        public static final int action_connect_now=0x7f070003;
+        public static final int action_settings=0x7f070002;
+        public static final int action_show_blocks=0x7f070004;
+        public static final int action_show_miners=0x7f070005;
         /**  Main Activity 
          */
-        public static final int app_name=0x7f060000;
-        public static final int default_option_connection_delay=0x7f06002f;
-        public static final int default_option_exchange_fetch_rate=0x7f060042;
-        public static final int default_option_slushs_block_domain=0x7f06003a;
-        public static final int default_option_slushs_miner_domain=0x7f060037;
-        public static final int json_parsed=0x7f060029;
-        public static final int label_block_list_title=0x7f060013;
-        public static final int label_block_table_header_block=0x7f060014;
-        public static final int label_block_table_header_confirmations=0x7f060015;
-        public static final int label_block_table_header_namecoin_reward=0x7f060017;
-        public static final int label_block_table_header_reward=0x7f060016;
-        public static final int label_block_table_header_score=0x7f060018;
-        public static final int label_block_table_header_share=0x7f060019;
-        public static final int label_confirmed_namecoin_reward=0x7f060008;
-        public static final int label_confirmed_reward=0x7f060007;
-        public static final int label_connection_rate_warning=0x7f060049;
-        public static final int label_estimated_reward=0x7f06000a;
-        public static final int label_hashrate_affix=0x7f06001b;
-        public static final int label_mtgox_connection_rate_warning=0x7f06004a;
-        public static final int label_number_stub=0x7f06001a;
-        public static final int label_option_affix_hashrates_text=0x7f060030;
-        public static final int label_option_affix_hashrates_text_summary=0x7f060031;
-        public static final int label_option_auto_connect=0x7f06002b;
-        public static final int label_option_auto_connect_summary=0x7f06002c;
-        public static final int label_option_category_exchange_rate=0x7f06003d;
+        public static final int app_name=0x7f070000;
+        public static final int default_option_connection_delay=0x7f07002f;
+        public static final int default_option_exchange_fetch_rate=0x7f070042;
+        public static final int default_option_mtgox_api_domain=0x7f07004b;
+        public static final int default_option_slushs_block_domain=0x7f07003a;
+        public static final int default_option_slushs_miner_domain=0x7f070037;
+        public static final int json_parsed=0x7f070029;
+        public static final int label_block_list_title=0x7f070013;
+        public static final int label_block_table_header_block=0x7f070014;
+        public static final int label_block_table_header_confirmations=0x7f070015;
+        public static final int label_block_table_header_namecoin_reward=0x7f070017;
+        public static final int label_block_table_header_reward=0x7f070016;
+        public static final int label_block_table_header_score=0x7f070018;
+        public static final int label_block_table_header_share=0x7f070019;
+        public static final int label_confirmed_namecoin_reward=0x7f070008;
+        public static final int label_confirmed_reward=0x7f070007;
+        public static final int label_connection_rate_warning=0x7f070051;
+        public static final int label_estimated_reward=0x7f07000a;
+        public static final int label_hashrate_affix=0x7f07001b;
+        public static final int label_mtgox_connection_rate_warning=0x7f070052;
+        public static final int label_number_stub=0x7f07001a;
+        public static final int label_option_affix_hashrates_text=0x7f070030;
+        public static final int label_option_affix_hashrates_text_summary=0x7f070031;
+        public static final int label_option_auto_connect=0x7f07002b;
+        public static final int label_option_auto_connect_summary=0x7f07002c;
+        public static final int label_option_backup_user_agent=0x7f070047;
+        public static final int label_option_backup_user_agent_summary=0x7f070048;
+        public static final int label_option_category_exchange_rate=0x7f07003d;
         /**  Settings Activity 
          */
-        public static final int label_option_category_general=0x7f06002a;
-        public static final int label_option_category_pool=0x7f060034;
-        public static final int label_option_check_connection_delays=0x7f060043;
-        public static final int label_option_check_connection_delays_summary=0x7f060044;
-        public static final int label_option_connection_delay=0x7f06002d;
-        public static final int label_option_connection_delay_summary=0x7f06002e;
-        public static final int label_option_exchange_fetch_rate=0x7f060040;
-        public static final int label_option_exchange_fetch_rate_summary=0x7f060041;
-        public static final int label_option_exchange_rate_enabled=0x7f06003e;
-        public static final int label_option_exchange_rate_enabled_summary=0x7f06003f;
-        public static final int label_option_show_when_parsed=0x7f060032;
-        public static final int label_option_show_when_parsed_summary=0x7f060033;
-        public static final int label_option_slushs_api_key=0x7f06003b;
-        public static final int label_option_slushs_api_key_summary=0x7f06003c;
-        public static final int label_slushs_option_site_block_domain=0x7f060038;
-        public static final int label_slushs_option_site_block_domain_summary=0x7f060039;
-        public static final int label_slushs_option_site_miner_domain=0x7f060035;
-        public static final int label_slushs_option_site_miner_domain_summary=0x7f060036;
-        public static final int label_total_potential_reward=0x7f06000b;
-        public static final int label_unconfirmed_reward=0x7f060009;
-        public static final int label_worker_list_title=0x7f06000c;
-        public static final int label_worker_rate=0x7f060006;
-        public static final int label_worker_table_header_name=0x7f06000e;
-        public static final int label_worker_table_header_rate=0x7f06000f;
-        public static final int label_worker_table_header_rate_affixed=0x7f060010;
-        public static final int label_worker_table_header_score=0x7f060012;
-        public static final int label_worker_table_header_share=0x7f060011;
-        public static final int label_worker_table_header_status=0x7f06000d;
-        public static final int problem_json=0x7f06001d;
-        public static final int problem_json_connection_error_blocks=0x7f060027;
-        public static final int problem_json_connection_error_miners=0x7f060024;
-        public static final int problem_json_invalid_token_blocks=0x7f060026;
-        public static final int problem_json_invalid_token_miners=0x7f060023;
-        public static final int problem_json_negative=0x7f06001f;
-        public static final int problem_json_no_api_key_set=0x7f06001c;
-        public static final int problem_json_not_trying_again=0x7f060021;
-        public static final int problem_json_parse_error_blocks=0x7f060025;
-        public static final int problem_json_parse_error_miners=0x7f060022;
-        public static final int problem_json_positive=0x7f06001e;
-        public static final int problem_json_trying_again=0x7f060020;
-        public static final int problem_low_connection_delay=0x7f060045;
-        public static final int problem_low_connection_delay_negative=0x7f060048;
-        public static final int problem_low_connection_delay_neutral=0x7f060047;
-        public static final int problem_low_connection_delay_positive=0x7f060046;
-        public static final int problem_try_again=0x7f060028;
+        public static final int label_option_category_general=0x7f07002a;
+        public static final int label_option_category_pool=0x7f070034;
+        public static final int label_option_check_connection_delays=0x7f070043;
+        public static final int label_option_check_connection_delays_summary=0x7f070044;
+        public static final int label_option_connection_delay=0x7f07002d;
+        public static final int label_option_connection_delay_summary=0x7f07002e;
+        public static final int label_option_currency_type=0x7f07004c;
+        public static final int label_option_exchange_fetch_rate=0x7f070040;
+        public static final int label_option_exchange_fetch_rate_summary=0x7f070041;
+        public static final int label_option_exchange_rate_enabled=0x7f07003e;
+        public static final int label_option_exchange_rate_enabled_summary=0x7f07003f;
+        public static final int label_option_force_use_backup_user_agent=0x7f070045;
+        public static final int label_option_force_use_backup_user_agent_summary=0x7f070046;
+        public static final int label_option_mtgox_api_domain=0x7f070049;
+        public static final int label_option_mtgox_api_domain_summary=0x7f07004a;
+        public static final int label_option_show_when_parsed=0x7f070032;
+        public static final int label_option_show_when_parsed_summary=0x7f070033;
+        public static final int label_option_slushs_api_key=0x7f07003b;
+        public static final int label_option_slushs_api_key_summary=0x7f07003c;
+        public static final int label_slushs_option_site_block_domain=0x7f070038;
+        public static final int label_slushs_option_site_block_domain_summary=0x7f070039;
+        public static final int label_slushs_option_site_miner_domain=0x7f070035;
+        public static final int label_slushs_option_site_miner_domain_summary=0x7f070036;
+        public static final int label_total_potential_reward=0x7f07000b;
+        public static final int label_unconfirmed_reward=0x7f070009;
+        public static final int label_worker_list_title=0x7f07000c;
+        public static final int label_worker_rate=0x7f070006;
+        public static final int label_worker_table_header_name=0x7f07000e;
+        public static final int label_worker_table_header_rate=0x7f07000f;
+        public static final int label_worker_table_header_rate_affixed=0x7f070010;
+        public static final int label_worker_table_header_score=0x7f070012;
+        public static final int label_worker_table_header_share=0x7f070011;
+        public static final int label_worker_table_header_status=0x7f07000d;
+        public static final int problem_json=0x7f07001d;
+        public static final int problem_json_connection_error_blocks=0x7f070027;
+        public static final int problem_json_connection_error_miners=0x7f070024;
+        public static final int problem_json_invalid_token_blocks=0x7f070026;
+        public static final int problem_json_invalid_token_miners=0x7f070023;
+        public static final int problem_json_negative=0x7f07001f;
+        public static final int problem_json_no_api_key_set=0x7f07001c;
+        public static final int problem_json_not_trying_again=0x7f070021;
+        public static final int problem_json_parse_error_blocks=0x7f070025;
+        public static final int problem_json_parse_error_miners=0x7f070022;
+        public static final int problem_json_positive=0x7f07001e;
+        public static final int problem_json_trying_again=0x7f070020;
+        public static final int problem_low_connection_delay=0x7f07004d;
+        public static final int problem_low_connection_delay_negative=0x7f070050;
+        public static final int problem_low_connection_delay_neutral=0x7f07004f;
+        public static final int problem_low_connection_delay_positive=0x7f07004e;
+        public static final int problem_try_again=0x7f070028;
     }
     public static final class style {
         /** 
@@ -152,11 +163,11 @@ public final class R {
             backward-compatibility can go here.
         
          */
-        public static final int AppBaseTheme=0x7f070000;
+        public static final int AppBaseTheme=0x7f080000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f070001;
+        public static final int AppTheme=0x7f080001;
     }
     public static final class xml {
         public static final int settings=0x7f040000;

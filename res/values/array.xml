@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="supported_currencies_convertable_from_btc">
+	    <item>USD</item>
+	    <item>AUD</item>
+	    <item>CAD</item>
+	    <item>CHF</item>
+	    <item>CNY</item>
+	    <item>DKK</item>
+	    <item>EUR</item>
+	    <item>GBP</item>
+	    <item>HKD</item>
+	    <item>JPY</item>
+	    <item>NZD</item>
+	    <item>PLN</item>
+	    <item>RUB</item>
+	    <item>SEK</item>
+	    <item>SGD</item>
+	    <item>THB</item>
+	    <item>NOK</item>
+	    <item>CZK</item>
+	</string-array>
+</resources>

@@ -13,7 +13,7 @@ import net.nexustools.jbitminingstats.util.MiningWorkerStub;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,31 +55,40 @@ public class MiningStatisticsActivity extends Activity {
 	public FormattableNumberView estimatedReward;
 	public FormattableNumberView potentialReward;
 	
+	public String httpUserAgent;
+	
 	public ProgressBar progressBar;
 	public int connectionDelay;
 	public int mtGoxFetchDelay;
 	public String slushsAccountDomain;
 	public String slushsBlockDomain;
 	public String slushsAPIKey;
+	public boolean forceUseBackupHttpUserAgent;
 	public boolean showingBlocks;
 	public boolean autoConnect;
 	public boolean showHashrateUnit;
 	public boolean showParseMessage;
 	public boolean checkConnectionDelays;
-	public boolean mtGoxFetchEnabled;
 	public static boolean canContinue = true;
 	public int elapsedTime = 0;
 	public static Handler handler = new Handler();
 	public static Timer workScheduler;
-	public static TimerTask currentTask;
+	public static TimerTask minerBlockFetchTask;
+	public static TimerTask mtGoxFetchTask;
 	public ArrayList<MiningWorkerStub> workers;
 	public ArrayList<BlockStub> blocks;
 	public ConcurrentHashMap<String, TableRow> createdMinerRows = new ConcurrentHashMap<String, TableRow>();
 	public ConcurrentHashMap<String, TableRow> createdBlockRows = new ConcurrentHashMap<String, TableRow>();
+	
+	public boolean mtGoxFetchEnabled;
+	public String mtGoxAPIDomain;
+	public String mtGoxCurrencyType;
+	
 	public static final int TIME_STEP = 1000 / 20;
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -106,8 +115,8 @@ public class MiningStatisticsActivity extends Activity {
 		final Context context = this;
 		if(workScheduler == null)
 			workScheduler = new Timer();
-		if(currentTask != null)
-			currentTask.cancel();
+		if(minerBlockFetchTask != null)
+			minerBlockFetchTask.cancel();
 		progressBar.setProgress(0);
 		progressBar.setMax(connectionDelay);
 		elapsedTime = connectionDelay;
@@ -117,7 +126,7 @@ public class MiningStatisticsActivity extends Activity {
 			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
 			return;
 		}
-		workScheduler.schedule(currentTask = new TimerTask() {
+		workScheduler.schedule(minerBlockFetchTask = new TimerTask() {
 			@Override
 			public void run() {
 				elapsedTime += TIME_STEP;
@@ -326,19 +335,43 @@ public class MiningStatisticsActivity extends Activity {
 		}, 0, TIME_STEP);
 	}
 	
+	public void fetchMtGoxCurrency() {
+		final Context context = this;
+		if(workScheduler == null)
+			workScheduler = new Timer();
+		if(mtGoxFetchTask != null)
+			mtGoxFetchTask.cancel();
+		
+		workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
+			@Override
+			public void run() {
+				int returnCode = fetchMtGoxJSONData();
+			}
+		}, 0, mtGoxFetchDelay);
+	}
+	
 	public void stopFetch() {
+		if(minerBlockFetchTask != null)
+			minerBlockFetchTask.cancel();
+		if(mtGoxFetchTask != null)
+			mtGoxFetchTask.cancel();
+		
 		if(workScheduler != null) {
 			workScheduler.cancel();
 			workScheduler.purge();
 			workScheduler = null;
 		}
+		
 		progressBar.setProgress(0);
 	}
 	
 	public int fetchMinerJSONData() {
 		try {
 			StringBuffer sb = new StringBuffer();
-			HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsAccountDomain + slushsAPIKey)).getEntity();
+			HttpGet httpGet = new HttpGet(slushsAccountDomain + slushsAPIKey);
+			if(httpUserAgent != null)
+				httpGet.setHeader("User-Agent", httpUserAgent);
+			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
 			InputStreamReader reader = new InputStreamReader(ent.getContent());
 			char[] data = new char[512];
 			int read = -1;
@@ -376,7 +409,10 @@ public class MiningStatisticsActivity extends Activity {
 	public int fetchBlockJSONData() {
 		try {
 			StringBuffer sb = new StringBuffer();
-			HttpEntity ent = new DefaultHttpClient().execute(new HttpPost(slushsBlockDomain + slushsAPIKey)).getEntity();
+			HttpGet httpGet = new HttpGet(slushsBlockDomain + slushsAPIKey);
+			if(httpUserAgent != null)
+				httpGet.setHeader("User-Agent", httpUserAgent);
+			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
 			InputStreamReader reader = new InputStreamReader(ent.getContent());
 			char[] data = new char[512];
 			int read = -1;
@@ -394,6 +430,33 @@ public class MiningStatisticsActivity extends Activity {
 					JSONObject blockEntry = block.getJSONObject(blockArray.getString(i));
 					blocks.add(new BlockStub(blockArray.getString(i), blockEntry.getInt("confirmations"), noNaN(blockEntry.optDouble("reward")), noNaN(blockEntry.optDouble("nmc_reward")), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
 				}
+				return JSON_FETCH_SUCCESS;
+			} catch(JSONException e) {
+				e.printStackTrace();
+				return JSON_FETCH_PARSE_ERROR;
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+			return JSON_FETCH_CONNECTION_ERROR;
+		}
+	}
+	
+	public int fetchMtGoxJSONData() {
+		try {
+			StringBuffer sb = new StringBuffer();
+			HttpGet httpGet = new HttpGet(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
+			if(httpUserAgent != null)
+				httpGet.setHeader("User-Agent", httpUserAgent);
+			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
+			InputStreamReader reader = new InputStreamReader(ent.getContent());
+			char[] data = new char[512];
+			int read = -1;
+			while((read = reader.read(data)) != -1)
+				sb.append(data, 0, read);
+			String content = sb.toString();
+			try {
+				JSONObject jsonContent = new JSONObject(content);
+				System.out.println(jsonContent);
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
 				e.printStackTrace();
@@ -488,6 +551,10 @@ public class MiningStatisticsActivity extends Activity {
 		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
 		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
+		forceUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", false);
+		String userAgent = prefs.getString("settings_backup_user_agent", null);
+		userAgent = userAgent == "" ? null : userAgent;
+		httpUserAgent = forceUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
 		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
@@ -555,7 +622,7 @@ public class MiningStatisticsActivity extends Activity {
 							editor.putString("settings_mtgox_fetch_rate", getString(R.string.default_option_exchange_fetch_rate));
 						}
 						editor.commit();
-						// beginFetch();
+						fetchMtGoxCurrency();
 					}
 				});
 				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, null);
@@ -572,6 +639,9 @@ public class MiningStatisticsActivity extends Activity {
 				});
 				alert.create().show();
 			}
+			mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", getString(R.string.default_option_mtgox_api_domain));
+			mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
+			fetchMtGoxCurrency();
 		}
 		
 		switchTable();

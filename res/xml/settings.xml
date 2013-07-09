@@ -34,6 +34,17 @@
                 android:title="@string/label_option_check_connection_delays"
                 android:summary="@string/label_option_check_connection_delays_summary"
                 android:defaultValue="true" />
+        
+        <CheckBoxPreference
+                android:key="settings_force_use_backup_user_agent"
+                android:title="@string/label_option_force_use_backup_user_agent"
+                android:summary="@string/label_option_force_use_backup_user_agent_summary"
+                android:defaultValue="false" />
+        
+        <EditTextPreference
+                android:key="settings_backup_user_agent"
+                android:title="@string/label_option_backup_user_agent"
+                android:summary="@string/label_option_backup_user_agent" />
 
     </PreferenceCategory>
     
@@ -75,6 +86,21 @@
                 android:summary="@string/label_option_exchange_fetch_rate_summary"
                 android:defaultValue="@string/default_option_exchange_fetch_rate"
                 android:inputType="number" />
+        
+        <EditTextPreference
+                android:key="settings_mtgox_api_domain"
+                android:dependency="settings_mtgox_enabled"
+                android:title="@string/label_option_mtgox_api_domain"
+                android:summary="@string/label_option_mtgox_api_domain_summary"
+                android:defaultValue="@string/default_option_mtgox_api_domain" />
+        
+        <ListPreference
+        		android:key="settings_mtgox_currency_type"
+        		android:entries="@array/supported_currencies_convertable_from_btc"
+        		android:entryValues="@array/supported_currencies_convertable_from_btc"
+        		android:defaultValue="USD"
+        		android:dependency="settings_mtgox_enabled"
+        		android:title="@string/label_option_currency_type" />
 
     </PreferenceCategory>
 </PreferenceScreen>
