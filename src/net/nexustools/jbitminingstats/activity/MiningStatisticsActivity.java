@@ -43,6 +43,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public static String[] currencyType;
 	public static String[] currencySymbol;
+	public static boolean[] currencyIsPrefix;
 	
 	public static String httpUserAgent;
 	
@@ -82,7 +83,7 @@ public class MiningStatisticsActivity extends Activity {
 	public ConcurrentHashMap<String, TableRow> createdBlockRows = new ConcurrentHashMap<String, TableRow>();
 	
 	public boolean mtGoxBTCTOCurrencySymbolSet;
-	public boolean mtGoxBTCTOCurrencySymbolAffix;
+	public boolean mtGoxBTCTOCurrencySymbolPrefix;
 	public boolean mtGoxFetchEnabled;
 	public String mtGoxAPIDomain;
 	public String mtGoxCurrencyType;
@@ -358,18 +359,7 @@ public class MiningStatisticsActivity extends Activity {
 					public void run() {
 						if(returnCode == JSON_FETCH_SUCCESS) {
 							if(!mtGoxBTCTOCurrencySymbolSet) {
-								if(mtGoxBTCTOCurrencySymbolAffix) {
-									confirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									confirmedNamecoinReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									unconfirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									estimatedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									potentialReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									confirmedReward.setPrefix("");
-									confirmedNamecoinReward.setPrefix("");
-									unconfirmedReward.setPrefix("");
-									estimatedReward.setPrefix("");
-									potentialReward.setPrefix("");
-								} else {
+								if(mtGoxBTCTOCurrencySymbolPrefix) {
 									confirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
 									confirmedNamecoinReward.setPrefix(mtGoxBTCTOCurrencySymbol);
 									unconfirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
@@ -380,6 +370,17 @@ public class MiningStatisticsActivity extends Activity {
 									unconfirmedReward.setAffix("");
 									estimatedReward.setAffix("");
 									potentialReward.setAffix("");
+								} else {
+									confirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									confirmedNamecoinReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									unconfirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									estimatedReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									potentialReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									confirmedReward.setPrefix("");
+									confirmedNamecoinReward.setPrefix("");
+									unconfirmedReward.setPrefix("");
+									estimatedReward.setPrefix("");
+									potentialReward.setPrefix("");
 								}
 								mtGoxBTCTOCurrencySymbolSet = true;
 							}
@@ -494,6 +495,10 @@ public class MiningStatisticsActivity extends Activity {
 		super.onStart();
 		currencyType = getResources().getStringArray(R.array.supported_currencies_convertable_from_btc);
 		currencySymbol = getResources().getStringArray(R.array.currency_type_to_symbol);
+		String[] tempArray = getResources().getStringArray(R.array.currency_type_is_prefix);
+		currencyIsPrefix = new boolean[tempArray.length];
+		for(int i = 0; i < tempArray.length; i++)
+			currencyIsPrefix[i] = Boolean.parseBoolean(tempArray[i]);
 	}
 	
 	@Override
@@ -676,11 +681,12 @@ public class MiningStatisticsActivity extends Activity {
 			mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
 			
 			mtGoxBTCTOCurrencySymbolSet = false;
-			mtGoxBTCTOCurrencySymbolAffix = false; // TODO: Find out what currencies prefix, and what ones affix.
+			mtGoxBTCTOCurrencySymbolPrefix = true; // TODO: Find out what currencies prefix, and what ones affix.
 			mtGoxBTCTOCurrencySymbol = "$";
 			for(int i = 0; i < currencyType.length; i++)
 				if(currencyType[i].equals(mtGoxCurrencyType)) {
 					mtGoxBTCTOCurrencySymbol = currencySymbol[i];
+					mtGoxBTCTOCurrencySymbolPrefix = currencyIsPrefix[i];
 					break;
 				}
 			fetchMtGoxCurrency();

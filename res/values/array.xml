@@ -40,4 +40,24 @@
 	    <item>kr</item>
 	    <item>Kč</item>
 	</string-array>
+	<string-array name="currency_type_is_prefix">
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	    <item>true</item>
+	</string-array>
 </resources>
