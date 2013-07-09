@@ -236,6 +236,7 @@ public class MiningStatisticsActivity extends Activity {
 											blockRow.addView(blockConfirmations);
 											
 											FormattableNumberView blockReward = new FormattableNumberView(context);
+											blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											blockReward.setValue(block.reward);
 											blockRow.addView(blockReward);
@@ -342,7 +343,7 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void fetchMtGoxCurrency() {
-		final Context context = this;
+		// final Context context = this;
 		if(workScheduler == null)
 			workScheduler = new Timer();
 		if(mtGoxFetchTask != null)
@@ -382,6 +383,10 @@ public class MiningStatisticsActivity extends Activity {
 									estimatedReward.setPrefix("");
 									potentialReward.setPrefix("");
 								}
+								
+								((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
+								((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
+								
 								mtGoxBTCTOCurrencySymbolSet = true;
 							}
 							confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
@@ -589,6 +594,8 @@ public class MiningStatisticsActivity extends Activity {
 			rateColumnStub.setText(R.string.label_worker_table_header_rate);
 		}
 		
+		((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
+		((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
 		confirmedReward.setPrefix("");
 		confirmedNamecoinReward.setPrefix("");
 		unconfirmedReward.setPrefix("");
