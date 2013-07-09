@@ -80,7 +80,6 @@ public class MiningStatisticsActivity extends Activity {
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -393,7 +392,7 @@ public class MiningStatisticsActivity extends Activity {
 				blocks = new ArrayList<BlockStub>();
 				for(int i = 0; i < blockArray.length(); i++) {
 					JSONObject blockEntry = block.getJSONObject(blockArray.getString(i));
-					blocks.add(new BlockStub(blockArray.getString(i), blockEntry.getInt("confirmations"), blockEntry.getDouble("reward"), blockEntry.getDouble("nmc_reward"), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
+					blocks.add(new BlockStub(blockArray.getString(i), blockEntry.getInt("confirmations"), noNaN(blockEntry.optDouble("reward")), noNaN(blockEntry.optDouble("nmc_reward")), blockEntry.getDouble("total_score"), blockEntry.getDouble("total_shares")));
 				}
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
@@ -607,5 +606,9 @@ public class MiningStatisticsActivity extends Activity {
 			createdBlockRows.clear();
 		}
 		beginFetch();
+	}
+	
+	public double noNaN(double d) {
+		return Double.isNaN(d) ? 0D : d;
 	}
 }
