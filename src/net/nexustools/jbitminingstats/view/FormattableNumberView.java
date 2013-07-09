@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 public class FormattableNumberView extends TextView {
 	private double val = 0;
+	private double mul = 0;
 	private String formatting;
+	private String prefix = "";
 	private String affix = "";
 	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 0, 0, 12);
 	
@@ -75,7 +77,7 @@ public class FormattableNumberView extends TextView {
 	}
 	
 	public void formText() {
-		setText((formatting == null ? Double.toString(val) : String.format(formatting, val)) + affix);
+		setText(prefix + (formatting == null ? Double.toString(mul != 0 ? val * mul : val) : String.format(formatting, mul != 0 ? val * mul : val)) + affix);
 	}
 	
 	public double getValue() {
@@ -98,5 +100,23 @@ public class FormattableNumberView extends TextView {
 	
 	public String getAffix() {
 		return affix;
+	}
+	
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+		formText();
+	}
+	
+	public String getPrefix() {
+		return prefix;
+	}
+	
+	public void setMultiplier(double mul) {
+		this.mul = mul;
+		formText();
+	}
+	
+	public double getMultiplier() {
+		return mul;
 	}
 }

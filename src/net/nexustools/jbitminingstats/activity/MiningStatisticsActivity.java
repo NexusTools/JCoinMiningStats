@@ -348,7 +348,27 @@ public class MiningStatisticsActivity extends Activity {
 		workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
 			@Override
 			public void run() {
-				int returnCode = fetchMtGoxJSONData();
+				final int returnCode = fetchMtGoxJSONData();
+				switch(returnCode) {
+				// TODO: Error handling...
+				}
+				handler.post(new Runnable() {
+					public void run() {
+						if(returnCode == JSON_FETCH_SUCCESS) {
+							confirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+							confirmedNamecoinReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+							unconfirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+							estimatedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+							potentialReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+							
+							confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+							confirmedNamecoinReward.setMultiplier(mtGoxBTCToCurrencyVal);
+							unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+							estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+							potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
+						}
+					}
+				});
 			}
 		}, 0, mtGoxFetchDelay);
 	}
@@ -429,13 +449,6 @@ public class MiningStatisticsActivity extends Activity {
 			String content = ContentGrabber.fetch(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
 			try {
 				mtGoxBTCToCurrencyVal = new JSONObject(content).getJSONObject("return").getJSONObject("last_local").getDouble("value");
-				mtGoxBTCTOCurrencySymbol = "$";
-				for(int i = 0; i < currencyType.length; i++)
-					if(currencyType[i].equals(mtGoxCurrencyType)) {
-						mtGoxBTCTOCurrencySymbol = currencySymbol[i];
-						break;
-					}
-				
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
 				e.printStackTrace();
@@ -623,6 +636,12 @@ public class MiningStatisticsActivity extends Activity {
 			}
 			mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", getString(R.string.default_option_mtgox_api_domain));
 			mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
+			mtGoxBTCTOCurrencySymbol = "$";
+			for(int i = 0; i < currencyType.length; i++)
+				if(currencyType[i].equals(mtGoxCurrencyType)) {
+					mtGoxBTCTOCurrencySymbol = currencySymbol[i];
+					break;
+				}
 			fetchMtGoxCurrency();
 		}
 		
