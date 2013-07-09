@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -156,25 +155,23 @@ public class MiningStatisticsActivity extends Activity {
 								AlertDialog.Builder alert = new AlertDialog.Builder(context);
 								alert.setTitle(R.string.problem_json);
 								alert.setMessage(problem + "\n" + getString(R.string.problem_try_again));
-								alert.setPositiveButton(R.string.problem_json_positive, new DialogInterface.OnClickListener() {
+								DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
-										beginFetch();
-									}
-								});
-								alert.setNegativeButton(R.string.problem_json_negative, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_LONG).show();
-									}
-								});
-								alert.setOnCancelListener(new OnCancelListener() {
-									@Override
-									public void onCancel(DialogInterface dialog) {
-										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_LONG).show();
-									}
-								});
+                                    public void onClick(DialogInterface dialog, int which) {
+	                                    switch(which) {
+	                                    	case AlertDialog.BUTTON_POSITIVE:
+	                                    		Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
+	    										beginFetch();
+	                                    		break;
+	                                    	case AlertDialog.BUTTON_NEGATIVE:
+	                                    		Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
+	                                    		break;
+	                                    }
+                                    }
+								};
+								alert.setPositiveButton(R.string.problem_json_positive, handler);
+								alert.setNegativeButton(R.string.problem_json_negative, handler);
+								alert.setCancelable(false);
 								alert.setIcon(R.drawable.ic_launcher);
 								alert.create().show();
 							} else {
@@ -574,20 +571,23 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setTitle(R.string.problem_low_connection_delay);
 				alert.setMessage(R.string.label_connection_rate_warning);
 				alert.setIcon(R.drawable.ic_launcher);
-				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
+				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
-						beginFetch();
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(which) {
+                        	case AlertDialog.BUTTON_POSITIVE:
+                        		settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
+        						beginFetch();
+                        		break;
+                        	case AlertDialog.BUTTON_NEGATIVE:
+                        		settings.setCheckConnectionDelays(false);
+                        		break;
+                        }
 					}
-				});
-				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, null);
-				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						settings.setCheckConnectionDelays(false);
-					}
-				});
+                };
+				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
+				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
+				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);
 				alert.create().show();
 			}
 		}
@@ -598,20 +598,23 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setTitle(R.string.problem_low_connection_delay);
 				alert.setMessage(R.string.label_mtgox_connection_rate_warning);
 				alert.setIcon(R.drawable.ic_launcher);
-				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
+				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
-						fetchMtGoxCurrency();
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(which) {
+                        	case AlertDialog.BUTTON_POSITIVE:
+                        		settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
+        						fetchMtGoxCurrency();
+                        		break;
+                        	case AlertDialog.BUTTON_NEGATIVE:
+                        		settings.setCheckConnectionDelays(false);
+                        		break;
+                        }
 					}
-				});
-				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, null);
-				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						settings.setCheckConnectionDelays(false);
-					}
-				});
+                };
+				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
+				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
+				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);
 				alert.create().show();
 			}
 			mtGoxBTCTOCurrencySymbolSet = false;
