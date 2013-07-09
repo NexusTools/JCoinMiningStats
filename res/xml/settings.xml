@@ -19,8 +19,8 @@
         
         <CheckBoxPreference
                 android:key="settings_show_hashrates"
-                android:title="@string/label_option_affix_hashrates_text"
-                android:summary="@string/label_option_affix_hashrates_text_summary" 
+                android:title="@string/label_option_suffix_hashrates_text"
+                android:summary="@string/label_option_suffix_hashrates_text_summary" 
                 android:defaultValue="true"/>
         
         <CheckBoxPreference

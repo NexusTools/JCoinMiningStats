@@ -91,13 +91,11 @@ public final class R {
         public static final int label_confirmed_reward=0x7f070007;
         public static final int label_connection_rate_warning=0x7f070053;
         public static final int label_estimated_reward=0x7f07000a;
-        public static final int label_hashrate_affix=0x7f07001b;
+        public static final int label_hashrate_suffix=0x7f07001b;
         public static final int label_mtgox_connection_rate_warning=0x7f070054;
         public static final int label_mtgox_effect_block_table=0x7f07004d;
         public static final int label_mtgox_effect_block_table_summary=0x7f07004e;
         public static final int label_number_stub=0x7f07001a;
-        public static final int label_option_affix_hashrates_text=0x7f070030;
-        public static final int label_option_affix_hashrates_text_summary=0x7f070031;
         public static final int label_option_auto_connect=0x7f07002b;
         public static final int label_option_auto_connect_summary=0x7f07002c;
         public static final int label_option_backup_user_agent=0x7f070047;
@@ -124,6 +122,8 @@ public final class R {
         public static final int label_option_show_when_parsed_summary=0x7f070033;
         public static final int label_option_slushs_api_key=0x7f07003b;
         public static final int label_option_slushs_api_key_summary=0x7f07003c;
+        public static final int label_option_suffix_hashrates_text=0x7f070030;
+        public static final int label_option_suffix_hashrates_text_summary=0x7f070031;
         public static final int label_slushs_option_site_block_domain=0x7f070038;
         public static final int label_slushs_option_site_block_domain_summary=0x7f070039;
         public static final int label_slushs_option_site_miner_domain=0x7f070035;
@@ -134,7 +134,7 @@ public final class R {
         public static final int label_worker_rate=0x7f070006;
         public static final int label_worker_table_header_name=0x7f07000e;
         public static final int label_worker_table_header_rate=0x7f07000f;
-        public static final int label_worker_table_header_rate_affixed=0x7f070010;
+        public static final int label_worker_table_header_rate_suffixed=0x7f070010;
         public static final int label_worker_table_header_score=0x7f070012;
         public static final int label_worker_table_header_share=0x7f070011;
         public static final int label_worker_table_header_status=0x7f07000d;

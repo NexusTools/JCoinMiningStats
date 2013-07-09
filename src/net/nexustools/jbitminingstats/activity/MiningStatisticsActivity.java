@@ -369,17 +369,17 @@ public class MiningStatisticsActivity extends Activity {
 									unconfirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
 									estimatedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
 									potentialReward.setPrefix(mtGoxBTCTOCurrencySymbol);
-									confirmedReward.setAffix("");
-									confirmedNamecoinReward.setAffix("");
-									unconfirmedReward.setAffix("");
-									estimatedReward.setAffix("");
-									potentialReward.setAffix("");
+									confirmedReward.setSuffix("");
+									confirmedNamecoinReward.setSuffix("");
+									unconfirmedReward.setSuffix("");
+									estimatedReward.setSuffix("");
+									potentialReward.setSuffix("");
 								} else {
-									confirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									confirmedNamecoinReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									unconfirmedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									estimatedReward.setAffix(mtGoxBTCTOCurrencySymbol);
-									potentialReward.setAffix(mtGoxBTCTOCurrencySymbol);
+									confirmedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
+									confirmedNamecoinReward.setSuffix(mtGoxBTCTOCurrencySymbol);
+									unconfirmedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
+									estimatedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
+									potentialReward.setSuffix(mtGoxBTCTOCurrencySymbol);
 									confirmedReward.setPrefix("");
 									confirmedNamecoinReward.setPrefix("");
 									unconfirmedReward.setPrefix("");
@@ -588,11 +588,11 @@ public class MiningStatisticsActivity extends Activity {
 		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
-			workerRate.setAffix(getString(R.string.label_hashrate_affix));
-			rateColumn.setText(R.string.label_worker_table_header_rate_affixed);
-			rateColumnStub.setText(R.string.label_worker_table_header_rate_affixed);
+			workerRate.setSuffix(getString(R.string.label_hashrate_suffix));
+			rateColumn.setText(R.string.label_worker_table_header_rate_suffixed);
+			rateColumnStub.setText(R.string.label_worker_table_header_rate_suffixed);
 		} else {
-			workerRate.setAffix("");
+			workerRate.setSuffix("");
 			rateColumn.setText(R.string.label_worker_table_header_rate);
 			rateColumnStub.setText(R.string.label_worker_table_header_rate);
 		}
@@ -604,11 +604,11 @@ public class MiningStatisticsActivity extends Activity {
 		unconfirmedReward.setPrefix("");
 		estimatedReward.setPrefix("");
 		potentialReward.setPrefix("");
-		confirmedReward.setAffix("");
-		confirmedNamecoinReward.setAffix("");
-		unconfirmedReward.setAffix("");
-		estimatedReward.setAffix("");
-		potentialReward.setAffix("");
+		confirmedReward.setSuffix("");
+		confirmedNamecoinReward.setSuffix("");
+		unconfirmedReward.setSuffix("");
+		estimatedReward.setSuffix("");
+		potentialReward.setSuffix("");
 		confirmedReward.setMultiplier(0);
 		confirmedNamecoinReward.setMultiplier(0);
 		unconfirmedReward.setMultiplier(0);

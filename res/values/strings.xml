@@ -18,7 +18,7 @@
     <string name="label_worker_table_header_status">On</string>
     <string name="label_worker_table_header_name">Name</string>
     <string name="label_worker_table_header_rate">Rate</string>
-    <string name="label_worker_table_header_rate_affixed">Rate (mh/s)</string>
+    <string name="label_worker_table_header_rate_suffixed">Rate (mh/s)</string>
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
     
@@ -31,7 +31,7 @@
     <string name="label_block_table_header_share">Share</string>
     <string name="label_number_stub">N/A</string>
     
-    <string name="label_hashrate_affix">mh/s</string>
+    <string name="label_hashrate_suffix">mh/s</string>
     
     <string name="problem_json_no_api_key_set">Slush\'s API key has not been set, it\'s required to fetch JSON data. Please set the API key in the settings.</string>
     <string name="problem_json">Connection Error</string>
@@ -58,8 +58,8 @@
     <string name="label_option_connection_delay">Connection delay</string>
     <string name="label_option_connection_delay_summary">The JSON data for miners/blocks will be fetched at this specified millisecond variable.</string>
     <string name="default_option_connection_delay">15000</string>
-    <string name="label_option_affix_hashrates_text">Show hashrate units</string>
-    <string name="label_option_affix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
+    <string name="label_option_suffix_hashrates_text">Show hashrate units</string>
+    <string name="label_option_suffix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
     <string name="label_option_show_when_parsed">Show parsed messages</string>
     <string name="label_option_show_when_parsed_summary">Whenever a connection is being attempted it\'ll display a toast saying the result.</string>
     <string name="label_option_category_pool">Pool Settings</string>

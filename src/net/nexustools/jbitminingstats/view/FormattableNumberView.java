@@ -12,7 +12,7 @@ public class FormattableNumberView extends TextView {
 	private double mul = 0;
 	private String formatting;
 	private String prefix = "";
-	private String affix = "";
+	private String suffix = "";
 	public SmoothColorChanger curColor = new SmoothColorChanger(0, 0, 0, 0, 0, 0, 0, 0, 12);
 	
 	public FormattableNumberView(Context context) {
@@ -77,7 +77,7 @@ public class FormattableNumberView extends TextView {
 	}
 	
 	public void formText() {
-		setText(prefix + (formatting == null ? Double.toString(mul != 0 ? val * mul : val) : String.format(formatting, mul != 0 ? val * mul : val)) + affix);
+		setText(prefix + (formatting == null ? Double.toString(mul != 0 ? val * mul : val) : String.format(formatting, mul != 0 ? val * mul : val)) + suffix);
 	}
 	
 	public double getValue() {
@@ -93,13 +93,13 @@ public class FormattableNumberView extends TextView {
 		return formatting;
 	}
 	
-	public void setAffix(String affix) {
-		this.affix = affix;
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
 		formText();
 	}
 	
 	public String getAffix() {
-		return affix;
+		return suffix;
 	}
 	
 	public void setPrefix(String prefix) {
