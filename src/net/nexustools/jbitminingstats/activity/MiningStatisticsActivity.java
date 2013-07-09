@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.nexustools.jbitminingstats.R;
 import net.nexustools.jbitminingstats.util.BlockStub;
+import net.nexustools.jbitminingstats.util.ContentGrabber;
 import net.nexustools.jbitminingstats.util.MiningWorkerStub;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
@@ -55,7 +56,7 @@ public class MiningStatisticsActivity extends Activity {
 	public FormattableNumberView estimatedReward;
 	public FormattableNumberView potentialReward;
 	
-	public String httpUserAgent;
+	public static String httpUserAgent;
 	
 	public ProgressBar progressBar;
 	public int connectionDelay;
@@ -367,17 +368,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMinerJSONData() {
 		try {
-			StringBuffer sb = new StringBuffer();
-			HttpGet httpGet = new HttpGet(slushsAccountDomain + slushsAPIKey);
-			if(httpUserAgent != null)
-				httpGet.setHeader("User-Agent", httpUserAgent);
-			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
-			InputStreamReader reader = new InputStreamReader(ent.getContent());
-			char[] data = new char[512];
-			int read = -1;
-			while((read = reader.read(data)) != -1)
-				sb.append(data, 0, read);
-			String content = sb.toString();
+			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -408,17 +399,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchBlockJSONData() {
 		try {
-			StringBuffer sb = new StringBuffer();
-			HttpGet httpGet = new HttpGet(slushsBlockDomain + slushsAPIKey);
-			if(httpUserAgent != null)
-				httpGet.setHeader("User-Agent", httpUserAgent);
-			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
-			InputStreamReader reader = new InputStreamReader(ent.getContent());
-			char[] data = new char[512];
-			int read = -1;
-			while((read = reader.read(data)) != -1)
-				sb.append(data, 0, read);
-			String content = sb.toString();
+			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -443,17 +424,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMtGoxJSONData() {
 		try {
-			StringBuffer sb = new StringBuffer();
-			HttpGet httpGet = new HttpGet(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
-			if(httpUserAgent != null)
-				httpGet.setHeader("User-Agent", httpUserAgent);
-			HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
-			InputStreamReader reader = new InputStreamReader(ent.getContent());
-			char[] data = new char[512];
-			int read = -1;
-			while((read = reader.read(data)) != -1)
-				sb.append(data, 0, read);
-			String content = sb.toString();
+			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
 			try {
 				JSONObject jsonContent = new JSONObject(content);
 				System.out.println(jsonContent);
@@ -553,8 +524,9 @@ public class MiningStatisticsActivity extends Activity {
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
 		forceUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", false);
 		String userAgent = prefs.getString("settings_backup_user_agent", null);
-		userAgent = userAgent == "" ? null : userAgent;
+		userAgent = userAgent.equals("") ? null : userAgent;
 		httpUserAgent = forceUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
+		
 		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
