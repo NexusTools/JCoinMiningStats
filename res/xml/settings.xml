@@ -101,6 +101,13 @@
         		android:defaultValue="USD"
         		android:dependency="settings_mtgox_enabled"
         		android:title="@string/label_option_currency_type" />
+        
+        <CheckBoxPreference
+                android:key="settings_mtgox_effect_block_table"
+                android:dependency="settings_mtgox_enabled"
+                android:title="@string/label_mtgox_effect_block_table"
+                android:summary="@string/label_mtgox_effect_block_table_summary"
+                android:defaultValue="true" />
 
     </PreferenceCategory>
 </PreferenceScreen>

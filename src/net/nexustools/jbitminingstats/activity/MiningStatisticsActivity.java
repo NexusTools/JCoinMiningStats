@@ -85,6 +85,7 @@ public class MiningStatisticsActivity extends Activity {
 	public boolean mtGoxBTCTOCurrencySymbolSet;
 	public boolean mtGoxBTCTOCurrencySymbolPrefix;
 	public boolean mtGoxFetchEnabled;
+	public boolean mtGoxEffectBlockTable;
 	public String mtGoxAPIDomain;
 	public String mtGoxCurrencyType;
 	public double mtGoxBTCToCurrencyVal;
@@ -236,7 +237,8 @@ public class MiningStatisticsActivity extends Activity {
 											blockRow.addView(blockConfirmations);
 											
 											FormattableNumberView blockReward = new FormattableNumberView(context);
-											blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
+											if(mtGoxEffectBlockTable)
+												blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											blockReward.setValue(block.reward);
 											blockRow.addView(blockReward);
@@ -383,10 +385,10 @@ public class MiningStatisticsActivity extends Activity {
 									estimatedReward.setPrefix("");
 									potentialReward.setPrefix("");
 								}
-								
-								((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
-								((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
-								
+								if(mtGoxEffectBlockTable) {
+									((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
+									((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
+								}
 								mtGoxBTCTOCurrencySymbolSet = true;
 							}
 							confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
@@ -686,6 +688,7 @@ public class MiningStatisticsActivity extends Activity {
 			}
 			mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", getString(R.string.default_option_mtgox_api_domain));
 			mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
+			mtGoxEffectBlockTable = prefs.getBoolean("settings_mtgox_effect_block_table", true);
 			
 			mtGoxBTCTOCurrencySymbolSet = false;
 			mtGoxBTCTOCurrencySymbolPrefix = true; // TODO: Find out what currencies prefix, and what ones affix.
