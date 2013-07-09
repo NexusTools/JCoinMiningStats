@@ -15,8 +15,8 @@ public class ContentGrabber {
 	public static String fetch(String request) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		HttpGet httpGet = new HttpGet(request);
-		if(MiningStatisticsActivity.httpUserAgent != null)
-			httpGet.setHeader("User-Agent", MiningStatisticsActivity.httpUserAgent);
+		if(MiningStatisticsActivity.settings.getHTTPUserAgent() != null)
+			httpGet.setHeader("User-Agent", MiningStatisticsActivity.settings.getHTTPUserAgent());
 		HttpEntity ent = new DefaultHttpClient().execute(httpGet).getEntity();
 		InputStreamReader reader = new InputStreamReader(ent.getContent());
 		char[] data = new char[BUFFER_SIZE];

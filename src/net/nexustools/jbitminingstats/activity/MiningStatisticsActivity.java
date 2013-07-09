@@ -10,6 +10,7 @@ import net.nexustools.jbitminingstats.R;
 import net.nexustools.jbitminingstats.util.BlockStub;
 import net.nexustools.jbitminingstats.util.ContentGrabber;
 import net.nexustools.jbitminingstats.util.MiningWorkerStub;
+import net.nexustools.jbitminingstats.util.Settings;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
 
 import org.json.JSONArray;
@@ -22,10 +23,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,12 +39,8 @@ import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
 	public static final int CONNECTION_DELAY_WARNING_CAP = 15000;
-	
-	public static String[] currencyType;
-	public static String[] currencySymbol;
-	public static boolean[] currencyIsPrefix;
-	
-	public static String httpUserAgent;
+	public static final int TIME_STEP = 1000 / 20;
+	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
 	public static Handler handler = new Handler();
 	public static Timer workScheduler;
@@ -53,48 +48,36 @@ public class MiningStatisticsActivity extends Activity {
 	public static TimerTask mtGoxFetchTask;
 	public static boolean canContinue = true;
 	
-	public TableLayout workerTableHeader;
-	public TableLayout workerTableEntries;
-	public TableLayout blockTableHeader;
-	public TableLayout blockTableEntries;
 	public FormattableNumberView workerRate;
 	public FormattableNumberView confirmedReward;
 	public FormattableNumberView confirmedNamecoinReward;
 	public FormattableNumberView unconfirmedReward;
 	public FormattableNumberView estimatedReward;
 	public FormattableNumberView potentialReward;
-	
+	public TableLayout workerTableHeader;
+	public TableLayout workerTableEntries;
+	public TableLayout blockTableHeader;
+	public TableLayout blockTableEntries;
 	public ProgressBar progressBar;
-	public int connectionDelay;
-	public int mtGoxFetchDelay;
-	public int elapsedTime = 0;
-	public String slushsAccountDomain;
-	public String slushsBlockDomain;
-	public String slushsAPIKey;
-	public boolean forceUseBackupHttpUserAgent;
-	public boolean showingBlocks;
-	public boolean autoConnect;
-	public boolean showHashrateUnit;
-	public boolean showParseMessage;
-	public boolean checkConnectionDelays;
+	
 	public ArrayList<MiningWorkerStub> workers;
 	public ArrayList<BlockStub> blocks;
 	public ConcurrentHashMap<String, TableRow> createdMinerRows = new ConcurrentHashMap<String, TableRow>();
 	public ConcurrentHashMap<String, TableRow> createdBlockRows = new ConcurrentHashMap<String, TableRow>();
 	
-	public boolean mtGoxBTCTOCurrencySymbolSet;
-	public boolean mtGoxBTCTOCurrencySymbolPrefix;
-	public boolean mtGoxFetchEnabled;
-	public boolean mtGoxEffectBlockTable;
-	public String mtGoxAPIDomain;
-	public String mtGoxCurrencyType;
-	public double mtGoxBTCToCurrencyVal;
-	public String mtGoxBTCTOCurrencySymbol;
+	public int elapsedTime = 0;
 	
-	public static final int TIME_STEP = 1000 / 20;
-	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
+	public static Settings settings;
 	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
+	public static double mtGoxBTCToCurrencyVal;
+	public static boolean mtGoxBTCTOCurrencySymbolSet;
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		settings = new Settings(this);
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -125,11 +108,11 @@ public class MiningStatisticsActivity extends Activity {
 		if(minerBlockFetchTask != null)
 			minerBlockFetchTask.cancel();
 		progressBar.setProgress(0);
-		progressBar.setMax(connectionDelay);
-		elapsedTime = connectionDelay;
+		progressBar.setMax(settings.getConnectionDelay());
+		elapsedTime = settings.getConnectionDelay();
 		canContinue = true;
 		
-		if(slushsAPIKey == null || slushsAPIKey.trim().length() == 0) {
+		if(settings.getSlushsAPIKey() == null || settings.getSlushsAPIKey().trim().length() == 0) {
 			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -137,10 +120,10 @@ public class MiningStatisticsActivity extends Activity {
 			@Override
 			public void run() {
 				elapsedTime += TIME_STEP;
-				progressBar.setProgress(elapsedTime > connectionDelay ? connectionDelay : elapsedTime);
-				if(elapsedTime >= connectionDelay) {
+				progressBar.setProgress(elapsedTime > settings.getConnectionDelay() ? settings.getConnectionDelay() : elapsedTime);
+				if(elapsedTime >= settings.getConnectionDelay()) {
 					final int result = fetchMinerJSONData();
-					final int result2 = showingBlocks ? fetchBlockJSONData() : 0;
+					final int result2 = settings.isShowingBlocks() ? fetchBlockJSONData() : 0;
 					String pb = null;
 					switch(result) {
 						case JSON_FETCH_PARSE_ERROR:
@@ -165,7 +148,7 @@ public class MiningStatisticsActivity extends Activity {
 						break;
 					}
 					final String problem = pb;
-					canContinue = (pb == null ? autoConnect : false);
+					canContinue = (pb == null ? settings.canAutoConnect() : false);
 					handler.post(new Runnable() {
 						public void run() {
 							if(problem != null) {
@@ -201,7 +184,7 @@ public class MiningStatisticsActivity extends Activity {
 								unconfirmedReward.setValue(unconfirmedRewardVal);
 								estimatedReward.setValue(estimatedRewardVal);
 								potentialReward.setValue(potentialRewardVal);
-								if(showingBlocks) {
+								if(settings.isShowingBlocks()) {
 									ArrayList<String> blocksFound = new ArrayList<String>();
 									blocksFound.add(getString(R.string.label_block_table_header_block));
 									for(BlockStub block : blocks) {
@@ -238,7 +221,7 @@ public class MiningStatisticsActivity extends Activity {
 											blockRow.addView(blockConfirmations);
 											
 											FormattableNumberView blockReward = new FormattableNumberView(context);
-											if(mtGoxEffectBlockTable)
+											if(settings.canMtGoxEffectBlockTable())
 												blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											blockReward.setValue(block.reward);
@@ -330,7 +313,7 @@ public class MiningStatisticsActivity extends Activity {
 										}
 									}
 								}
-								if(showParseMessage)
+								if(settings.canShowParseMessage())
 									Toast.makeText(context, R.string.json_parsed, Toast.LENGTH_SHORT).show();
 							}
 						}
@@ -363,32 +346,32 @@ public class MiningStatisticsActivity extends Activity {
 					public void run() {
 						if(returnCode == JSON_FETCH_SUCCESS) {
 							if(!mtGoxBTCTOCurrencySymbolSet) {
-								if(mtGoxBTCTOCurrencySymbolPrefix) {
-									confirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
-									confirmedNamecoinReward.setPrefix(mtGoxBTCTOCurrencySymbol);
-									unconfirmedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
-									estimatedReward.setPrefix(mtGoxBTCTOCurrencySymbol);
-									potentialReward.setPrefix(mtGoxBTCTOCurrencySymbol);
+								if(settings.canTheMtGoxBTCTOCurrencySymbolPrefixOrAffix()) {
+									confirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+									confirmedNamecoinReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+									unconfirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+									estimatedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+									potentialReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 									confirmedReward.setSuffix("");
 									confirmedNamecoinReward.setSuffix("");
 									unconfirmedReward.setSuffix("");
 									estimatedReward.setSuffix("");
 									potentialReward.setSuffix("");
 								} else {
-									confirmedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
-									confirmedNamecoinReward.setSuffix(mtGoxBTCTOCurrencySymbol);
-									unconfirmedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
-									estimatedReward.setSuffix(mtGoxBTCTOCurrencySymbol);
-									potentialReward.setSuffix(mtGoxBTCTOCurrencySymbol);
+									confirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+									confirmedNamecoinReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+									unconfirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+									estimatedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+									potentialReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 									confirmedReward.setPrefix("");
 									confirmedNamecoinReward.setPrefix("");
 									unconfirmedReward.setPrefix("");
 									estimatedReward.setPrefix("");
 									potentialReward.setPrefix("");
 								}
-								if(mtGoxEffectBlockTable) {
-									((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
-									((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + mtGoxBTCTOCurrencySymbol + ")");
+								if(settings.canMtGoxEffectBlockTable()) {
+									((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
+									((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
 								}
 								mtGoxBTCTOCurrencySymbolSet = true;
 							}
@@ -401,7 +384,7 @@ public class MiningStatisticsActivity extends Activity {
 					}
 				});
 			}
-		}, 0, mtGoxFetchDelay);
+		}, 0, settings.getMtGoxFetchDelay());
 	}
 	
 	public void stopFetch() {
@@ -421,7 +404,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMinerJSONData() {
 		try {
-			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
+			String content = ContentGrabber.fetch(settings.getSlushsAccountDomain() + settings.getSlushsAPIKey());
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -452,7 +435,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchBlockJSONData() {
 		try {
-			String content = ContentGrabber.fetch(slushsBlockDomain + slushsAPIKey);
+			String content = ContentGrabber.fetch(settings.getSlushsBlockDomain() + settings.getSlushsAPIKey());
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -477,7 +460,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMtGoxJSONData() {
 		try {
-			String content = ContentGrabber.fetch(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
+			String content = ContentGrabber.fetch(settings.getMtGoxAPIDomain().replaceAll("~", settings.getMtGoxCurrencyType()));
 			try {
 				mtGoxBTCToCurrencyVal = new JSONObject(content).getJSONObject("return").getJSONObject("last_local").getDouble("value");
 				return JSON_FETCH_SUCCESS;
@@ -494,31 +477,15 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		loadSettings();
+		settings.load();
+		applySettings();
 		beginFetch();
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		currencyType = getResources().getStringArray(R.array.supported_currencies_convertable_from_btc);
-		currencySymbol = getResources().getStringArray(R.array.currency_type_to_symbol);
-		String[] tempArray = getResources().getStringArray(R.array.currency_type_is_prefix);
-		currencyIsPrefix = new boolean[tempArray.length];
-		for(int i = 0; i < tempArray.length; i++)
-			currencyIsPrefix[i] = Boolean.parseBoolean(tempArray[i]);
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
 		stopFetch();
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		SharedPreferences.Editor editor = prefs.edit();
-		{
-			editor.putBoolean("showing_blocks", showingBlocks);
-		}
-		editor.commit();
 	}
 	
 	@Override
@@ -541,8 +508,8 @@ public class MiningStatisticsActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.action_show_blocks).setVisible(!showingBlocks);
-		menu.findItem(R.id.action_show_miners).setVisible(showingBlocks);
+		menu.findItem(R.id.action_show_blocks).setVisible(!settings.isShowingBlocks());
+		menu.findItem(R.id.action_show_miners).setVisible(settings.isShowingBlocks());
 		return true;
 	}
 	
@@ -554,12 +521,12 @@ public class MiningStatisticsActivity extends Activity {
 				return true;
 				
 			case R.id.action_show_blocks:
-				showingBlocks = true;
+				settings.setShowingBlocks(true);
 				switchTable();
 				return true;
 				
 			case R.id.action_show_miners:
-				showingBlocks = false;
+				settings.setShowingBlocks(false);
 				switchTable();
 				return true;
 				
@@ -570,24 +537,10 @@ public class MiningStatisticsActivity extends Activity {
 		return false;
 	}
 	
-	public void loadSettings() {
-		final Context context = this;
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		showingBlocks = prefs.getBoolean("showing_blocks", true);
-		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
-		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
-		checkConnectionDelays = prefs.getBoolean("settings_check_connection_delays", true);
-		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
-		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
-		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
-		forceUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", false);
-		String userAgent = prefs.getString("settings_backup_user_agent", "");
-		userAgent = userAgent.equals("") ? null : userAgent;
-		httpUserAgent = forceUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
-		
+	public void applySettings() {
 		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
-		if(showHashrateUnit) {
+		if(settings.canShowHashrateUnit()) {
 			workerRate.setSuffix(getString(R.string.label_hashrate_suffix));
 			rateColumn.setText(R.string.label_worker_table_header_rate_suffixed);
 			rateColumnStub.setText(R.string.label_worker_table_header_rate_suffixed);
@@ -615,10 +568,8 @@ public class MiningStatisticsActivity extends Activity {
 		estimatedReward.setMultiplier(0);
 		potentialReward.setMultiplier(0);
 		
-		autoConnect = prefs.getBoolean("settings_auto_connect", true);
-		if(autoConnect) {
-			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
-			if(checkConnectionDelays && connectionDelay < CONNECTION_DELAY_WARNING_CAP) {
+		if(settings.canAutoConnect()) {
+			if(settings.canCheckConnectionDelays() && settings.getConnectionDelay() < CONNECTION_DELAY_WARNING_CAP) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(this);
 				alert.setTitle(R.string.problem_low_connection_delay);
 				alert.setMessage(R.string.label_connection_rate_warning);
@@ -626,13 +577,7 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						connectionDelay = Integer.parseInt(getString(R.string.default_option_connection_delay));
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-						SharedPreferences.Editor editor = prefs.edit();
-						{
-							editor.putString("settings_connect_delay", getString(R.string.default_option_connection_delay));
-						}
-						editor.commit();
+						settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
 						beginFetch();
 					}
 				});
@@ -640,22 +585,15 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-						SharedPreferences.Editor editor = prefs.edit();
-						{
-							editor.putBoolean("settings_check_connection_delays", false);
-						}
-						editor.commit();
+						settings.setCheckConnectionDelays(false);
 					}
 				});
 				alert.create().show();
 			}
 		}
 		
-		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", false);
-		if(mtGoxFetchEnabled) {
-			mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", getString(R.string.default_option_connection_delay)));
-			if(checkConnectionDelays && mtGoxFetchDelay < CONNECTION_DELAY_WARNING_CAP) {
+		if(settings.isMtGoxFetchEnabled()) {
+			if(settings.canCheckConnectionDelays() && settings.getMtGoxFetchDelay() < CONNECTION_DELAY_WARNING_CAP) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(this);
 				alert.setTitle(R.string.problem_low_connection_delay);
 				alert.setMessage(R.string.label_mtgox_connection_rate_warning);
@@ -663,13 +601,7 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						mtGoxFetchDelay = Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate));
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-						SharedPreferences.Editor editor = prefs.edit();
-						{
-							editor.putString("settings_mtgox_fetch_rate", getString(R.string.default_option_exchange_fetch_rate));
-						}
-						editor.commit();
+						settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
 						fetchMtGoxCurrency();
 					}
 				});
@@ -677,29 +609,12 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-						SharedPreferences.Editor editor = prefs.edit();
-						{
-							editor.putBoolean("settings_check_connection_delays", false);
-						}
-						editor.commit();
+						settings.setCheckConnectionDelays(false);
 					}
 				});
 				alert.create().show();
 			}
-			mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", getString(R.string.default_option_mtgox_api_domain));
-			mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
-			mtGoxEffectBlockTable = prefs.getBoolean("settings_mtgox_effect_block_table", true);
-			
 			mtGoxBTCTOCurrencySymbolSet = false;
-			mtGoxBTCTOCurrencySymbolPrefix = true; // TODO: Find out what currencies prefix, and what ones affix.
-			mtGoxBTCTOCurrencySymbol = "$";
-			for(int i = 0; i < currencyType.length; i++)
-				if(currencyType[i].equals(mtGoxCurrencyType)) {
-					mtGoxBTCTOCurrencySymbol = currencySymbol[i];
-					mtGoxBTCTOCurrencySymbolPrefix = currencyIsPrefix[i];
-					break;
-				}
 			fetchMtGoxCurrency();
 		}
 		
@@ -717,11 +632,11 @@ public class MiningStatisticsActivity extends Activity {
 		}
 		if(workers != null)
 			workers.clear();
-		createdMinerRows.clear();
 		if(blocks != null)
 			blocks.clear();
+		createdMinerRows.clear();
 		createdBlockRows.clear();
-		if(showingBlocks) {
+		if(settings.isShowingBlocks()) {
 			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
 			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
 			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
