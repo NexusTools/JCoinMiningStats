@@ -399,7 +399,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchBlockJSONData() {
 		try {
-			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
+			String content = ContentGrabber.fetch(slushsBlockDomain + slushsAPIKey);
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -424,7 +424,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMtGoxJSONData() {
 		try {
-			String content = ContentGrabber.fetch(slushsAccountDomain + slushsAPIKey);
+			String content = ContentGrabber.fetch(mtGoxAPIDomain.replaceAll("~", mtGoxCurrencyType));
 			try {
 				JSONObject jsonContent = new JSONObject(content);
 				System.out.println(jsonContent);
