@@ -212,9 +212,12 @@ public class MiningStatisticsActivity extends Activity {
 											blockConfirmation.setValue(block.confirmations);
 											
 											FormattableNumberView blockReward = (FormattableNumberView)blockRow.getChildAt(2);
+											if(mtGoxEffectBlockTable)
+												blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setValue(block.reward);
 											
 											FormattableNumberView blockNMCReward = (FormattableNumberView)blockRow.getChildAt(3);
+											
 											blockNMCReward.setValue(block.nmcReward);
 											
 											FormattableNumberView blockScore = (FormattableNumberView)blockRow.getChildAt(4);
