@@ -11,7 +11,9 @@
         
         <EditTextPreference
                 android:key="settings_connect_delay"
+                android:dependency="settings_auto_connect"
                 android:title="@string/label_option_connection_delay"
+                android:summary="@string/label_option_connection_delay_summary"
                 android:defaultValue="@string/default_option_connection_delay"
                 android:inputType="number" />
         
@@ -26,6 +28,12 @@
                 android:title="@string/label_option_show_when_parsed"
                 android:summary="@string/label_option_show_when_parsed_summary"
                 android:defaultValue="false" />
+        
+        <CheckBoxPreference
+                android:key="settings_check_connection_delays"
+                android:title="@string/label_option_check_connection_delays"
+                android:summary="@string/label_option_check_connection_delays_summary"
+                android:defaultValue="true" />
 
     </PreferenceCategory>
     
@@ -47,8 +55,26 @@
         <EditTextPreference
                 android:key="settings_slushs_api_key"
                 android:title="@string/label_option_slushs_api_key"
-                android:summary="@string/label_option_slushs_api_key_summary"
-                android:defaultValue="@string/default_option_slushs_api_key" />
+                android:summary="@string/label_option_slushs_api_key_summary" />
+
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+            android:title="@string/label_option_category_exchange_rate">
+
+        <CheckBoxPreference
+                android:key="settings_mtgox_enabled"
+                android:title="@string/label_option_exchange_rate_enabled"
+                android:summary="@string/label_option_exchange_rate_enabled_summary"
+                android:defaultValue="false" />
+        
+        <EditTextPreference
+                android:key="settings_mtgox_fetch_rate"
+                android:dependency="settings_mtgox_enabled"
+                android:title="@string/label_option_exchange_fetch_rate"
+                android:summary="@string/label_option_exchange_fetch_rate_summary"
+                android:defaultValue="@string/default_option_exchange_fetch_rate"
+                android:inputType="number" />
 
     </PreferenceCategory>
 </PreferenceScreen>

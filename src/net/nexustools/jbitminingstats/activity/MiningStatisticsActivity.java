@@ -42,6 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MiningStatisticsActivity extends Activity {
+	public static final int CONNECTION_DELAY_WARNING_CAP = 15000;
+	
 	public TableLayout workerTableHeader;
 	public TableLayout workerTableEntries;
 	public TableLayout blockTableHeader;
@@ -55,6 +57,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public ProgressBar progressBar;
 	public int connectionDelay;
+	public int mtGoxFetchDelay;
 	public String slushsAccountDomain;
 	public String slushsBlockDomain;
 	public String slushsAPIKey;
@@ -62,6 +65,8 @@ public class MiningStatisticsActivity extends Activity {
 	public boolean autoConnect;
 	public boolean showHashrateUnit;
 	public boolean showParseMessage;
+	public boolean checkConnectionDelays;
+	public boolean mtGoxFetchEnabled;
 	public static boolean canContinue = true;
 	public int elapsedTime = 0;
 	public static Handler handler = new Handler();
@@ -104,7 +109,8 @@ public class MiningStatisticsActivity extends Activity {
 			workScheduler = new Timer();
 		if(currentTask != null)
 			currentTask.cancel();
-		
+		progressBar.setProgress(0);
+		progressBar.setMax(connectionDelay);
 		elapsedTime = connectionDelay;
 		canContinue = true;
 		
@@ -152,14 +158,14 @@ public class MiningStatisticsActivity extends Activity {
 								AlertDialog.Builder alert = new AlertDialog.Builder(context);
 								alert.setTitle(R.string.problem_json);
 								alert.setMessage(problem + "\n" + getString(R.string.problem_try_again));
-								alert.setPositiveButton(R.string.problem_json_yes, new DialogInterface.OnClickListener() {
+								alert.setPositiveButton(R.string.problem_json_positive, new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
 										beginFetch();
 									}
 								});
-								alert.setNegativeButton(R.string.problem_json_no, new DialogInterface.OnClickListener() {
+								alert.setNegativeButton(R.string.problem_json_negative, new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_LONG).show();
@@ -474,11 +480,15 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void loadSettings() {
+		final Context context = this;
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		showingBlocks = prefs.getBoolean("showing_blocks", true);
-		autoConnect = prefs.getBoolean("settings_auto_connect", true);
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
 		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
+		checkConnectionDelays = prefs.getBoolean("settings_check_connection_delays", true);
+		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
+		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
+		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
 		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
 		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(showHashrateUnit) {
@@ -490,12 +500,81 @@ public class MiningStatisticsActivity extends Activity {
 			rateColumn.setText(R.string.label_worker_table_header_rate);
 			rateColumnStub.setText(R.string.label_worker_table_header_rate);
 		}
-		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
-		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", getString(R.string.default_option_slushs_miner_domain));
-		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", getString(R.string.default_option_slushs_miner_domain));
-		slushsAPIKey = prefs.getString("settings_slushs_api_key", getString(R.string.default_option_slushs_api_key));
-		progressBar.setMax(connectionDelay);
-		progressBar.setProgress(connectionDelay);
+		
+		autoConnect = prefs.getBoolean("settings_auto_connect", true);
+		if(autoConnect) {
+			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", getString(R.string.default_option_connection_delay)));
+			if(checkConnectionDelays && connectionDelay < CONNECTION_DELAY_WARNING_CAP) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
+				alert.setTitle(R.string.problem_low_connection_delay);
+				alert.setMessage(R.string.label_connection_rate_warning);
+				alert.setIcon(R.drawable.ic_launcher);
+				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						connectionDelay = Integer.parseInt(getString(R.string.default_option_connection_delay));
+						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+						SharedPreferences.Editor editor = prefs.edit();
+						{
+							editor.putString("settings_connect_delay", getString(R.string.default_option_connection_delay));
+						}
+						editor.commit();
+						beginFetch();
+					}
+				});
+				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, null);
+				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+						SharedPreferences.Editor editor = prefs.edit();
+						{
+							editor.putBoolean("settings_check_connection_delays", false);
+						}
+						editor.commit();
+					}
+				});
+				alert.create().show();
+			}
+		}
+		
+		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", false);
+		if(mtGoxFetchEnabled) {
+			mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", getString(R.string.default_option_connection_delay)));
+			if(checkConnectionDelays && mtGoxFetchDelay < CONNECTION_DELAY_WARNING_CAP) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
+				alert.setTitle(R.string.problem_low_connection_delay);
+				alert.setMessage(R.string.label_mtgox_connection_rate_warning);
+				alert.setIcon(R.drawable.ic_launcher);
+				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mtGoxFetchDelay = Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate));
+						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+						SharedPreferences.Editor editor = prefs.edit();
+						{
+							editor.putString("settings_mtgox_fetch_rate", getString(R.string.default_option_exchange_fetch_rate));
+						}
+						editor.commit();
+						// beginFetch();
+					}
+				});
+				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, null);
+				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+						SharedPreferences.Editor editor = prefs.edit();
+						{
+							editor.putBoolean("settings_check_connection_delays", false);
+						}
+						editor.commit();
+					}
+				});
+				alert.create().show();
+			}
+		}
+		
 		switchTable();
 	}
 	
