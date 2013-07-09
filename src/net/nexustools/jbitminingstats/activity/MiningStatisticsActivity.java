@@ -212,8 +212,6 @@ public class MiningStatisticsActivity extends Activity {
 											blockConfirmation.setValue(block.confirmations);
 											
 											FormattableNumberView blockReward = (FormattableNumberView)blockRow.getChildAt(2);
-											if(mtGoxEffectBlockTable)
-												blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setValue(block.reward);
 											
 											FormattableNumberView blockNMCReward = (FormattableNumberView)blockRow.getChildAt(3);
@@ -709,32 +707,32 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void switchTable() {
+		for(String entry : createdMinerRows.keySet()) {
+			workerTableEntries.removeView(createdMinerRows.get(entry));
+			createdMinerRows.remove(entry);
+		}
+		for(String entry : createdBlockRows.keySet()) {
+			blockTableEntries.removeView(createdBlockRows.get(entry));
+			createdBlockRows.remove(entry);
+		}
+		if(workers != null)
+			workers.clear();
+		createdMinerRows.clear();
+		if(blocks != null)
+			blocks.clear();
+		createdBlockRows.clear();
 		if(showingBlocks) {
 			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
 			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
-			for(String entry : createdMinerRows.keySet()) {
-				workerTableEntries.removeView(createdMinerRows.get(entry));
-				createdMinerRows.remove(entry);
-			}
 			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
 			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
-			if(workers != null)
-				workers.clear();
-			createdMinerRows.clear();
 		} else {
 			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.GONE);
 			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.GONE);
-			for(String entry : createdBlockRows.keySet()) {
-				blockTableEntries.removeView(createdBlockRows.get(entry));
-				createdBlockRows.remove(entry);
-			}
 			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
 			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
-			if(blocks != null)
-				blocks.clear();
-			createdBlockRows.clear();
 		}
 		beginFetch();
 	}
