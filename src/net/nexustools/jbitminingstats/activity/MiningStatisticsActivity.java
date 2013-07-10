@@ -324,15 +324,9 @@ public class MiningStatisticsActivity extends Activity {
 				}
 			}
 		}, 0, TIME_STEP);
-	}
-	
-	public void fetchMtGoxCurrency() {
-		// final Context context = this;
-		if(workScheduler == null)
-			workScheduler = new Timer();
+		
 		if(mtGoxFetchTask != null)
 			mtGoxFetchTask.cancel();
-		
 		workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -597,7 +591,7 @@ public class MiningStatisticsActivity extends Activity {
 						switch(which) {
 							case AlertDialog.BUTTON_POSITIVE:
 								settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
-								fetchMtGoxCurrency();
+								beginFetch();
 							break;
 							case AlertDialog.BUTTON_NEGATIVE:
 								settings.setCheckConnectionDelays(false);
@@ -611,7 +605,6 @@ public class MiningStatisticsActivity extends Activity {
 				alert.create().show();
 			}
 			mtGoxBTCTOCurrencySymbolSet = false;
-			fetchMtGoxCurrency();
 		}
 		
 		switchTable();
