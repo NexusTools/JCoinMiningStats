@@ -176,7 +176,7 @@ public class MiningStatisticsActivity extends Activity {
 									@Override
 									public void run() {
 										Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
-										canContinue = true;
+										startMinerBlockFetch();
 									}
 								}, null, new Runnable() {
 									@Override
@@ -380,7 +380,12 @@ public class MiningStatisticsActivity extends Activity {
 						@Override
 						public void run() {
 							if(problem != null) {
-								dialogHelper.create(R.string.problem_mtgox_error, problem + "\n" + getString(R.string.problem_continue_anyway), true, false, true, R.string.problem_mtgox_positive, 0, R.string.problem_mtgox_negative, null, null, new Runnable() {
+								dialogHelper.create(R.string.problem_mtgox_error, problem + "\n" + getString(R.string.problem_try_again), true, true, true, R.string.problem_mtgox_positive, R.string.problem_mtgox_neutral, R.string.problem_mtgox_negative, new Runnable() {
+									@Override
+									public void run() {
+										startMtGoxFetch();
+									}
+								}, null, new Runnable() {
 									@Override
 									public void run() {
 										Toast.makeText(context, R.string.problem_mtgox_now_disabled, Toast.LENGTH_SHORT).show();
@@ -428,10 +433,10 @@ public class MiningStatisticsActivity extends Activity {
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							}
-							Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
 						}
 					});
-					if(!settings.canAutoConnect())
+					if(!settings.canAutoConnect() || !settings.isMtGoxFetchEnabled())
 						return;
 				}
 			}, 0, settings.getMtGoxFetchDelay());
@@ -439,6 +444,8 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void stopFetch() {
+		canContinue = false;
+		
 		if(minerBlockFetchTask != null)
 			minerBlockFetchTask.cancel();
 		if(mtGoxFetchTask != null)
@@ -455,7 +462,6 @@ public class MiningStatisticsActivity extends Activity {
 			mtGoxScheduler.purge();
 			mtGoxScheduler = null;
 		}
-		canContinue = false;
 		progressBar.setProgress(0);
 	}
 	
@@ -629,7 +635,6 @@ public class MiningStatisticsActivity extends Activity {
 					@Override
 					public void run() {
 						settings.setConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
-						canContinue = true;
 					}
 				}, null, new Runnable() {
 					@Override
@@ -646,7 +651,6 @@ public class MiningStatisticsActivity extends Activity {
 					@Override
 					public void run() {
 						settings.setMtGoxFetchDelay(Integer.parseInt(resources.getString(R.string.mtgox_currency_exchange_fetch_rate)));
-						canContinue = true;
 					}
 				}, null, new Runnable() {
 					@Override

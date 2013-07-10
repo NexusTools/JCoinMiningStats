@@ -58,6 +58,7 @@
     <string name="problem_mtgox_connection_error">Error connecting to the Mt.Gox JSON API.</string>
     <string name="problem_continue_anyway">Continue anyway?</string>
     <string name="problem_mtgox_positive">Yes</string>
+    <string name="problem_mtgox_neutral">No</string>
     <string name="problem_mtgox_negative">Disable Mt.Gox</string>
     <string name="problem_mtgox_now_disabled">Mt.Gox has been disabled, you can re-enable it anytime in the settings.</string>
     <!-- Settings Activity -->

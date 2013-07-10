@@ -101,44 +101,44 @@ public final class R {
         public static final int label_estimated_reward=0x7f070011;
         public static final int label_hashrate_suffix=0x7f070022;
         public static final int label_mtgox_connection_rate_warning=0x7f070036;
-        public static final int label_mtgox_effect_block_table=0x7f070050;
-        public static final int label_mtgox_effect_block_table_summary=0x7f070051;
+        public static final int label_mtgox_effect_block_table=0x7f070051;
+        public static final int label_mtgox_effect_block_table_summary=0x7f070052;
         public static final int label_number_stub=0x7f070021;
-        public static final int label_option_advanced=0x7f070055;
-        public static final int label_option_auto_connect=0x7f070044;
-        public static final int label_option_backup_user_agent=0x7f070058;
-        public static final int label_option_backup_user_agent_summary=0x7f070059;
+        public static final int label_option_advanced=0x7f070056;
+        public static final int label_option_auto_connect=0x7f070045;
+        public static final int label_option_backup_user_agent=0x7f070059;
+        public static final int label_option_backup_user_agent_summary=0x7f07005a;
         /**  Mt.Gox Settings 
          */
-        public static final int label_option_category_mtgox_exchange_rate=0x7f070049;
+        public static final int label_option_category_mtgox_exchange_rate=0x7f07004a;
         /**  Other Settings 
          */
-        public static final int label_option_category_other=0x7f070052;
+        public static final int label_option_category_other=0x7f070053;
         /**  Settings Activity 
  Slush's Pool Settings 
          */
-        public static final int label_option_category_slushs_pool=0x7f070040;
-        public static final int label_option_check_connection_delays=0x7f070053;
-        public static final int label_option_check_connection_delays_summary=0x7f070054;
-        public static final int label_option_connection_delay=0x7f070045;
-        public static final int label_option_currency_type=0x7f07004f;
-        public static final int label_option_force_use_backup_user_agent=0x7f070056;
-        public static final int label_option_force_use_backup_user_agent_summary=0x7f070057;
-        public static final int label_option_mtgox=0x7f07004c;
-        public static final int label_option_mtgox_api_domain=0x7f07005c;
-        public static final int label_option_mtgox_api_domain_summary=0x7f07005d;
-        public static final int label_option_mtgox_exchange_fetch_rate=0x7f07004d;
-        public static final int label_option_mtgox_exchange_fetch_rate_summary=0x7f07004e;
-        public static final int label_option_mtgox_exchange_rate_enabled=0x7f07004a;
-        public static final int label_option_mtgox_exchange_rate_enabled_summary=0x7f07004b;
-        public static final int label_option_show_when_parsed=0x7f070048;
-        public static final int label_option_slush=0x7f070043;
-        public static final int label_option_slushs_api_key=0x7f070041;
-        public static final int label_option_slushs_api_key_summary=0x7f070042;
-        public static final int label_option_suffix_hashrates_text=0x7f070046;
-        public static final int label_option_suffix_hashrates_text_summary=0x7f070047;
-        public static final int label_slushs_option_site_block_domain=0x7f07005b;
-        public static final int label_slushs_option_site_miner_domain=0x7f07005a;
+        public static final int label_option_category_slushs_pool=0x7f070041;
+        public static final int label_option_check_connection_delays=0x7f070054;
+        public static final int label_option_check_connection_delays_summary=0x7f070055;
+        public static final int label_option_connection_delay=0x7f070046;
+        public static final int label_option_currency_type=0x7f070050;
+        public static final int label_option_force_use_backup_user_agent=0x7f070057;
+        public static final int label_option_force_use_backup_user_agent_summary=0x7f070058;
+        public static final int label_option_mtgox=0x7f07004d;
+        public static final int label_option_mtgox_api_domain=0x7f07005d;
+        public static final int label_option_mtgox_api_domain_summary=0x7f07005e;
+        public static final int label_option_mtgox_exchange_fetch_rate=0x7f07004e;
+        public static final int label_option_mtgox_exchange_fetch_rate_summary=0x7f07004f;
+        public static final int label_option_mtgox_exchange_rate_enabled=0x7f07004b;
+        public static final int label_option_mtgox_exchange_rate_enabled_summary=0x7f07004c;
+        public static final int label_option_show_when_parsed=0x7f070049;
+        public static final int label_option_slush=0x7f070044;
+        public static final int label_option_slushs_api_key=0x7f070042;
+        public static final int label_option_slushs_api_key_summary=0x7f070043;
+        public static final int label_option_suffix_hashrates_text=0x7f070047;
+        public static final int label_option_suffix_hashrates_text_summary=0x7f070048;
+        public static final int label_slushs_option_site_block_domain=0x7f07005c;
+        public static final int label_slushs_option_site_miner_domain=0x7f07005b;
         public static final int label_total_potential_reward=0x7f070012;
         public static final int label_unconfirmed_reward=0x7f070010;
         public static final int label_worker_list_title=0x7f070013;
@@ -173,8 +173,9 @@ public final class R {
         public static final int problem_mtgox_connection_error=0x7f07003b;
         public static final int problem_mtgox_connection_rate_invalid=0x7f070037;
         public static final int problem_mtgox_error=0x7f070039;
-        public static final int problem_mtgox_negative=0x7f07003e;
-        public static final int problem_mtgox_now_disabled=0x7f07003f;
+        public static final int problem_mtgox_negative=0x7f07003f;
+        public static final int problem_mtgox_neutral=0x7f07003e;
+        public static final int problem_mtgox_now_disabled=0x7f070040;
         public static final int problem_mtgox_parse_error=0x7f07003a;
         public static final int problem_mtgox_positive=0x7f07003d;
         public static final int problem_try_again=0x7f07002f;
