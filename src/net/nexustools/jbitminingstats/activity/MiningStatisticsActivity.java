@@ -470,7 +470,6 @@ public class MiningStatisticsActivity extends Activity {
 		super.onResume();
 		settings.load();
 		applySettings();
-		beginFetch();
 	}
 	
 	@Override
@@ -642,7 +641,10 @@ public class MiningStatisticsActivity extends Activity {
 			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
 		}
-		beginFetch();
+		if(settings.canAutoConnect())
+			beginFetch();
+		else
+			stopFetch();
 	}
 	
 	public double noNaN(double d) {

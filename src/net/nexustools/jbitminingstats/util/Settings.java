@@ -96,7 +96,7 @@ public class Settings {
 			}
 		r = null;
 	}
-	
+
 	public boolean isShowingBlocks() {
 		return showingBlocks;
 	}
