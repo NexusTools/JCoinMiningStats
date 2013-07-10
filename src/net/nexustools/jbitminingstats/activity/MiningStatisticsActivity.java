@@ -328,52 +328,54 @@ public class MiningStatisticsActivity extends Activity {
 		
 		if(mtGoxFetchTask != null)
 			mtGoxFetchTask.cancel();
-		workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
-			@Override
-			public void run() {
-				final int returnCode = fetchMtGoxJSONData();
-				switch(returnCode) {
-				// TODO: Error handling...
-				}
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if(returnCode == JSON_FETCH_SUCCESS) {
-							if(!mtGoxBTCTOCurrencySymbolSet) {
-								if(settings.canTheMtGoxBTCTOCurrencySymbolPrefixOrAffix()) {
-									confirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
-									unconfirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
-									estimatedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
-									potentialReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
-									confirmedReward.setSuffix("");
-									unconfirmedReward.setSuffix("");
-									estimatedReward.setSuffix("");
-									potentialReward.setSuffix("");
-								} else {
-									confirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
-									unconfirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
-									estimatedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
-									potentialReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
-									confirmedReward.setPrefix("");
-									unconfirmedReward.setPrefix("");
-									estimatedReward.setPrefix("");
-									potentialReward.setPrefix("");
-								}
-								if(settings.canMtGoxEffectBlockTable()) {
-									((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
-									((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
-								}
-								mtGoxBTCTOCurrencySymbolSet = true;
-							}
-							confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
-							unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
-							estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
-							potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
-						}
+		if(settings.isMtGoxFetchEnabled()) {
+			workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
+				@Override
+				public void run() {
+					final int returnCode = fetchMtGoxJSONData();
+					switch(returnCode) {
+					// TODO: Error handling...
 					}
-				});
-			}
-		}, 0, settings.getMtGoxFetchDelay());
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							if(returnCode == JSON_FETCH_SUCCESS) {
+								if(!mtGoxBTCTOCurrencySymbolSet) {
+									if(settings.canTheMtGoxBTCTOCurrencySymbolPrefixOrAffix()) {
+										confirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+										unconfirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+										estimatedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+										potentialReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
+										confirmedReward.setSuffix("");
+										unconfirmedReward.setSuffix("");
+										estimatedReward.setSuffix("");
+										potentialReward.setSuffix("");
+									} else {
+										confirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+										unconfirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+										estimatedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+										potentialReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
+										confirmedReward.setPrefix("");
+										unconfirmedReward.setPrefix("");
+										estimatedReward.setPrefix("");
+										potentialReward.setPrefix("");
+									}
+									if(settings.canMtGoxEffectBlockTable()) {
+										((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
+										((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
+									}
+									mtGoxBTCTOCurrencySymbolSet = true;
+								}
+								confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+								unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
+								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
+							}
+						}
+					});
+				}
+			}, 0, settings.getMtGoxFetchDelay());
+		}
 	}
 	
 	public void stopFetch() {
