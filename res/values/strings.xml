@@ -15,11 +15,11 @@
     <string name="label_estimated_reward">Estimated Reward:</string>
     <string name="label_total_potential_reward">Total Potential Reward:</string>
     <string name="label_worker_list_title">Workers:</string>
-    <string name="label_worker_table_header_status">On</string>
+    <string name="label_worker_table_header_status">Alive</string>
     <string name="label_worker_table_header_name">Name</string>
     <string name="label_worker_table_header_rate">Rate</string>
     <string name="label_worker_table_header_rate_suffixed">Rate (mh/s)</string>
-    <string name="label_worker_table_header_share">Share</string>
+    <string name="label_worker_table_header_share">Shares</string>
     <string name="label_worker_table_header_score">Score</string>
     <string name="label_block_list_title">Blocks:</string>
     <string name="label_block_table_header_block">Block</string>

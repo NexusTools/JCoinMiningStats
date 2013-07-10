@@ -291,11 +291,13 @@ public class MiningStatisticsActivity extends Activity {
 											FormattableNumberView workerRate = new FormattableNumberView(context);
 											workerRate.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerRate.setValue(worker.hashRate);
+											workerRate.setFormatting("%.0f");
 											workerRow.addView(workerRate);
 											
 											FormattableNumberView workerShare = new FormattableNumberView(context);
 											workerShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 											workerShare.setValue(worker.share);
+											workerShare.setFormatting("%.0f");
 											workerRow.addView(workerShare);
 											
 											FormattableNumberView workerScore = new FormattableNumberView(context);
@@ -409,7 +411,7 @@ public class MiningStatisticsActivity extends Activity {
 				workers = new ArrayList<MiningWorkerStub>();
 				for(int i = 0; i < workerNames.length(); i++) {
 					JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
-					workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getDouble("hashrate"), worker.getDouble("shares"), worker.getDouble("score")));
+					workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getInt("hashrate"), worker.getInt("shares"), worker.getDouble("score")));
 				}
 				hashRateVal = jsonContent.getDouble("hashrate");
 				confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
