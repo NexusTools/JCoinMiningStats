@@ -220,10 +220,9 @@
                     android:layout_weight="1"
                     android:text="@string/label_worker_table_header_score" />
             </TableRow>
-
         </TableLayout>
     </ScrollView>
-    
+
     <TableLayout
         android:id="@+id/block_table_header"
         android:layout_width="match_parent"
@@ -269,7 +268,7 @@
                 android:layout_margin="1dp"
                 android:layout_weight="1"
                 android:text="@string/label_block_table_header_score" />
-            
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -294,51 +293,51 @@
             android:orientation="vertical" >
 
             <TableRow
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            tools:ignore="UselessParent" >
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:text="@string/label_block_table_header_block" />
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:layout_weight="1"
-	                android:text="@string/label_block_table_header_confirmations" />
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:layout_weight="1"
-	                android:text="@string/label_block_table_header_reward" />
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	               android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:layout_weight="1"
-	                android:text="@string/label_block_table_header_namecoin_reward" />
-	
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:layout_weight="1"
-	                android:text="@string/label_block_table_header_score" />
-	            
-	            <TextView
-	                android:layout_width="wrap_content"
-	                android:layout_height="0dp"
-	                android:layout_margin="1dp"
-	                android:layout_weight="1"
-	                android:text="@string/label_block_table_header_share" />
-	        </TableRow>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:text="@string/label_block_table_header_block" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_block_table_header_confirmations" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_block_table_header_reward" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_block_table_header_namecoin_reward" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_block_table_header_score" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:text="@string/label_block_table_header_share" />
+            </TableRow>
         </TableLayout>
     </ScrollView>
 

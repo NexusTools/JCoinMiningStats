@@ -2,15 +2,18 @@
 <resources>
     <bool name="auto_connect">true</bool>
     <integer name="connection_delay">15000</integer>
+
     <bool name="show_hashrates">true</bool>
     <bool name="show_parsing_messages">false</bool>
     <bool name="check_connection_delays">true</bool>
     <bool name="force_custom_user_agent">true</bool>
+
     <string name="slushs_miner_domain">https://mining.bitcoin.cz/accounts/profile/json/</string>
     <string name="slushs_block_domain">https://mining.bitcoin.cz/stats/json/</string>
+
     <bool name="mtgox_enabled">false</bool>
-	<integer name="mtgox_currency_exchange_fetch_rate">15000</integer>
-	<string name="mtgox_api_domain">http://data.mtgox.com/api/1/BTC~/ticker_fast</string>
-	<string name="mtgox_currency_type">USD</string>
-	<bool name="mtgox_effect_block_table">true</bool>
+    <integer name="mtgox_currency_exchange_fetch_rate">15000</integer>
+    <string name="mtgox_api_domain">http://data.mtgox.com/api/1/BTC~/ticker_fast</string>
+    <string name="mtgox_currency_type">USD</string>
+    <bool name="mtgox_effect_block_table">true</bool>
 </resources>

@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="supported_currencies_convertable_from_btc">
-	    <item>USD</item>
-	    <item>AUD</item>
-	    <item>CAD</item>
-	    <item>CHF</item>
-	    <item>CNY</item>
-	    <item>DKK</item>
-	    <item>EUR</item>
-	    <item>GBP</item>
-	    <item>HKD</item>
-	    <item>JPY</item>
-	    <item>NZD</item>
-	    <item>PLN</item>
-	    <item>RUB</item>
-	    <item>SEK</item>
-	    <item>SGD</item>
-	    <item>THB</item>
-	    <item>NOK</item>
-	    <item>CZK</item>
-	</string-array>
-	<string-array name="currency_type_to_symbol">
-	    <item>$</item>
-	    <item>$</item>
-	    <item>$</item>
-	    <item>CHF</item>
-	    <item>¥</item>
-	    <item>kr</item>
-	    <item>€</item>
-	    <item>£</item>
-	    <item>$</item>
-	    <item>¥</item>
-	    <item>$</item>
-	    <item>zł</item>
-	    <item>руб</item>
-	    <item>kr</item>
-	    <item>$</item>
-	    <item>฿</item>
-	    <item>kr</item>
-	    <item>Kč</item>
-	</string-array>
-	<string-array name="currency_type_is_prefix">
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	    <item>true</item>
-	</string-array>
+
+    <string-array name="supported_currencies_convertable_from_btc">
+        <item>USD</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>CHF</item>
+        <item>CNY</item>
+        <item>DKK</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>HKD</item>
+        <item>JPY</item>
+        <item>NZD</item>
+        <item>PLN</item>
+        <item>RUB</item>
+        <item>SEK</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>NOK</item>
+        <item>CZK</item>
+    </string-array>
+    <string-array name="currency_type_to_symbol">
+        <item>$</item>
+        <item>$</item>
+        <item>$</item>
+        <item>CHF</item>
+        <item>¥</item>
+        <item>kr</item>
+        <item>€</item>
+        <item>£</item>
+        <item>$</item>
+        <item>¥</item>
+        <item>$</item>
+        <item>zł</item>
+        <item>руб</item>
+        <item>kr</item>
+        <item>$</item>
+        <item>฿</item>
+        <item>kr</item>
+        <item>Kč</item>
+    </string-array>
+    <string-array name="currency_type_is_prefix">
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+        <item>true</item>
+    </string-array>
+
 </resources>
