@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="@string/label_option_category_general" >
-        <CheckBoxPreference
-            android:defaultValue="@bool/auto_connect"
-            android:key="settings_auto_connect"
-            android:summary="@string/label_option_auto_connect_summary"
-            android:title="@string/label_option_auto_connect" />
-
-        <EditTextPreference
-            android:defaultValue="@integer/connection_delay"
-            android:dependency="settings_auto_connect"
-            android:inputType="number"
-            android:key="settings_connect_delay"
-            android:summary="@string/label_option_connection_delay_summary"
-            android:title="@string/label_option_connection_delay" />
-
-        <CheckBoxPreference
-            android:defaultValue="@bool/show_hashrates"
-            android:key="settings_show_hashrates"
-            android:summary="@string/label_option_suffix_hashrates_text_summary"
-            android:title="@string/label_option_suffix_hashrates_text" />
-        <CheckBoxPreference
-            android:defaultValue="@bool/show_parsing_messages"
-            android:key="settings_show_messages_when_parsed"
-            android:summary="@string/label_option_show_when_parsed_summary"
-            android:title="@string/label_option_show_when_parsed" />
-        <CheckBoxPreference
-            android:defaultValue="bool/check_connection_delays"
-            android:key="settings_check_connection_delays"
-            android:summary="@string/label_option_check_connection_delays_summary"
-            android:title="@string/label_option_check_connection_delays" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/label_option_category_pool" >
+    <PreferenceCategory android:title="@string/label_option_category_slushs_pool" >
         <EditTextPreference
             android:key="settings_slushs_api_key"
             android:summary="@string/label_option_slushs_api_key_summary"
             android:title="@string/label_option_slushs_api_key" />
+
+        <PreferenceScreen
+            android:dependency="settings_slushs_api_key"
+            android:title="@string/label_option_slush" >
+            <CheckBoxPreference
+                android:defaultValue="@bool/auto_connect"
+                android:key="settings_auto_connect"
+                android:title="@string/label_option_auto_connect" />
+
+            <EditTextPreference
+                android:defaultValue="@integer/connection_delay"
+                android:dependency="settings_auto_connect"
+                android:inputType="number"
+                android:key="settings_connect_delay"
+                android:title="@string/label_option_connection_delay" />
+
+            <CheckBoxPreference
+                android:defaultValue="@bool/show_hashrates"
+                android:key="settings_show_hashrates"
+                android:summary="@string/label_option_suffix_hashrates_text_summary"
+                android:title="@string/label_option_suffix_hashrates_text" />
+            <CheckBoxPreference
+                android:defaultValue="@bool/show_parsing_messages"
+                android:key="settings_show_messages_when_parsed"
+                android:title="@string/label_option_show_when_parsed" />
+        </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/label_option_category_mtgox_exchange_rate" >
         <CheckBoxPreference
@@ -50,7 +45,6 @@
             android:title="@string/label_option_mtgox" >
             <EditTextPreference
                 android:defaultValue="@integer/mtgox_currency_exchange_fetch_rate"
-                android:dependency="settings_mtgox_enabled"
                 android:inputType="number"
                 android:key="settings_mtgox_fetch_rate"
                 android:summary="@string/label_option_mtgox_exchange_fetch_rate_summary"
@@ -58,7 +52,6 @@
 
             <ListPreference
                 android:defaultValue="@string/mtgox_currency_type"
-                android:dependency="settings_mtgox_enabled"
                 android:entries="@array/supported_currencies_convertable_from_btc"
                 android:entryValues="@array/supported_currencies_convertable_from_btc"
                 android:key="settings_mtgox_currency_type"
@@ -66,13 +59,18 @@
 
             <CheckBoxPreference
                 android:defaultValue="@bool/mtgox_effect_block_table"
-                android:dependency="settings_mtgox_enabled"
                 android:key="settings_mtgox_effect_block_table"
                 android:summary="@string/label_mtgox_effect_block_table_summary"
                 android:title="@string/label_mtgox_effect_block_table" />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/label_option_category_other" >
+        <CheckBoxPreference
+            android:defaultValue="bool/check_connection_delays"
+            android:key="settings_check_connection_delays"
+            android:summary="@string/label_option_check_connection_delays_summary"
+            android:title="@string/label_option_check_connection_delays" />
+
         <PreferenceScreen android:title="@string/label_option_advanced" >
             <CheckBoxPreference
                 android:defaultValue="@bool/force_custom_user_agent"
@@ -82,17 +80,15 @@
 
             <EditTextPreference
                 android:key="settings_backup_user_agent"
-                android:summary="@string/label_option_backup_user_agent"
+                android:summary="@string/label_option_backup_user_agent_summary"
                 android:title="@string/label_option_backup_user_agent" />
             <EditTextPreference
                 android:defaultValue="@string/slushs_miner_domain"
                 android:key="settings_slushs_account_api_domain"
-                android:summary="@string/label_slushs_option_site_miner_domain_summary"
                 android:title="@string/label_slushs_option_site_miner_domain" />
             <EditTextPreference
                 android:defaultValue="@string/slushs_block_domain"
                 android:key="settings_slushs_block_api_domain"
-                android:summary="@string/label_slushs_option_site_block_domain_summary"
                 android:title="@string/label_slushs_option_site_block_domain" />
             <EditTextPreference
                 android:defaultValue="@string/mtgox_api_domain"

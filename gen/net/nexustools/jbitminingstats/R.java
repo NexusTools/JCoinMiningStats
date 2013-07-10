@@ -97,48 +97,48 @@ public final class R {
         public static final int label_block_table_header_share=0x7f08001d;
         public static final int label_confirmed_namecoin_reward=0x7f08000c;
         public static final int label_confirmed_reward=0x7f08000b;
-        public static final int label_connection_rate_warning=0x7f080055;
+        public static final int label_connection_rate_warning=0x7f080032;
         public static final int label_estimated_reward=0x7f08000e;
         public static final int label_hashrate_suffix=0x7f08001f;
-        public static final int label_mtgox_connection_rate_warning=0x7f080056;
-        public static final int label_mtgox_effect_block_table=0x7f08004d;
-        public static final int label_mtgox_effect_block_table_summary=0x7f08004e;
+        public static final int label_mtgox_connection_rate_warning=0x7f080033;
+        public static final int label_mtgox_effect_block_table=0x7f080046;
+        public static final int label_mtgox_effect_block_table_summary=0x7f080047;
         public static final int label_number_stub=0x7f08001e;
-        public static final int label_option_advanced=0x7f080050;
-        public static final int label_option_auto_connect=0x7f08002f;
-        public static final int label_option_auto_connect_summary=0x7f080030;
-        public static final int label_option_backup_user_agent=0x7f080048;
-        public static final int label_option_backup_user_agent_summary=0x7f080049;
-        /**  Settings Activity 
+        public static final int label_option_advanced=0x7f08004b;
+        public static final int label_option_auto_connect=0x7f08003a;
+        public static final int label_option_backup_user_agent=0x7f08004e;
+        public static final int label_option_backup_user_agent_summary=0x7f08004f;
+        /**  Mt.Gox Settings 
          */
-        public static final int label_option_category_general=0x7f08002e;
-        public static final int label_option_category_mtgox_exchange_rate=0x7f08003e;
-        public static final int label_option_category_other=0x7f08004f;
-        public static final int label_option_category_pool=0x7f080037;
-        public static final int label_option_check_connection_delays=0x7f080044;
-        public static final int label_option_check_connection_delays_summary=0x7f080045;
-        public static final int label_option_connection_delay=0x7f080031;
-        public static final int label_option_connection_delay_summary=0x7f080032;
-        public static final int label_option_currency_type=0x7f08004c;
-        public static final int label_option_force_use_backup_user_agent=0x7f080046;
-        public static final int label_option_force_use_backup_user_agent_summary=0x7f080047;
-        public static final int label_option_mtgox=0x7f080040;
-        public static final int label_option_mtgox_api_domain=0x7f08004a;
-        public static final int label_option_mtgox_api_domain_summary=0x7f08004b;
-        public static final int label_option_mtgox_exchange_fetch_rate=0x7f080042;
-        public static final int label_option_mtgox_exchange_fetch_rate_summary=0x7f080043;
-        public static final int label_option_mtgox_exchange_rate_enabled=0x7f08003f;
+        public static final int label_option_category_mtgox_exchange_rate=0x7f08003f;
+        /**  Other Settings 
+         */
+        public static final int label_option_category_other=0x7f080048;
+        /**  Settings Activity 
+ Slush's Pool Settings 
+         */
+        public static final int label_option_category_slushs_pool=0x7f080036;
+        public static final int label_option_check_connection_delays=0x7f080049;
+        public static final int label_option_check_connection_delays_summary=0x7f08004a;
+        public static final int label_option_connection_delay=0x7f08003b;
+        public static final int label_option_currency_type=0x7f080045;
+        public static final int label_option_force_use_backup_user_agent=0x7f08004c;
+        public static final int label_option_force_use_backup_user_agent_summary=0x7f08004d;
+        public static final int label_option_mtgox=0x7f080042;
+        public static final int label_option_mtgox_api_domain=0x7f080052;
+        public static final int label_option_mtgox_api_domain_summary=0x7f080053;
+        public static final int label_option_mtgox_exchange_fetch_rate=0x7f080043;
+        public static final int label_option_mtgox_exchange_fetch_rate_summary=0x7f080044;
+        public static final int label_option_mtgox_exchange_rate_enabled=0x7f080040;
         public static final int label_option_mtgox_exchange_rate_enabled_summary=0x7f080041;
-        public static final int label_option_show_when_parsed=0x7f080035;
-        public static final int label_option_show_when_parsed_summary=0x7f080036;
-        public static final int label_option_slushs_api_key=0x7f08003c;
-        public static final int label_option_slushs_api_key_summary=0x7f08003d;
-        public static final int label_option_suffix_hashrates_text=0x7f080033;
-        public static final int label_option_suffix_hashrates_text_summary=0x7f080034;
-        public static final int label_slushs_option_site_block_domain=0x7f08003a;
-        public static final int label_slushs_option_site_block_domain_summary=0x7f08003b;
-        public static final int label_slushs_option_site_miner_domain=0x7f080038;
-        public static final int label_slushs_option_site_miner_domain_summary=0x7f080039;
+        public static final int label_option_show_when_parsed=0x7f08003e;
+        public static final int label_option_slush=0x7f080039;
+        public static final int label_option_slushs_api_key=0x7f080037;
+        public static final int label_option_slushs_api_key_summary=0x7f080038;
+        public static final int label_option_suffix_hashrates_text=0x7f08003c;
+        public static final int label_option_suffix_hashrates_text_summary=0x7f08003d;
+        public static final int label_slushs_option_site_block_domain=0x7f080051;
+        public static final int label_slushs_option_site_miner_domain=0x7f080050;
         public static final int label_total_potential_reward=0x7f08000f;
         public static final int label_unconfirmed_reward=0x7f08000d;
         public static final int label_worker_list_title=0x7f080010;
@@ -151,7 +151,7 @@ public final class R {
         public static final int label_worker_table_header_status=0x7f080011;
         public static final int mtgox_api_domain=0x7f080002;
         public static final int mtgox_currency_type=0x7f080003;
-        public static final int problem_connection_delay_invalid=0x7f080058;
+        public static final int problem_connection_delay_invalid=0x7f080035;
         public static final int problem_json=0x7f080021;
         public static final int problem_json_connection_error_blocks=0x7f08002b;
         public static final int problem_json_connection_error_miners=0x7f080028;
@@ -164,11 +164,11 @@ public final class R {
         public static final int problem_json_parse_error_miners=0x7f080026;
         public static final int problem_json_positive=0x7f080022;
         public static final int problem_json_trying_again=0x7f080024;
-        public static final int problem_low_connection_delay=0x7f080051;
-        public static final int problem_low_connection_delay_negative=0x7f080054;
-        public static final int problem_low_connection_delay_neutral=0x7f080053;
-        public static final int problem_low_connection_delay_positive=0x7f080052;
-        public static final int problem_mtgox_connection_rate_invalid=0x7f080057;
+        public static final int problem_low_connection_delay=0x7f08002e;
+        public static final int problem_low_connection_delay_negative=0x7f080031;
+        public static final int problem_low_connection_delay_neutral=0x7f080030;
+        public static final int problem_low_connection_delay_positive=0x7f08002f;
+        public static final int problem_mtgox_connection_rate_invalid=0x7f080034;
         public static final int problem_try_again=0x7f08002c;
         public static final int slushs_block_domain=0x7f080001;
         public static final int slushs_miner_domain=0x7f080000;

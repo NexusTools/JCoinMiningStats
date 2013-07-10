@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Main Activity -->
     <string name="app_name">JBitMiningStats</string>
     <string name="action_back">Back</string>
@@ -13,7 +14,6 @@
     <string name="label_unconfirmed_reward">Unconfirmed Reward:</string>
     <string name="label_estimated_reward">Estimated Reward:</string>
     <string name="label_total_potential_reward">Total Potential Reward:</string>
-    
     <string name="label_worker_list_title">Workers:</string>
     <string name="label_worker_table_header_status">On</string>
     <string name="label_worker_table_header_name">Name</string>
@@ -21,7 +21,6 @@
     <string name="label_worker_table_header_rate_suffixed">Rate (mh/s)</string>
     <string name="label_worker_table_header_share">Share</string>
     <string name="label_worker_table_header_score">Score</string>
-    
     <string name="label_block_list_title">Blocks:</string>
     <string name="label_block_table_header_block">Block</string>
     <string name="label_block_table_header_confirmations">Confirmations</string>
@@ -30,71 +29,62 @@
     <string name="label_block_table_header_score">Score</string>
     <string name="label_block_table_header_share">Share</string>
     <string name="label_number_stub">N/A</string>
-    
     <string name="label_hashrate_suffix">mh/s</string>
-    
     <string name="problem_json_no_api_key_set">Slush\'s API key has not been set, it\'s required to fetch JSON data. Please set the API key in the settings.</string>
     <string name="problem_json">Connection Error</string>
     <string name="problem_json_positive">Yes</string>
     <string name="problem_json_negative">No</string>
     <string name="problem_json_trying_again">Trying to connect again&#8230;</string>
     <string name="problem_json_not_trying_again">No more attempts to connect will be made.</string>
-    
     <string name="problem_json_parse_error_miners">There\'s been an issue while parsing the JSON data. (Miners)</string>
     <string name="problem_json_invalid_token_miners">The API key you\'ve provided appears to be invalid. (Miners)</string>
     <string name="problem_json_connection_error_miners">There\'s been an error while connecting to the JSON supplier. (Miners)</string>
-    
     <string name="problem_json_parse_error_blocks">There\'s been an issue while parsing the JSON data. (Blocks)</string>
     <string name="problem_json_invalid_token_blocks">The API key you\'ve provided appears to be invalid. (Blocks)</string>
     <string name="problem_json_connection_error_blocks">There\'s been an error while connecting to the JSON supplier. (Blocks)</string>
-    
     <string name="problem_try_again">Would you like to try again?</string>
-    
     <string name="json_parsed">JSON Parsed!</string>
+    <string name="problem_low_connection_delay">Low Delay</string>
+    <string name="problem_low_connection_delay_positive">Reset</string>
+    <string name="problem_low_connection_delay_neutral">OK</string>
+    <string name="problem_low_connection_delay_negative">Disable Check</string>
+    <string name="label_connection_rate_warning">You\'ve typed in a value less than 15 seconds for fetching the miner/block JSON data. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
+    <string name="label_mtgox_connection_rate_warning">You\'ve typed in a value less than 15 seconds for MtGox exchange rate fetching. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
+    <string name="problem_mtgox_connection_rate_invalid">The MtGox connection rate didn\'t appear to be a valid number, it was reset to the default.</string>
+    <string name="problem_connection_delay_invalid">The connection delay didn\'t appear to be a valid number, it was reset to the default.</string>
     <!-- Settings Activity -->
-    <string name="label_option_category_general">General Settings</string>
+    <!-- Slush's Pool Settings -->
+    <string name="label_option_category_slushs_pool">Slush\'s Pool</string>
+    <string name="label_option_slushs_api_key">API key</string>
+    <string name="label_option_slushs_api_key_summary">The API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
+    <string name="label_option_slush">Additional Settings</string>
     <string name="label_option_auto_connect">Auto connect</string>
-    <string name="label_option_auto_connect_summary">Automatically fetches the next json data within the connection delay specified.</string>
     <string name="label_option_connection_delay">Connection delay</string>
-    <string name="label_option_connection_delay_summary">The JSON data for miners/blocks will be fetched at this specified millisecond variable.</string>
     <string name="label_option_suffix_hashrates_text">Show hashrate units</string>
     <string name="label_option_suffix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
-    <string name="label_option_show_when_parsed">Show parsed messages</string>
-    <string name="label_option_show_when_parsed_summary">Whenever a connection is being attempted it\'ll display a toast saying the result.</string>
-    <string name="label_option_category_pool">Pool Settings</string>
-    <string name="label_slushs_option_site_miner_domain">Miner API domain</string>
-    <string name="label_slushs_option_site_miner_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Miners)</string>
-    <string name="label_slushs_option_site_block_domain">Block API domain</string>
-    <string name="label_slushs_option_site_block_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Blocks)</string>
-    <string name="label_option_slushs_api_key">API key</string>
-    <string name="label_option_slushs_api_key_summary">This is the API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
-    <string name="label_option_category_mtgox_exchange_rate">MtGox BTC Exchange Rate</string>
-    <string name="label_option_mtgox_exchange_rate_enabled">Fetch exchange rate</string>
-    <string name="label_option_mtgox">Mt.Gox</string>
+    <string name="label_option_show_when_parsed">Show parsing messages</string>
+    <!-- Mt.Gox Settings -->
+    <string name="label_option_category_mtgox_exchange_rate">Mt.Gox BTC Exchange Rate</string>
+    <string name="label_option_mtgox_exchange_rate_enabled">Enabled</string>
     <string name="label_option_mtgox_exchange_rate_enabled_summary">When enabled all BTC values will be changed to your specified currency. New values fetched at your specified duration.</string>
-	<string name="label_option_mtgox_exchange_fetch_rate">Connection delay</string>
+    <string name="label_option_mtgox">Additional Settings</string>
+    <string name="label_option_mtgox_exchange_fetch_rate">Connection delay</string>
     <string name="label_option_mtgox_exchange_fetch_rate_summary">The JSON data for your BTC exchange rate will be fetched at this specified millisecond variable.</string>
-	<string name="label_option_check_connection_delays">Check connection delays</string>
-	<string name="label_option_check_connection_delays_summary">The connection delays for fetching data is recommended to stay above 15 seconds as to avoid being block by the providers.</string>
-	<string name="label_option_force_use_backup_user_agent">Force use backup user agent</string>
-	<string name="label_option_force_use_backup_user_agent_summary">Forces the backup user agent to be used in place of the system user agent.</string>
-	<string name="label_option_backup_user_agent">Backup user agent</string>
-	<string name="label_option_backup_user_agent_summary">Depending on your user agent it\'s possible for requests to sites to be rejected if the user-agent is disallowed, this gives you a way to avoid that.</string>
-	<string name="label_option_mtgox_api_domain">MtGox API Domain</string>
-	<string name="label_option_mtgox_api_domain_summary">The domain to obtain the MtGox provided BTC currency conversion.\n~ is replaced with your currency selection.</string>
-	<string name="label_option_currency_type">Desired Currency</string>
-	<string name="label_mtgox_effect_block_table">Modify block table</string>
-	<string name="label_mtgox_effect_block_table_summary">Modifies the block reward values with the BTC exchange rates.</string>
-	
-	<string name="label_option_category_other">Other</string>
-	<string name="label_option_advanced">Advanced</string>
-	
-	<string name="problem_low_connection_delay">Low Delay</string>
-	<string name="problem_low_connection_delay_positive">Reset</string>
-	<string name="problem_low_connection_delay_neutral">OK</string>
-	<string name="problem_low_connection_delay_negative">Disable Check</string>
-	<string name="label_connection_rate_warning">You\'ve typed in a value less than 15 seconds for fetching the miner/block JSON data. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
-	<string name="label_mtgox_connection_rate_warning">You\'ve typed in a value less than 15 seconds for MtGox exchange rate fetching. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
-	<string name="problem_mtgox_connection_rate_invalid">The MtGox connection rate didn\'t appear to be a valid number, it was reset to the default.</string>
-	<string name="problem_connection_delay_invalid">The connection delay didn\'t appear to be a valid number, it was reset to the default.</string>
+    <string name="label_option_currency_type">Desired Currency</string>
+    <string name="label_mtgox_effect_block_table">Modify block table</string>
+    <string name="label_mtgox_effect_block_table_summary">Modifies the block reward values with the BTC exchange rates.</string>
+    <!-- Other Settings -->
+    <string name="label_option_category_other">Other</string>
+    <string name="label_option_check_connection_delays">Check connection delays</string>
+    <string name="label_option_check_connection_delays_summary">The connection delays for fetching data is recommended to stay above 15 seconds as to avoid being block by the providers.</string>
+    <string name="label_option_advanced">Advanced</string>
+    <string name="label_option_force_use_backup_user_agent">Force use backup user agent</string>
+    <string name="label_option_force_use_backup_user_agent_summary">Forces the backup user agent to be used in place of the system user agent.</string>
+    <string name="label_option_backup_user_agent">Backup user agent</string>
+    <string name="label_option_backup_user_agent_summary">Used if either no user-agent is found or if it\'s being forced.</string>
+    <string name="label_slushs_option_site_miner_domain">Miner API domain</string>
+    <string name="label_slushs_option_site_block_domain">Block API domain</string>
+    <string name="label_option_mtgox_api_domain">MtGox API Domain</string>
+    <string name="label_option_mtgox_api_domain_summary">~ is replaced with your currency selection.</string>
+
 </resources>
