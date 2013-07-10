@@ -29,19 +29,19 @@ public class DialogHelper {
 			public void onClick(DialogInterface dialog, int which) {
 				switch(which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						dialogDisplaying = false;
 						if(posRunnable != null)
 							posRunnable.run();
+						dialogDisplaying = false;
 					break;
 					case DialogInterface.BUTTON_NEUTRAL:
-						dialogDisplaying = false;
 						if(neuRunnable != null)
 							neuRunnable.run();
+						dialogDisplaying = false;
 					break;
 					case DialogInterface.BUTTON_NEGATIVE:
-						dialogDisplaying = false;
 						if(negRunnable != null)
 							negRunnable.run();
+						dialogDisplaying = false;
 					break;
 				}
 			}

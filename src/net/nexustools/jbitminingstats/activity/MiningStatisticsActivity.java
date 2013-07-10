@@ -42,7 +42,8 @@ public class MiningStatisticsActivity extends Activity {
 	public static final int JSON_FETCH_SUCCESS = 0, JSON_FETCH_PARSE_ERROR = 1, JSON_FETCH_INVALID_TOKEN = 2, JSON_FETCH_CONNECTION_ERROR = 3;
 	
 	public static Handler handler = new Handler();
-	public static Timer workScheduler;
+	public static Timer minerScheduler;
+	public static Timer mtGoxScheduler;
 	public static TimerTask minerBlockFetchTask;
 	public static TimerTask mtGoxFetchTask;
 	public static boolean canContinue = true;
@@ -105,10 +106,10 @@ public class MiningStatisticsActivity extends Activity {
 		progressBar = ((ProgressBar)findViewById(R.id.progress_until_connection));
 	}
 	
-	public void beginFetch() {
+	public void startMinerBlockFetch() {
 		final Context context = this;
-		if(workScheduler == null)
-			workScheduler = new Timer();
+		if(minerScheduler == null)
+			minerScheduler = new Timer();
 		if(minerBlockFetchTask != null)
 			minerBlockFetchTask.cancel();
 		progressBar.setProgress(0);
@@ -121,19 +122,19 @@ public class MiningStatisticsActivity extends Activity {
 			return;
 		}
 		if(dialogHelper.areAnyDialogsShowing()) {
-			workScheduler.schedule(minerBlockFetchTask = new TimerTask() {
+			minerScheduler.schedule(minerBlockFetchTask = new TimerTask() {
 				@Override
 				public void run() {
 					if(!dialogHelper.areAnyDialogsShowing()) {
 						if(canContinue)
-							beginFetch();
+							startMinerBlockFetch();
 						return;
 					}
 				}
 			}, 100, 100);
 			return;
 		}
-		workScheduler.schedule(minerBlockFetchTask = new TimerTask() {
+		minerScheduler.schedule(minerBlockFetchTask = new TimerTask() {
 			@Override
 			public void run() {
 				elapsedTime += TIME_STEP;
@@ -338,11 +339,30 @@ public class MiningStatisticsActivity extends Activity {
 				}
 			}
 		}, 0, TIME_STEP);
-		
+	}
+	
+	public void startMtGoxFetch() {
+		final Context context = this;
+		if(mtGoxScheduler == null)
+			mtGoxScheduler = new Timer();
 		if(mtGoxFetchTask != null)
 			mtGoxFetchTask.cancel();
+		if(dialogHelper.areAnyDialogsShowing()) {
+			mtGoxScheduler.schedule(mtGoxFetchTask = new TimerTask() {
+				@Override
+				public void run() {
+					if(!dialogHelper.areAnyDialogsShowing()) {
+						if(settings.canAutoConnect() || settings.isMtGoxFetchEnabled())
+							startMtGoxFetch();
+						return;
+					}
+				}
+			}, 100, 100);
+			return;
+		}
+		
 		if(settings.isMtGoxFetchEnabled()) {
-			workScheduler.schedule(mtGoxFetchTask = new TimerTask() {
+			mtGoxScheduler.schedule(mtGoxFetchTask = new TimerTask() {
 				@Override
 				public void run() {
 					final int returnCode = fetchMtGoxJSONData();
@@ -408,8 +428,11 @@ public class MiningStatisticsActivity extends Activity {
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							}
+							Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
 						}
 					});
+					if(!settings.canAutoConnect())
+						return;
 				}
 			}, 0, settings.getMtGoxFetchDelay());
 		}
@@ -421,10 +444,16 @@ public class MiningStatisticsActivity extends Activity {
 		if(mtGoxFetchTask != null)
 			mtGoxFetchTask.cancel();
 		
-		if(workScheduler != null) {
-			workScheduler.cancel();
-			workScheduler.purge();
-			workScheduler = null;
+		if(minerScheduler != null) {
+			minerScheduler.cancel();
+			minerScheduler.purge();
+			minerScheduler = null;
+		}
+		
+		if(mtGoxScheduler != null) {
+			mtGoxScheduler.cancel();
+			mtGoxScheduler.purge();
+			mtGoxScheduler = null;
 		}
 		canContinue = false;
 		progressBar.setProgress(0);
@@ -558,7 +587,9 @@ public class MiningStatisticsActivity extends Activity {
 				return true;
 				
 			case R.id.action_connect_now:
-				beginFetch();
+				startMinerBlockFetch();
+				if(settings.isMtGoxFetchEnabled())
+					startMtGoxFetch();
 				return true;
 		}
 		return false;
@@ -665,9 +696,10 @@ public class MiningStatisticsActivity extends Activity {
 			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
 		}
-		if(settings.canAutoConnect())
-			beginFetch();
-		else
+		if(settings.canAutoConnect()) {
+			startMinerBlockFetch();
+			startMtGoxFetch();
+		} else
 			stopFetch();
 	}
 	
