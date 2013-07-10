@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -66,6 +67,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int elapsedTime = 0;
 	
+	public static Resources resources;
 	public static Settings settings;
 	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
@@ -75,7 +77,8 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		settings = new Settings(this);
+		resources = getResources();
+		settings = new Settings(this, resources);
 	}
 	
 	@Override
@@ -84,15 +87,11 @@ public class MiningStatisticsActivity extends Activity {
 		setContentView(R.layout.activity_mining_statistics);
 		workerRate = ((FormattableNumberView)findViewById(R.id.number_val_worker_hash_rate));
 		confirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_reward));
-		confirmedReward.setFormatting("%.5f");
 		confirmedNamecoinReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
 		unconfirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_uncomfirmed_reward));
-		unconfirmedReward.setFormatting("%.5f");
 		estimatedReward = ((FormattableNumberView)findViewById(R.id.number_val_estimated_reward));
-		estimatedReward.setFormatting("%.5f");
 		potentialReward = ((FormattableNumberView)findViewById(R.id.number_val_potential_reward));
-		potentialReward.setFormatting("%.5f");
 		workerTableHeader = ((TableLayout)findViewById(R.id.worker_table_header));
 		workerTableEntries = ((TableLayout)findViewById(R.id.worker_table_entries));
 		blockTableHeader = ((TableLayout)findViewById(R.id.block_table_header));
@@ -370,6 +369,10 @@ public class MiningStatisticsActivity extends Activity {
 										((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
 										((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
 									}
+									confirmedReward.setFormatting("%.2f");
+									unconfirmedReward.setFormatting("%.2f");
+									estimatedReward.setFormatting("%.2f");
+									potentialReward.setFormatting("%.2f");
 									mtGoxBTCTOCurrencySymbolSet = true;
 								}
 								confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
@@ -474,7 +477,7 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		settings.load();
+		settings.load(resources);
 		applySettings();
 	}
 	
@@ -572,7 +575,7 @@ public class MiningStatisticsActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								settings.setConnectionDelay(Integer.parseInt(getResources().getString(R.string.connection_delay)));
+								settings.setConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
 								beginFetch();
 							break;
 							case DialogInterface.BUTTON_NEGATIVE:
@@ -599,7 +602,7 @@ public class MiningStatisticsActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								settings.setMtGoxFetchDelay(Integer.parseInt(getResources().getString(R.string.mtgox_currency_exchange_fetch_rate)));
+								settings.setMtGoxFetchDelay(Integer.parseInt(resources.getString(R.string.mtgox_currency_exchange_fetch_rate)));
 								beginFetch();
 							break;
 							case DialogInterface.BUTTON_NEGATIVE:
@@ -615,6 +618,10 @@ public class MiningStatisticsActivity extends Activity {
 			}
 			mtGoxBTCTOCurrencySymbolSet = false;
 		}
+		confirmedReward.setFormatting("%.5f");
+		unconfirmedReward.setFormatting("%.5f");
+		estimatedReward.setFormatting("%.5f");
+		potentialReward.setFormatting("%.5f");
 		
 		switchTable();
 	}

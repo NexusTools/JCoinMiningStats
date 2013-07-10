@@ -37,10 +37,9 @@ public class Settings {
 	private boolean mtGoxBTCTOCurrencySymbolPrefix;
 	private String mtGoxBTCToCurrencySymbol;
 	
-	public Settings(Context theContext) {
+	public Settings(Context theContext, Resources r) {
 		context = theContext;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		Resources r = context.getResources();
 		
 		currencyType = r.getStringArray(R.array.supported_currencies_convertable_from_btc);
 		currencySymbol = r.getStringArray(R.array.currency_type_to_symbol);
@@ -49,11 +48,9 @@ public class Settings {
 		for(int i = 0; i < tempArray.length; i++)
 			currencyIsPrefix[i] = Boolean.parseBoolean(tempArray[i]);
 		tempArray = null;
-		r = null;
 	}
 	
-	public void load() {
-		Resources r = context.getResources();
+	public void load(Resources r) {
 		showingBlocks = prefs.getBoolean("showing_blocks", false);
 		autoConnect = prefs.getBoolean("settings_auto_connect", r.getBoolean(R.bool.auto_connect));
 		try {
@@ -94,7 +91,6 @@ public class Settings {
 				mtGoxBTCTOCurrencySymbolPrefix = currencyIsPrefix[i];
 				break;
 			}
-		r = null;
 	}
 	
 	public boolean isShowingBlocks() {
