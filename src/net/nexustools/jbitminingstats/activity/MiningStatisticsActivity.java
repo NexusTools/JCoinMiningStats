@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.nexustools.jbitminingstats.R;
 import net.nexustools.jbitminingstats.util.BlockStub;
 import net.nexustools.jbitminingstats.util.ContentGrabber;
+import net.nexustools.jbitminingstats.util.DialogHelper;
 import net.nexustools.jbitminingstats.util.MiningWorkerStub;
 import net.nexustools.jbitminingstats.util.Settings;
 import net.nexustools.jbitminingstats.view.FormattableNumberView;
@@ -18,9 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -71,6 +70,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public static Resources resources;
 	public static Settings settings;
+	public static DialogHelper dialogHelper;
 	
 	public static double hashRateVal, confirmedRewardVal, confirmedNamecoinRewardVal, unconfirmedRewardVal, estimatedRewardVal, potentialRewardVal;
 	public static double mtGoxBTCToCurrencyVal;
@@ -81,6 +81,7 @@ public class MiningStatisticsActivity extends Activity {
 		super.onStart();
 		resources = getResources();
 		settings = new Settings(this, resources);
+		dialogHelper = new DialogHelper(this);
 	}
 	
 	@Override
@@ -117,6 +118,19 @@ public class MiningStatisticsActivity extends Activity {
 		
 		if(settings.getSlushsAPIKey() == null || settings.getSlushsAPIKey().trim().length() == 0) {
 			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
+			return;
+		}
+		if(dialogHelper.areAnyDialogsShowing()) {
+			workScheduler.schedule(minerBlockFetchTask = new TimerTask() {
+				@Override
+                public void run() {
+	                if(!dialogHelper.areAnyDialogsShowing()) {
+	                	if(canContinue)
+	                		beginFetch();
+	                	return;
+	                }
+                }
+			}, 100, 100);
 			return;
 		}
 		workScheduler.schedule(minerBlockFetchTask = new TimerTask() {
@@ -157,29 +171,16 @@ public class MiningStatisticsActivity extends Activity {
 						@Override
 						public void run() {
 							if(problem != null) {
-								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
-								AlertDialog.Builder alert = new AlertDialog.Builder(context);
-								alert.setTitle(R.string.problem_json);
-								alert.setMessage(problem + "\n" + getString(R.string.problem_try_again));
-								DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										switch(which) {
-											case DialogInterface.BUTTON_POSITIVE:
-												Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
-												beginFetch();
-											break;
-											case DialogInterface.BUTTON_NEGATIVE:
-												Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
-											break;
-										}
+								dialogHelper.create(R.string.problem_json, problem + "\n" + getString(R.string.problem_try_again), true, false, true, R.string.problem_json_positive, 0, R.string.problem_json_negative, new Runnable() {
+									public void run() {
+										Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
+										canContinue = true;
 									}
-								};
-								alert.setPositiveButton(R.string.problem_json_positive, handler);
-								alert.setNegativeButton(R.string.problem_json_negative, handler);
-								alert.setCancelable(false);
-								alert.setIcon(R.drawable.ic_launcher);
-								alert.create().show();
+								}, null, new Runnable() {
+									public void run() {
+										Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
+									}
+								});
 							} else {
 								workerRate.setValue(hashRateVal);
 								confirmedReward.setValue(confirmedRewardVal);
@@ -343,13 +344,27 @@ public class MiningStatisticsActivity extends Activity {
 				@Override
 				public void run() {
 					final int returnCode = fetchMtGoxJSONData();
+					String pb = null;
 					switch(returnCode) {
-					// TODO: Error handling...
+						case JSON_FETCH_PARSE_ERROR:
+							pb = getString(R.string.problem_mtgox_parse_error);
+						break;
+						case JSON_FETCH_CONNECTION_ERROR:
+							pb = getString(R.string.problem_mtgox_connection_error);
+						break;
 					}
+					final String problem = pb;
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							if(returnCode == JSON_FETCH_SUCCESS) {
+							if(problem != null) {
+								dialogHelper.create(R.string.problem_mtgox_error, problem + "\n" + getString(R.string.problem_continue_anyway), true, false, true, R.string.problem_mtgox_positive, 0, R.string.problem_mtgox_negative, null, null, new Runnable() {
+									public void run() {
+										Toast.makeText(context, R.string.problem_mtgox_now_disabled, Toast.LENGTH_SHORT).show();
+										settings.setMtGoxFetchEnabled(false);
+									}
+								});
+							} else {
 								currentBTCPriceLabel.setVisibility(View.VISIBLE);
 								currentBTCPrice.setVisibility(View.VISIBLE);
 								if(!mtGoxBTCTOCurrencySymbolSet) {
@@ -408,7 +423,7 @@ public class MiningStatisticsActivity extends Activity {
 			workScheduler.purge();
 			workScheduler = null;
 		}
-		
+		canContinue = false;
 		progressBar.setProgress(0);
 	}
 	
@@ -576,55 +591,31 @@ public class MiningStatisticsActivity extends Activity {
 		
 		if(settings.canAutoConnect()) {
 			if(settings.canCheckConnectionDelays() && settings.getConnectionDelay() < CONNECTION_DELAY_WARNING_CAP) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(this);
-				alert.setTitle(R.string.problem_low_connection_delay);
-				alert.setMessage(R.string.label_connection_rate_warning);
-				alert.setIcon(R.drawable.ic_launcher);
-				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						switch(which) {
-							case DialogInterface.BUTTON_POSITIVE:
-								settings.setConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
-								beginFetch();
-							break;
-							case DialogInterface.BUTTON_NEGATIVE:
-								settings.setCheckConnectionDelays(false);
-							break;
-						}
+				dialogHelper.create(R.string.problem_low_connection_delay, R.string.label_connection_rate_warning, true, true, true, R.string.problem_low_connection_delay_positive, R.string.problem_low_connection_delay_neutral, R.string.problem_low_connection_delay_negative, new Runnable() {
+					public void run() {
+						settings.setConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
+						canContinue = true;
 					}
-				};
-				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
-				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
-				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);
-				alert.create().show();
+				}, null, new Runnable() {
+					public void run() {
+						settings.setCheckConnectionDelays(false);
+					}
+				});
 			}
 		}
 		
 		if(settings.isMtGoxFetchEnabled()) {
 			if(settings.canCheckConnectionDelays() && settings.getMtGoxFetchDelay() < CONNECTION_DELAY_WARNING_CAP) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(this);
-				alert.setTitle(R.string.problem_low_connection_delay);
-				alert.setMessage(R.string.label_mtgox_connection_rate_warning);
-				alert.setIcon(R.drawable.ic_launcher);
-				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						switch(which) {
-							case DialogInterface.BUTTON_POSITIVE:
-								settings.setMtGoxFetchDelay(Integer.parseInt(resources.getString(R.string.mtgox_currency_exchange_fetch_rate)));
-								beginFetch();
-							break;
-							case DialogInterface.BUTTON_NEGATIVE:
-								settings.setCheckConnectionDelays(false);
-							break;
-						}
+				dialogHelper.create(R.string.problem_low_connection_delay, R.string.label_mtgox_connection_rate_warning, true, true, true, R.string.problem_low_connection_delay_positive, R.string.problem_low_connection_delay_neutral, R.string.problem_low_connection_delay_negative, new Runnable() {
+					public void run() {
+						settings.setMtGoxFetchDelay(Integer.parseInt(resources.getString(R.string.mtgox_currency_exchange_fetch_rate)));
+						canContinue = true;
 					}
-				};
-				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
-				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
-				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);
-				alert.create().show();
+				}, null, new Runnable() {
+					public void run() {
+						settings.setCheckConnectionDelays(false);
+					}
+				});
 			}
 			mtGoxBTCTOCurrencySymbolSet = false;
 		} else {

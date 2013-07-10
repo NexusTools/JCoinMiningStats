@@ -40,7 +40,6 @@ public class Settings {
 	public Settings(Context theContext, Resources r) {
 		context = theContext;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
 		currencyType = r.getStringArray(R.array.supported_currencies_convertable_from_btc);
 		currencySymbol = r.getStringArray(R.array.currency_type_to_symbol);
 		String[] tempArray = r.getStringArray(R.array.currency_type_is_prefix);
@@ -156,11 +155,17 @@ public class Settings {
 		return mtGoxFetchEnabled;
 	}
 	
+	public void setMtGoxFetchEnabled(boolean mtGoxFetchEnabled) {
+		this.mtGoxFetchEnabled = mtGoxFetchEnabled;
+		prefs.edit().putBoolean("settings_mtgox_enabled", mtGoxFetchEnabled).commit();
+	}
+	
 	public int getMtGoxFetchDelay() {
 		return mtGoxFetchDelay;
 	}
 	
 	public void setMtGoxFetchDelay(int mtGoxFetchDelay) {
+		this.mtGoxFetchDelay = mtGoxFetchDelay;
 		prefs.edit().putString("settings_mtgox_fetch_rate", Integer.toString(mtGoxFetchDelay)).commit();
 	}
 	

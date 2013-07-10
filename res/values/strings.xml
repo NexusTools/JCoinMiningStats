@@ -53,6 +53,13 @@
     <string name="label_mtgox_connection_rate_warning">You\'ve typed in a value less than 15 seconds for MtGox exchange rate fetching. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
     <string name="problem_mtgox_connection_rate_invalid">The MtGox connection rate didn\'t appear to be a valid number, it was reset to the default.</string>
     <string name="problem_connection_delay_invalid">The connection delay didn\'t appear to be a valid number, it was reset to the default.</string>
+    <string name="problem_mtgox_error">Mt.Gox Problem</string>
+    <string name="problem_mtgox_parse_error">Error parsing the Mt.Gox JSON API.</string>
+    <string name="problem_mtgox_connection_error">Error connecting to the Mt.Gox JSON API.</string>
+    <string name="problem_continue_anyway">Continue anyway?</string>
+    <string name="problem_mtgox_positive">Yes</string>
+    <string name="problem_mtgox_negative">Disable Mt.Gox</string>
+    <string name="problem_mtgox_now_disabled">Mt.Gox has been disabled, you can re-enable it anytime in the settings.</string>
     <!-- Settings Activity -->
     <!-- Slush's Pool Settings -->
     <string name="label_option_category_slushs_pool">Slush\'s Pool</string>
