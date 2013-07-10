@@ -122,6 +122,7 @@ public class MiningStatisticsActivity extends Activity {
 				progressBar.setProgress(elapsedTime > settings.getConnectionDelay() ? settings.getConnectionDelay() : elapsedTime);
 				if(elapsedTime >= settings.getConnectionDelay()) {
 					final int result = fetchMinerJSONData();
+					
 					final int result2 = settings.isShowingBlocks() ? fetchBlockJSONData() : 0;
 					String pb = null;
 					switch(result) {
@@ -157,17 +158,17 @@ public class MiningStatisticsActivity extends Activity {
 								alert.setMessage(problem + "\n" + getString(R.string.problem_try_again));
 								DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 									@Override
-                                    public void onClick(DialogInterface dialog, int which) {
-	                                    switch(which) {
-	                                    	case AlertDialog.BUTTON_POSITIVE:
-	                                    		Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
-	    										beginFetch();
-	                                    		break;
-	                                    	case AlertDialog.BUTTON_NEGATIVE:
-	                                    		Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
-	                                    		break;
-	                                    }
-                                    }
+									public void onClick(DialogInterface dialog, int which) {
+										switch(which) {
+											case AlertDialog.BUTTON_POSITIVE:
+												Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
+												beginFetch();
+											break;
+											case AlertDialog.BUTTON_NEGATIVE:
+												Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
+											break;
+										}
+									}
 								};
 								alert.setPositiveButton(R.string.problem_json_positive, handler);
 								alert.setNegativeButton(R.string.problem_json_negative, handler);
@@ -345,23 +346,19 @@ public class MiningStatisticsActivity extends Activity {
 							if(!mtGoxBTCTOCurrencySymbolSet) {
 								if(settings.canTheMtGoxBTCTOCurrencySymbolPrefixOrAffix()) {
 									confirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
-									confirmedNamecoinReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 									unconfirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 									estimatedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 									potentialReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 									confirmedReward.setSuffix("");
-									confirmedNamecoinReward.setSuffix("");
 									unconfirmedReward.setSuffix("");
 									estimatedReward.setSuffix("");
 									potentialReward.setSuffix("");
 								} else {
 									confirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
-									confirmedNamecoinReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 									unconfirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 									estimatedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 									potentialReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 									confirmedReward.setPrefix("");
-									confirmedNamecoinReward.setPrefix("");
 									unconfirmedReward.setPrefix("");
 									estimatedReward.setPrefix("");
 									potentialReward.setPrefix("");
@@ -373,7 +370,6 @@ public class MiningStatisticsActivity extends Activity {
 								mtGoxBTCTOCurrencySymbolSet = true;
 							}
 							confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
-							confirmedNamecoinReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
@@ -550,17 +546,14 @@ public class MiningStatisticsActivity extends Activity {
 		((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
 		((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
 		confirmedReward.setPrefix("");
-		confirmedNamecoinReward.setPrefix("");
 		unconfirmedReward.setPrefix("");
 		estimatedReward.setPrefix("");
 		potentialReward.setPrefix("");
 		confirmedReward.setSuffix("");
-		confirmedNamecoinReward.setSuffix("");
 		unconfirmedReward.setSuffix("");
 		estimatedReward.setSuffix("");
 		potentialReward.setSuffix("");
 		confirmedReward.setMultiplier(0);
-		confirmedNamecoinReward.setMultiplier(0);
 		unconfirmedReward.setMultiplier(0);
 		estimatedReward.setMultiplier(0);
 		potentialReward.setMultiplier(0);
@@ -573,18 +566,18 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setIcon(R.drawable.ic_launcher);
 				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 					@Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch(which) {
-                        	case AlertDialog.BUTTON_POSITIVE:
-                        		settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
-        						beginFetch();
-                        		break;
-                        	case AlertDialog.BUTTON_NEGATIVE:
-                        		settings.setCheckConnectionDelays(false);
-                        		break;
-                        }
+					public void onClick(DialogInterface dialog, int which) {
+						switch(which) {
+							case AlertDialog.BUTTON_POSITIVE:
+								settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
+								beginFetch();
+							break;
+							case AlertDialog.BUTTON_NEGATIVE:
+								settings.setCheckConnectionDelays(false);
+							break;
+						}
 					}
-                };
+				};
 				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
 				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
 				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);
@@ -600,18 +593,18 @@ public class MiningStatisticsActivity extends Activity {
 				alert.setIcon(R.drawable.ic_launcher);
 				DialogInterface.OnClickListener handler = new DialogInterface.OnClickListener() {
 					@Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch(which) {
-                        	case AlertDialog.BUTTON_POSITIVE:
-                        		settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
-        						fetchMtGoxCurrency();
-                        		break;
-                        	case AlertDialog.BUTTON_NEGATIVE:
-                        		settings.setCheckConnectionDelays(false);
-                        		break;
-                        }
+					public void onClick(DialogInterface dialog, int which) {
+						switch(which) {
+							case AlertDialog.BUTTON_POSITIVE:
+								settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
+								fetchMtGoxCurrency();
+							break;
+							case AlertDialog.BUTTON_NEGATIVE:
+								settings.setCheckConnectionDelays(false);
+							break;
+						}
 					}
-                };
+				};
 				alert.setPositiveButton(R.string.problem_low_connection_delay_positive, handler);
 				alert.setNeutralButton(R.string.problem_low_connection_delay_neutral, handler);
 				alert.setNegativeButton(R.string.problem_low_connection_delay_negative, handler);

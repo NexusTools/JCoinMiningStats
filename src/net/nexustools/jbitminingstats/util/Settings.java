@@ -41,13 +41,14 @@ public class Settings {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Resources r = context.getResources();
 		
-		currencyType = context.getResources().getStringArray(R.array.supported_currencies_convertable_from_btc);
+		currencyType = r.getStringArray(R.array.supported_currencies_convertable_from_btc);
 		currencySymbol = r.getStringArray(R.array.currency_type_to_symbol);
 		String[] tempArray = r.getStringArray(R.array.currency_type_is_prefix);
 		currencyIsPrefix = new boolean[tempArray.length];
 		for(int i = 0; i < tempArray.length; i++)
 			currencyIsPrefix[i] = Boolean.parseBoolean(tempArray[i]);
 		tempArray = null;
+		r = null;
 	}
 	
 	public void load() {
