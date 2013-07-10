@@ -8,6 +8,7 @@
     <string name="action_connect_now">Connect Now</string>
     <string name="action_show_blocks">Show Blocks</string>
     <string name="action_show_miners">Show Miners</string>
+    <string name="label_current_mtgox_btc_exchange">BTC Price:</string>
     <string name="label_worker_rate">Worker Rate:</string>
     <string name="label_confirmed_reward">Confirmed Reward:</string>
     <string name="label_confirmed_namecoin_reward">Confirmed Namecoin Reward:</string>

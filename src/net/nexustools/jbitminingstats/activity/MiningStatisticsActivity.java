@@ -48,6 +48,8 @@ public class MiningStatisticsActivity extends Activity {
 	public static TimerTask mtGoxFetchTask;
 	public static boolean canContinue = true;
 	
+	public TextView currentBTCPriceLabel;
+	public FormattableNumberView currentBTCPrice;
 	public FormattableNumberView workerRate;
 	public FormattableNumberView confirmedReward;
 	public FormattableNumberView confirmedNamecoinReward;
@@ -89,6 +91,9 @@ public class MiningStatisticsActivity extends Activity {
 		confirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_reward));
 		confirmedNamecoinReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
+		currentBTCPriceLabel = ((TextView)findViewById(R.id.current_mtgox_btc_exchange));
+		currentBTCPrice = ((FormattableNumberView)findViewById(R.id.number_val_current_mtgox_btc_exchange));
+		currentBTCPrice.setFormatting("%.2f");
 		unconfirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_uncomfirmed_reward));
 		estimatedReward = ((FormattableNumberView)findViewById(R.id.number_val_estimated_reward));
 		potentialReward = ((FormattableNumberView)findViewById(R.id.number_val_potential_reward));
@@ -345,8 +350,11 @@ public class MiningStatisticsActivity extends Activity {
 						@Override
 						public void run() {
 							if(returnCode == JSON_FETCH_SUCCESS) {
+								currentBTCPriceLabel.setVisibility(View.VISIBLE);
+								currentBTCPrice.setVisibility(View.VISIBLE);
 								if(!mtGoxBTCTOCurrencySymbolSet) {
 									if(settings.canTheMtGoxBTCTOCurrencySymbolPrefixOrAffix()) {
+										currentBTCPrice.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 										confirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 										unconfirmedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
 										estimatedReward.setPrefix(settings.getTheMtGoxBTCToCurrencySymbol());
@@ -356,6 +364,7 @@ public class MiningStatisticsActivity extends Activity {
 										estimatedReward.setSuffix("");
 										potentialReward.setSuffix("");
 									} else {
+										currentBTCPrice.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 										confirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 										unconfirmedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
 										estimatedReward.setSuffix(settings.getTheMtGoxBTCToCurrencySymbol());
@@ -375,6 +384,7 @@ public class MiningStatisticsActivity extends Activity {
 									potentialReward.setFormatting("%.2f");
 									mtGoxBTCTOCurrencySymbolSet = true;
 								}
+								currentBTCPrice.setValue(mtGoxBTCToCurrencyVal);
 								confirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
@@ -617,11 +627,14 @@ public class MiningStatisticsActivity extends Activity {
 				alert.create().show();
 			}
 			mtGoxBTCTOCurrencySymbolSet = false;
+		} else {
+			currentBTCPriceLabel.setVisibility(View.GONE);
+			currentBTCPrice.setVisibility(View.GONE);
+			confirmedReward.setFormatting("%.5f");
+			unconfirmedReward.setFormatting("%.5f");
+			estimatedReward.setFormatting("%.5f");
+			potentialReward.setFormatting("%.5f");
 		}
-		confirmedReward.setFormatting("%.5f");
-		unconfirmedReward.setFormatting("%.5f");
-		estimatedReward.setFormatting("%.5f");
-		potentialReward.setFormatting("%.5f");
 		
 		switchTable();
 	}
