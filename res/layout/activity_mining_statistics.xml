@@ -86,7 +86,7 @@
         android:id="@+id/unconfirmed_reward_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/number_val_confirmed_namecoin_reward"
+        android:layout_below="@+id/confirmed_namecoin_reward_label"
         android:layout_marginTop="6dp"
         android:text="@string/label_unconfirmed_reward" />
 
