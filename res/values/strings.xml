@@ -57,7 +57,6 @@
     <string name="label_option_auto_connect_summary">Automatically fetches the next json data within the connection delay specified.</string>
     <string name="label_option_connection_delay">Connection delay</string>
     <string name="label_option_connection_delay_summary">The JSON data for miners/blocks will be fetched at this specified millisecond variable.</string>
-    <string name="default_option_connection_delay">15000</string>
     <string name="label_option_suffix_hashrates_text">Show hashrate units</string>
     <string name="label_option_suffix_hashrates_text_summary">Appends the appropriate working hash-rate to the applicable values.\nEx: 250mh/s</string>
     <string name="label_option_show_when_parsed">Show parsed messages</string>
@@ -65,10 +64,8 @@
     <string name="label_option_category_pool">Pool Settings</string>
     <string name="label_slushs_option_site_miner_domain">Miner API domain</string>
     <string name="label_slushs_option_site_miner_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Miners)</string>
-    <string name="default_option_slushs_miner_domain">https://mining.bitcoin.cz/accounts/profile/json/</string>
     <string name="label_slushs_option_site_block_domain">Block API domain</string>
     <string name="label_slushs_option_site_block_domain_summary">The domain to use while connecting to Slush\'s API to fetch the resulting JSON data.\n(For Blocks)</string>
-    <string name="default_option_slushs_block_domain">https://mining.bitcoin.cz/stats/json/</string>
     <string name="label_option_slushs_api_key">API key</string>
     <string name="label_option_slushs_api_key_summary">This is the API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
     <string name="label_option_category_exchange_rate">MtGox BTC Exchange Rate</string>
@@ -76,7 +73,6 @@
     <string name="label_option_exchange_rate_enabled_summary">When enabled all BTC values will be changed to your specified currency. New values fetched at your specified duration.</string>
 	<string name="label_option_exchange_fetch_rate">Connection delay</string>
     <string name="label_option_exchange_fetch_rate_summary">The JSON data for your BTC exchange rate will be fetched at this specified millisecond variable.</string>
-	<string name="default_option_exchange_fetch_rate">15000</string>
 	<string name="label_option_check_connection_delays">Check connection delays</string>
 	<string name="label_option_check_connection_delays_summary">The connection delays for fetching data is recommended to stay above 15 seconds as to avoid being block by the providers.</string>
 	<string name="label_option_force_use_backup_user_agent">Force use backup user agent</string>
@@ -85,7 +81,6 @@
 	<string name="label_option_backup_user_agent_summary">Depending on your user agent it\'s possible for requests to sites to be rejected if the user-agent is disallowed, this gives you a way to avoid that.</string>
 	<string name="label_option_mtgox_api_domain">MtGox API Domain</string>
 	<string name="label_option_mtgox_api_domain_summary">The domain to obtain the MtGox provided BTC currency conversion.\n~ is replaced with your currency selection.</string>
-	<string name="default_option_mtgox_api_domain">http://data.mtgox.com/api/1/BTC~/ticker_fast</string>
 	<string name="label_option_currency_type">Desired Currency</string>
 	<string name="label_mtgox_effect_block_table">Modify block table</string>
 	<string name="label_mtgox_effect_block_table_summary">Modifies the block reward values with the BTC exchange rates.</string>
@@ -96,4 +91,6 @@
 	<string name="problem_low_connection_delay_negative">Disable Check</string>
 	<string name="label_connection_rate_warning">You\'ve typed in a value less than 15 seconds for fetching the miner/block JSON data. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
 	<string name="label_mtgox_connection_rate_warning">You\'ve typed in a value less than 15 seconds for MtGox exchange rate fetching. This is not recommended as the values obtained are cached for ~30 seconds, if you connect too many times you\'re in the potential for getting blocked from further connecting.</string>
+	<string name="problem_mtgox_connection_rate_invalid">The MtGox connection rate didn\'t appear to be a valid number, it was reset to the default.</string>
+	<string name="problem_connection_delay_invalid">The connection delay didn\'t appear to be a valid number, it was reset to the default.</string>
 </resources>

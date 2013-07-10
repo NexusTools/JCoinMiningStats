@@ -150,6 +150,7 @@ public class MiningStatisticsActivity extends Activity {
 					final String problem = pb;
 					canContinue = (pb == null ? settings.canAutoConnect() : false);
 					handler.post(new Runnable() {
+						@Override
 						public void run() {
 							if(problem != null) {
 								Toast.makeText(context, problem, Toast.LENGTH_SHORT).show();
@@ -160,11 +161,11 @@ public class MiningStatisticsActivity extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										switch(which) {
-											case AlertDialog.BUTTON_POSITIVE:
+											case DialogInterface.BUTTON_POSITIVE:
 												Toast.makeText(context, R.string.problem_json_trying_again, Toast.LENGTH_SHORT).show();
 												beginFetch();
 											break;
-											case AlertDialog.BUTTON_NEGATIVE:
+											case DialogInterface.BUTTON_NEGATIVE:
 												Toast.makeText(context, R.string.problem_json_not_trying_again, Toast.LENGTH_SHORT).show();
 											break;
 										}
@@ -335,6 +336,7 @@ public class MiningStatisticsActivity extends Activity {
 				// TODO: Error handling...
 				}
 				handler.post(new Runnable() {
+					@Override
 					public void run() {
 						if(returnCode == JSON_FETCH_SUCCESS) {
 							if(!mtGoxBTCTOCurrencySymbolSet) {
@@ -562,11 +564,11 @@ public class MiningStatisticsActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
-							case AlertDialog.BUTTON_POSITIVE:
-								settings.setConnectionDelay(Integer.parseInt(getString(R.string.default_option_connection_delay)));
+							case DialogInterface.BUTTON_POSITIVE:
+								settings.setConnectionDelay(getResources().getInteger(R.integer.connection_delay));
 								beginFetch();
 							break;
-							case AlertDialog.BUTTON_NEGATIVE:
+							case DialogInterface.BUTTON_NEGATIVE:
 								settings.setCheckConnectionDelays(false);
 							break;
 						}
@@ -589,11 +591,11 @@ public class MiningStatisticsActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
-							case AlertDialog.BUTTON_POSITIVE:
-								settings.setMtGoxFetchDelay(Integer.parseInt(getString(R.string.default_option_exchange_fetch_rate)));
+							case DialogInterface.BUTTON_POSITIVE:
+								settings.setMtGoxFetchDelay(getResources().getInteger(R.integer.mtgox_currency_exchange_fetch_rate));
 								beginFetch();
 							break;
-							case AlertDialog.BUTTON_NEGATIVE:
+							case DialogInterface.BUTTON_NEGATIVE:
 								settings.setCheckConnectionDelays(false);
 							break;
 						}

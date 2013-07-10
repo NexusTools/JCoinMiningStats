@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class Settings {
 	private static Context context;
@@ -52,29 +53,40 @@ public class Settings {
 	}
 	
 	public void load() {
-		showingBlocks = prefs.getBoolean("showing_blocks", true);
-		autoConnect = prefs.getBoolean("settings_auto_connect", true);
-		connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", context.getString(R.string.default_option_connection_delay)));
-		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", true);
-		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", false);
-		canCheckConnectionDelays = prefs.getBoolean("settings_check_connection_delays", true);
+		Resources r = context.getResources();
+		showingBlocks = prefs.getBoolean("showing_blocks", r.getBoolean(R.bool.auto_connect));
+		autoConnect = prefs.getBoolean("settings_auto_connect", r.getBoolean(R.bool.auto_connect));
+		try {
+			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", Integer.toString(r.getInteger(R.integer.connection_delay))));
+		} catch(Exception e) {
+			setConnectionDelay(r.getInteger(R.integer.connection_delay));
+			Toast.makeText(context, R.string.problem_connection_delay_invalid, Toast.LENGTH_LONG).show();
+		}
+		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", r.getBoolean(R.bool.show_hashrates));
+		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", r.getBoolean(R.bool.show_parsing_messages));
+		canCheckConnectionDelays = prefs.getBoolean("settings_check_connection_delays", r.getBoolean(R.bool.check_connection_delays));
 		
-		shouldUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", false);
+		shouldUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", r.getBoolean(R.bool.force_custom_user_agent));
 		String userAgent = prefs.getString("settings_backup_user_agent", "");
 		userAgent = userAgent.equals("") ? null : userAgent;
 		httpUserAgent = shouldUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
 		
-		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", context.getString(R.string.default_option_slushs_miner_domain));
-		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", context.getString(R.string.default_option_slushs_miner_domain));
+		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", r.getString(R.string.slushs_block_domain));
+		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", r.getString(R.string.slushs_miner_domain));
 		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
 		
-		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", false);
-		mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", context.getString(R.string.default_option_connection_delay)));
-		mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", context.getString(R.string.default_option_mtgox_api_domain));
-		mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", "USD");
-		mtGoxEffectBlockTable = prefs.getBoolean("settings_mtgox_effect_block_table", true);
+		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", r.getBoolean(R.bool.mtgox_enabled));
+		try {
+			mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", Integer.toString(r.getInteger(R.integer.mtgox_currency_exchange_fetch_rate))));
+		} catch(Exception e) {
+			setMtGoxFetchDelay(r.getInteger(R.integer.mtgox_currency_exchange_fetch_rate));
+			Toast.makeText(context, R.string.problem_mtgox_connection_rate_invalid, Toast.LENGTH_LONG).show();
+		}
+		mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", r.getString(R.string.mtgox_api_domain));
+		mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", r.getString(R.string.mtgox_currency_type));
+		mtGoxEffectBlockTable = prefs.getBoolean("settings_mtgox_effect_block_table", r.getBoolean(R.bool.mtgox_effect_block_table));
 		
-		mtGoxBTCTOCurrencySymbolPrefix = true; // TODO: Find out what currencies prefix, and what ones affix.
+		mtGoxBTCTOCurrencySymbolPrefix = true; // TODO: Find out what currencies prefix, and what ones suffix.
 		mtGoxBTCToCurrencySymbol = "$";
 		for(int i = 0; i < currencyType.length; i++)
 			if(currencyType[i].equals(mtGoxCurrencyType)) {
@@ -82,6 +94,7 @@ public class Settings {
 				mtGoxBTCTOCurrencySymbolPrefix = currencyIsPrefix[i];
 				break;
 			}
+		r = null;
 	}
 	
 	public boolean isShowingBlocks() {

@@ -7,39 +7,39 @@
                 android:key="settings_auto_connect"
                 android:title="@string/label_option_auto_connect"
                 android:summary="@string/label_option_auto_connect_summary"
-                android:defaultValue="true" />
+                android:defaultValue="@bool/auto_connect" />
         
         <EditTextPreference
                 android:key="settings_connect_delay"
                 android:dependency="settings_auto_connect"
                 android:title="@string/label_option_connection_delay"
                 android:summary="@string/label_option_connection_delay_summary"
-                android:defaultValue="@string/default_option_connection_delay"
+                android:defaultValue="@integer/connection_delay"
                 android:inputType="number" />
         
         <CheckBoxPreference
                 android:key="settings_show_hashrates"
                 android:title="@string/label_option_suffix_hashrates_text"
                 android:summary="@string/label_option_suffix_hashrates_text_summary" 
-                android:defaultValue="true"/>
+                android:defaultValue="@bool/show_hashrates"/>
         
         <CheckBoxPreference
                 android:key="settings_show_messages_when_parsed"
                 android:title="@string/label_option_show_when_parsed"
                 android:summary="@string/label_option_show_when_parsed_summary"
-                android:defaultValue="false" />
+                android:defaultValue="@bool/show_parsing_messages" />
         
         <CheckBoxPreference
                 android:key="settings_check_connection_delays"
                 android:title="@string/label_option_check_connection_delays"
                 android:summary="@string/label_option_check_connection_delays_summary"
-                android:defaultValue="true" />
+                android:defaultValue="bool/check_connection_delays" />
         
         <CheckBoxPreference
                 android:key="settings_force_use_backup_user_agent"
                 android:title="@string/label_option_force_use_backup_user_agent"
                 android:summary="@string/label_option_force_use_backup_user_agent_summary"
-                android:defaultValue="false" />
+                android:defaultValue="@bool/force_custom_user_agent" />
         
         <EditTextPreference
                 android:key="settings_backup_user_agent"
@@ -55,13 +55,13 @@
                 android:key="settings_slushs_account_api_domain"
                 android:title="@string/label_slushs_option_site_miner_domain"
                 android:summary="@string/label_slushs_option_site_miner_domain_summary"
-                android:defaultValue="@string/default_option_slushs_miner_domain" />
+                android:defaultValue="@string/slushs_miner_domain" />
         
         <EditTextPreference
                 android:key="settings_slushs_block_api_domain"
                 android:title="@string/label_slushs_option_site_block_domain"
                 android:summary="@string/label_slushs_option_site_block_domain_summary"
-                android:defaultValue="@string/default_option_slushs_block_domain" />
+                android:defaultValue="@string/slushs_block_domain" />
         
         <EditTextPreference
                 android:key="settings_slushs_api_key"
@@ -77,14 +77,14 @@
                 android:key="settings_mtgox_enabled"
                 android:title="@string/label_option_exchange_rate_enabled"
                 android:summary="@string/label_option_exchange_rate_enabled_summary"
-                android:defaultValue="false" />
+                android:defaultValue="@bool/mtgox_enabled" />
         
         <EditTextPreference
                 android:key="settings_mtgox_fetch_rate"
                 android:dependency="settings_mtgox_enabled"
                 android:title="@string/label_option_exchange_fetch_rate"
                 android:summary="@string/label_option_exchange_fetch_rate_summary"
-                android:defaultValue="@string/default_option_exchange_fetch_rate"
+                android:defaultValue="@integer/mtgox_currency_exchange_fetch_rate"
                 android:inputType="number" />
         
         <EditTextPreference
@@ -92,13 +92,13 @@
                 android:dependency="settings_mtgox_enabled"
                 android:title="@string/label_option_mtgox_api_domain"
                 android:summary="@string/label_option_mtgox_api_domain_summary"
-                android:defaultValue="@string/default_option_mtgox_api_domain" />
+                android:defaultValue="@string/mtgox_api_domain" />
         
         <ListPreference
         		android:key="settings_mtgox_currency_type"
         		android:entries="@array/supported_currencies_convertable_from_btc"
         		android:entryValues="@array/supported_currencies_convertable_from_btc"
-        		android:defaultValue="USD"
+        		android:defaultValue="@string/mtgox_currency_type"
         		android:dependency="settings_mtgox_enabled"
         		android:title="@string/label_option_currency_type" />
         
@@ -107,7 +107,7 @@
                 android:dependency="settings_mtgox_enabled"
                 android:title="@string/label_mtgox_effect_block_table"
                 android:summary="@string/label_mtgox_effect_block_table_summary"
-                android:defaultValue="true" />
+                android:defaultValue="@bool/mtgox_effect_block_table" />
 
     </PreferenceCategory>
 </PreferenceScreen>
