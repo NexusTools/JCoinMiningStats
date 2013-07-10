@@ -223,21 +223,25 @@ public class MiningStatisticsActivity extends Activity {
 											if(settings.canMtGoxEffectBlockTable())
 												blockReward.setMultiplier(mtGoxBTCToCurrencyVal);
 											blockReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockReward.setFormatting("%.2f");
 											blockReward.setValue(block.reward);
 											blockRow.addView(blockReward);
 											
 											FormattableNumberView blockNMCReward = new FormattableNumberView(context);
 											blockNMCReward.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockNMCReward.setFormatting("%.2f");
 											blockNMCReward.setValue(block.nmcReward);
 											blockRow.addView(blockNMCReward);
 											
 											FormattableNumberView blockScore = new FormattableNumberView(context);
 											blockScore.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockScore.setFormatting("%.2f");
 											blockScore.setValue(block.score);
 											blockRow.addView(blockScore);
 											
 											FormattableNumberView blockShare = new FormattableNumberView(context);
 											blockShare.setLayoutParams(new TableRow.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+											blockShare.setFormatting("%.0f");
 											blockShare.setValue(block.share);
 											blockRow.addView(blockShare);
 											
