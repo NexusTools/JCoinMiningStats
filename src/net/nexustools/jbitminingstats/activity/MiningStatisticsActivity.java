@@ -572,7 +572,7 @@ public class MiningStatisticsActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								settings.setConnectionDelay(getResources().getInteger(R.integer.connection_delay));
+								settings.setConnectionDelay(Integer.parseInt(getResources().getString(R.string.connection_delay)));
 								beginFetch();
 							break;
 							case DialogInterface.BUTTON_NEGATIVE:
@@ -599,7 +599,7 @@ public class MiningStatisticsActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which) {
 							case DialogInterface.BUTTON_POSITIVE:
-								settings.setMtGoxFetchDelay(getResources().getInteger(R.integer.mtgox_currency_exchange_fetch_rate));
+								settings.setMtGoxFetchDelay(Integer.parseInt(getResources().getString(R.string.mtgox_currency_exchange_fetch_rate)));
 								beginFetch();
 							break;
 							case DialogInterface.BUTTON_NEGATIVE:

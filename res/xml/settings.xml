@@ -16,7 +16,7 @@
                 android:title="@string/label_option_auto_connect" />
 
             <EditTextPreference
-                android:defaultValue="@integer/connection_delay"
+                android:defaultValue="@string/connection_delay"
                 android:dependency="settings_auto_connect"
                 android:inputType="number"
                 android:key="settings_connect_delay"
@@ -44,7 +44,7 @@
             android:dependency="settings_mtgox_enabled"
             android:title="@string/label_option_mtgox" >
             <EditTextPreference
-                android:defaultValue="@integer/mtgox_currency_exchange_fetch_rate"
+                android:defaultValue="@string/mtgox_currency_exchange_fetch_rate"
                 android:inputType="number"
                 android:key="settings_mtgox_fetch_rate"
                 android:summary="@string/label_option_mtgox_exchange_fetch_rate_summary"

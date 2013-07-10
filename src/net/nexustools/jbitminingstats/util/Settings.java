@@ -54,12 +54,12 @@ public class Settings {
 	
 	public void load() {
 		Resources r = context.getResources();
-		showingBlocks = prefs.getBoolean("showing_blocks", r.getBoolean(R.bool.auto_connect));
+		showingBlocks = prefs.getBoolean("showing_blocks", false);
 		autoConnect = prefs.getBoolean("settings_auto_connect", r.getBoolean(R.bool.auto_connect));
 		try {
-			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", Integer.toString(r.getInteger(R.integer.connection_delay))));
+			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", r.getString(R.string.connection_delay)));
 		} catch(Exception e) {
-			setConnectionDelay(r.getInteger(R.integer.connection_delay));
+			setConnectionDelay(Integer.parseInt(r.getString(R.string.connection_delay)));
 			Toast.makeText(context, R.string.problem_connection_delay_invalid, Toast.LENGTH_LONG).show();
 		}
 		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", r.getBoolean(R.bool.show_hashrates));
@@ -77,9 +77,9 @@ public class Settings {
 		
 		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", r.getBoolean(R.bool.mtgox_enabled));
 		try {
-			mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", Integer.toString(r.getInteger(R.integer.mtgox_currency_exchange_fetch_rate))));
+			mtGoxFetchDelay = Integer.parseInt(prefs.getString("settings_mtgox_fetch_rate", r.getString(R.string.mtgox_currency_exchange_fetch_rate)));
 		} catch(Exception e) {
-			setMtGoxFetchDelay(r.getInteger(R.integer.mtgox_currency_exchange_fetch_rate));
+			setMtGoxFetchDelay(Integer.parseInt(r.getString(R.string.mtgox_currency_exchange_fetch_rate)));
 			Toast.makeText(context, R.string.problem_mtgox_connection_rate_invalid, Toast.LENGTH_LONG).show();
 		}
 		mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", r.getString(R.string.mtgox_api_domain));
@@ -96,7 +96,7 @@ public class Settings {
 			}
 		r = null;
 	}
-
+	
 	public boolean isShowingBlocks() {
 		return showingBlocks;
 	}
