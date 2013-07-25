@@ -433,7 +433,7 @@ public class MiningStatisticsActivity extends Activity {
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
 							}
-							//Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
+							// Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
 						}
 					});
 					if(!settings.canAutoConnect() || !settings.isMtGoxFetchEnabled())
