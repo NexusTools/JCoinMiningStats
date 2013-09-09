@@ -46,7 +46,6 @@ public class MiningStatisticsActivity extends Activity {
 	public static Timer mtGoxScheduler;
 	public static TimerTask minerBlockFetchTask;
 	public static TimerTask mtGoxFetchTask;
-	public static boolean canContinue = true;
 	
 	public TextView currentBTCPriceLabel;
 	public FormattableNumberView currentBTCPrice;
@@ -115,28 +114,17 @@ public class MiningStatisticsActivity extends Activity {
 		progressBar.setProgress(0);
 		progressBar.setMax(settings.getConnectionDelay());
 		elapsedTime = settings.getConnectionDelay();
-		canContinue = true;
 		
 		if(settings.getSlushsAPIKey() == null || settings.getSlushsAPIKey().trim().length() == 0) {
 			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
 			return;
 		}
-		if(dialogHelper.areAnyDialogsShowing()) {
-			minerScheduler.schedule(minerBlockFetchTask = new TimerTask() {
-				@Override
-				public void run() {
-					if(!dialogHelper.areAnyDialogsShowing()) {
-						if(canContinue)
-							startMinerBlockFetch();
-						return;
-					}
-				}
-			}, 100, 100);
-			return;
-		}
+		
 		minerScheduler.schedule(minerBlockFetchTask = new TimerTask() {
 			@Override
 			public void run() {
+				if(dialogHelper.areAnyDialogsShowing())
+					return;
 				elapsedTime += TIME_STEP;
 				progressBar.setProgress(elapsedTime > settings.getConnectionDelay() ? settings.getConnectionDelay() : elapsedTime);
 				if(elapsedTime >= settings.getConnectionDelay()) {
@@ -167,7 +155,6 @@ public class MiningStatisticsActivity extends Activity {
 						break;
 					}
 					final String problem = pb;
-					canContinue = (pb == null ? settings.canAutoConnect() : false);
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -264,6 +251,8 @@ public class MiningStatisticsActivity extends Activity {
 											createdBlockRows.remove(entry);
 										}
 									}
+									if(settings.canShowParseMessage())
+										Toast.makeText(context, R.string.miner_json_parsed, Toast.LENGTH_SHORT).show();
 								} else {
 									ArrayList<String> workersFound = new ArrayList<String>();
 									workersFound.add(getString(R.string.label_worker_table_header_name));
@@ -325,17 +314,15 @@ public class MiningStatisticsActivity extends Activity {
 											createdMinerRows.remove(entry);
 										}
 									}
+									if(settings.canShowParseMessage())
+										Toast.makeText(context, R.string.block_json_parsed, Toast.LENGTH_SHORT).show();
 								}
-								if(settings.canShowParseMessage())
-									Toast.makeText(context, R.string.json_parsed, Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
-					if(!canContinue) {
-						stopFetch();
-					} else
-						elapsedTime = 0;
-					return;
+					if(problem != null)
+						stopFetch(true, false);
+					elapsedTime = 0;
 				}
 			}
 		}, 0, TIME_STEP);
@@ -347,24 +334,13 @@ public class MiningStatisticsActivity extends Activity {
 			mtGoxScheduler = new Timer();
 		if(mtGoxFetchTask != null)
 			mtGoxFetchTask.cancel();
-		if(dialogHelper.areAnyDialogsShowing()) {
-			mtGoxScheduler.schedule(mtGoxFetchTask = new TimerTask() {
-				@Override
-				public void run() {
-					if(!dialogHelper.areAnyDialogsShowing()) {
-						if(settings.canAutoConnect() || settings.isMtGoxFetchEnabled())
-							startMtGoxFetch();
-						return;
-					}
-				}
-			}, 100, 100);
-			return;
-		}
 		
 		if(settings.isMtGoxFetchEnabled()) {
 			mtGoxScheduler.schedule(mtGoxFetchTask = new TimerTask() {
 				@Override
 				public void run() {
+					if(dialogHelper.areAnyDialogsShowing())
+						return;
 					final int returnCode = fetchMtGoxJSONData();
 					String pb = null;
 					switch(returnCode) {
@@ -376,6 +352,8 @@ public class MiningStatisticsActivity extends Activity {
 						break;
 					}
 					final String problem = pb;
+					if(problem != null)
+						stopFetch(false, true);
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -432,37 +410,39 @@ public class MiningStatisticsActivity extends Activity {
 								unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
+								if(settings.canShowParseMessage())
+									Toast.makeText(context, R.string.mtgox_json_parsed, Toast.LENGTH_SHORT).show();
 							}
-							// Toast.makeText(context, "Mt.Gox fetched", Toast.LENGTH_SHORT).show();
 						}
 					});
 					if(!settings.canAutoConnect() || !settings.isMtGoxFetchEnabled())
-						return;
+						stopFetch(false, true);
 				}
 			}, 0, settings.getMtGoxFetchDelay());
 		}
 	}
 	
-	public void stopFetch() {
-		canContinue = false;
-		
-		if(minerBlockFetchTask != null)
-			minerBlockFetchTask.cancel();
-		if(mtGoxFetchTask != null)
-			mtGoxFetchTask.cancel();
-		
-		if(minerScheduler != null) {
-			minerScheduler.cancel();
-			minerScheduler.purge();
-			minerScheduler = null;
+	public void stopFetch(boolean miner, boolean gox) {
+		if(miner) {
+			if(minerBlockFetchTask != null)
+				minerBlockFetchTask.cancel();
+			if(minerScheduler != null) {
+				minerScheduler.cancel();
+				minerScheduler.purge();
+				minerScheduler = null;
+			}
+			elapsedTime = 0;
+			progressBar.setProgress(0);
 		}
-		
-		if(mtGoxScheduler != null) {
-			mtGoxScheduler.cancel();
-			mtGoxScheduler.purge();
-			mtGoxScheduler = null;
+		if(gox) {
+			if(mtGoxFetchTask != null)
+				mtGoxFetchTask.cancel();
+			if(mtGoxScheduler != null) {
+				mtGoxScheduler.cancel();
+				mtGoxScheduler.purge();
+				mtGoxScheduler = null;
+			}
 		}
-		progressBar.setProgress(0);
 	}
 	
 	public int fetchMinerJSONData() {
@@ -547,19 +527,19 @@ public class MiningStatisticsActivity extends Activity {
 	@Override
 	public void onStop() {
 		super.onStop();
-		stopFetch();
+		stopFetch(true, true);
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		stopFetch();
+		stopFetch(true, true);
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		stopFetch();
+		stopFetch(true, true);
 	}
 	
 	@Override
@@ -704,7 +684,7 @@ public class MiningStatisticsActivity extends Activity {
 			startMinerBlockFetch();
 			startMtGoxFetch();
 		} else
-			stopFetch();
+			stopFetch(true, true);
 	}
 	
 	public double noNaN(double d) {

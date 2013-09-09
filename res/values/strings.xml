@@ -44,7 +44,9 @@
     <string name="problem_json_invalid_token_blocks">The API key you\'ve provided appears to be invalid. (Blocks)</string>
     <string name="problem_json_connection_error_blocks">There\'s been an error while connecting to the JSON supplier. (Blocks)</string>
     <string name="problem_try_again">Would you like to try again?</string>
-    <string name="json_parsed">JSON Parsed!</string>
+    <string name="miner_json_parsed">Miner JSON Parsed!</string>
+    <string name="block_json_parsed">Block JSON Parsed!</string>
+    <string name="mtgox_json_parsed">Mt.Gox JSON Parsed!</string>
     <string name="problem_low_connection_delay">Low Delay</string>
     <string name="problem_low_connection_delay_positive">Reset</string>
     <string name="problem_low_connection_delay_neutral">OK</string>
