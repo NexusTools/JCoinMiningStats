@@ -88,21 +88,21 @@ public class MiningStatisticsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mining_statistics);
-		workerRate = ((FormattableNumberView)findViewById(R.id.number_val_worker_hash_rate));
-		confirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_reward));
-		confirmedNamecoinReward = ((FormattableNumberView)findViewById(R.id.number_val_confirmed_namecoin_reward));
+		workerRate = ((FormattableNumberView) findViewById(R.id.number_val_worker_hash_rate));
+		confirmedReward = ((FormattableNumberView) findViewById(R.id.number_val_confirmed_reward));
+		confirmedNamecoinReward = ((FormattableNumberView) findViewById(R.id.number_val_confirmed_namecoin_reward));
 		confirmedNamecoinReward.setFormatting("%.5f");
-		currentBTCPriceLabel = ((TextView)findViewById(R.id.current_mtgox_btc_exchange));
-		currentBTCPrice = ((FormattableNumberView)findViewById(R.id.number_val_current_mtgox_btc_exchange));
+		currentBTCPriceLabel = ((TextView) findViewById(R.id.current_mtgox_btc_exchange));
+		currentBTCPrice = ((FormattableNumberView) findViewById(R.id.number_val_current_mtgox_btc_exchange));
 		currentBTCPrice.setFormatting("%.2f");
-		unconfirmedReward = ((FormattableNumberView)findViewById(R.id.number_val_uncomfirmed_reward));
-		estimatedReward = ((FormattableNumberView)findViewById(R.id.number_val_estimated_reward));
-		potentialReward = ((FormattableNumberView)findViewById(R.id.number_val_potential_reward));
-		workerTableHeader = ((TableLayout)findViewById(R.id.worker_table_header));
-		workerTableEntries = ((TableLayout)findViewById(R.id.worker_table_entries));
-		blockTableHeader = ((TableLayout)findViewById(R.id.block_table_header));
-		blockTableEntries = ((TableLayout)findViewById(R.id.block_table_entries));
-		progressBar = ((ProgressBar)findViewById(R.id.progress_until_connection));
+		unconfirmedReward = ((FormattableNumberView) findViewById(R.id.number_val_uncomfirmed_reward));
+		estimatedReward = ((FormattableNumberView) findViewById(R.id.number_val_estimated_reward));
+		potentialReward = ((FormattableNumberView) findViewById(R.id.number_val_potential_reward));
+		workerTableHeader = ((TableLayout) findViewById(R.id.worker_table_header));
+		workerTableEntries = ((TableLayout) findViewById(R.id.worker_table_entries));
+		blockTableHeader = ((TableLayout) findViewById(R.id.block_table_header));
+		blockTableEntries = ((TableLayout) findViewById(R.id.block_table_entries));
+		progressBar = ((ProgressBar) findViewById(R.id.progress_until_connection));
 	}
 	
 	public void startMinerBlockFetch() {
@@ -185,20 +185,20 @@ public class MiningStatisticsActivity extends Activity {
 										if(createdBlockRows.containsKey(block.id)) {
 											TableRow blockRow = createdBlockRows.get(block.id);
 											
-											FormattableNumberView blockConfirmation = (FormattableNumberView)blockRow.getChildAt(1);
+											FormattableNumberView blockConfirmation = (FormattableNumberView) blockRow.getChildAt(1);
 											blockConfirmation.setValue(block.confirmations);
 											
-											FormattableNumberView blockReward = (FormattableNumberView)blockRow.getChildAt(2);
+											FormattableNumberView blockReward = (FormattableNumberView) blockRow.getChildAt(2);
 											blockReward.setValue(block.reward);
 											
-											FormattableNumberView blockNMCReward = (FormattableNumberView)blockRow.getChildAt(3);
+											FormattableNumberView blockNMCReward = (FormattableNumberView) blockRow.getChildAt(3);
 											
 											blockNMCReward.setValue(block.nmcReward);
 											
-											FormattableNumberView blockScore = (FormattableNumberView)blockRow.getChildAt(4);
+											FormattableNumberView blockScore = (FormattableNumberView) blockRow.getChildAt(4);
 											blockScore.setValue(block.score);
 											
-											FormattableNumberView blockShare = (FormattableNumberView)blockRow.getChildAt(5);
+											FormattableNumberView blockShare = (FormattableNumberView) blockRow.getChildAt(5);
 											blockShare.setValue(block.share);
 										} else {
 											TableRow blockRow = new TableRow(context);
@@ -260,16 +260,16 @@ public class MiningStatisticsActivity extends Activity {
 										if(createdMinerRows.containsKey(worker.name)) {
 											TableRow workerRow = createdMinerRows.get(worker.name);
 											
-											ImageView workerStatus = (ImageView)workerRow.getChildAt(0);
+											ImageView workerStatus = (ImageView) workerRow.getChildAt(0);
 											workerStatus.setImageResource(worker.online ? R.drawable.accept : R.drawable.cross);
 											
-											FormattableNumberView workerRate = (FormattableNumberView)workerRow.getChildAt(2);
+											FormattableNumberView workerRate = (FormattableNumberView) workerRow.getChildAt(2);
 											workerRate.setValue(worker.hashRate);
 											
-											FormattableNumberView workerShare = (FormattableNumberView)workerRow.getChildAt(3);
+											FormattableNumberView workerShare = (FormattableNumberView) workerRow.getChildAt(3);
 											workerShare.setValue(worker.share);
 											
-											FormattableNumberView workerScore = (FormattableNumberView)workerRow.getChildAt(4);
+											FormattableNumberView workerScore = (FormattableNumberView) workerRow.getChildAt(4);
 											workerScore.setValue(worker.score);
 										} else {
 											TableRow workerRow = new TableRow(context);
@@ -396,8 +396,8 @@ public class MiningStatisticsActivity extends Activity {
 										potentialReward.setPrefix("");
 									}
 									if(settings.canMtGoxEffectBlockTable()) {
-										((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
-										((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
+										((TextView) ((TableRow) blockTableHeader.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
+										((TextView) ((TableRow) blockTableEntries.getChildAt(0)).getChildAt(2)).setText(getString(R.string.label_block_table_header_reward) + " (" + settings.getTheMtGoxBTCToCurrencySymbol() + ")");
 									}
 									confirmedReward.setFormatting("%.2f");
 									unconfirmedReward.setFormatting("%.2f");
@@ -582,8 +582,8 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void applySettings() {
-		TextView rateColumn = ((TextView)((TableRow)workerTableHeader.getChildAt(0)).getChildAt(2));
-		TextView rateColumnStub = ((TextView)((TableRow)workerTableEntries.getChildAt(0)).getChildAt(2));
+		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
+		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
 		if(settings.canShowHashrateUnit()) {
 			workerRate.setSuffix(getString(R.string.label_hashrate_suffix));
 			rateColumn.setText(R.string.label_worker_table_header_rate_suffixed);
@@ -594,8 +594,8 @@ public class MiningStatisticsActivity extends Activity {
 			rateColumnStub.setText(R.string.label_worker_table_header_rate);
 		}
 		
-		((TextView)((TableRow)blockTableHeader.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
-		((TextView)((TableRow)blockTableEntries.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
+		((TextView) ((TableRow) blockTableHeader.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
+		((TextView) ((TableRow) blockTableEntries.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
 		confirmedReward.setPrefix("");
 		unconfirmedReward.setPrefix("");
 		estimatedReward.setPrefix("");
@@ -668,17 +668,17 @@ public class MiningStatisticsActivity extends Activity {
 		createdMinerRows.clear();
 		createdBlockRows.clear();
 		if(settings.isShowingBlocks()) {
-			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
-			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
-			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
-			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
-			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
+			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
+			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
+			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_block_list_title);
 		} else {
-			((TableLayout)findViewById(R.id.block_table_header)).setVisibility(View.GONE);
-			((ScrollView)findViewById(R.id.block_table_view)).setVisibility(View.GONE);
-			((TableLayout)findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
-			((ScrollView)findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
-			((TextView)findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
+			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.GONE);
+			((ScrollView) findViewById(R.id.block_table_view)).setVisibility(View.GONE);
+			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.VISIBLE);
+			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
 		}
 		if(settings.canAutoConnect()) {
 			startMinerBlockFetch();

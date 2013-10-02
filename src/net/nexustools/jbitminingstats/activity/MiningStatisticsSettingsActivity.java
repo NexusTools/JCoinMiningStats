@@ -6,7 +6,7 @@ import android.preference.PreferenceActivity;
 
 public class MiningStatisticsSettingsActivity extends PreferenceActivity {
 	@SuppressWarnings("deprecation")
-    @Override
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
