@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Main Activity -->
-    <string name="app_name">JBitMiningStats</string>
+    <string name="app_name">JCoinMiningStats</string>
     <string name="action_back">Back</string>
     <string name="action_settings">Settings</string>
     <string name="action_connect_now">Connect Now</string>

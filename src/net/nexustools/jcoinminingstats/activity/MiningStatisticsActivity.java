@@ -1,4 +1,4 @@
-package net.nexustools.jbitminingstats.activity;
+package net.nexustools.jcoinminingstats.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,13 +6,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.nexustools.jbitminingstats.R;
-import net.nexustools.jbitminingstats.util.BlockStub;
-import net.nexustools.jbitminingstats.util.ContentGrabber;
-import net.nexustools.jbitminingstats.util.DialogHelper;
-import net.nexustools.jbitminingstats.util.MiningWorkerStub;
-import net.nexustools.jbitminingstats.util.Settings;
-import net.nexustools.jbitminingstats.view.FormattableNumberView;
+import net.nexustools.jcoinminingstats.R;
+import net.nexustools.jcoinminingstats.util.BlockStub;
+import net.nexustools.jcoinminingstats.util.ContentGrabber;
+import net.nexustools.jcoinminingstats.util.DialogHelper;
+import net.nexustools.jcoinminingstats.util.MiningWorkerStub;
+import net.nexustools.jcoinminingstats.util.Settings;
+import net.nexustools.jcoinminingstats.view.FormattableNumberView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,6 +1,6 @@
-package net.nexustools.jbitminingstats.activity;
+package net.nexustools.jcoinminingstats.activity;
 
-import net.nexustools.jbitminingstats.R;
+import net.nexustools.jcoinminingstats.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 

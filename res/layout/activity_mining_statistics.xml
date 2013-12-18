@@ -17,7 +17,7 @@
         android:text="@string/label_current_mtgox_btc_exchange"
         android:visibility="gone" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_current_mtgox_btc_exchange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/label_worker_rate" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_worker_hash_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/label_confirmed_reward" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_confirmed_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/label_confirmed_namecoin_reward" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_confirmed_namecoin_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
         android:layout_marginTop="6dp"
         android:text="@string/label_unconfirmed_reward" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_uncomfirmed_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
         android:layout_below="@+id/unconfirmed_reward_label"
         android:text="@string/label_estimated_reward" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_estimated_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
         android:layout_below="@+id/estimated_reward_label"
         android:text="@string/label_total_potential_reward" />
 
-    <net.nexustools.jbitminingstats.view.FormattableNumberView
+    <net.nexustools.jcoinminingstats.view.FormattableNumberView
         android:id="@+id/number_val_potential_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

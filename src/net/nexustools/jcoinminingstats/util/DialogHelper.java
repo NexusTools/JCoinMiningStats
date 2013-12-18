@@ -1,6 +1,6 @@
-package net.nexustools.jbitminingstats.util;
+package net.nexustools.jcoinminingstats.util;
 
-import net.nexustools.jbitminingstats.R;
+import net.nexustools.jcoinminingstats.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

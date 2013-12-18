@@ -1,9 +1,9 @@
-package net.nexustools.jbitminingstats.util;
+package net.nexustools.jcoinminingstats.util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import net.nexustools.jbitminingstats.activity.MiningStatisticsActivity;
+import net.nexustools.jcoinminingstats.activity.MiningStatisticsActivity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;

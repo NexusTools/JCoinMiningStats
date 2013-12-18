@@ -1,4 +1,4 @@
-package net.nexustools.jbitminingstats.util;
+package net.nexustools.jcoinminingstats.util;
 
 public class BlockStub {
 	public String id;

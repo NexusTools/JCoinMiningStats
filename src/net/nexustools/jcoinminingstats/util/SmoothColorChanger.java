@@ -1,4 +1,4 @@
-package net.nexustools.jbitminingstats.util;
+package net.nexustools.jcoinminingstats.util;
 
 import android.graphics.Color;
 
