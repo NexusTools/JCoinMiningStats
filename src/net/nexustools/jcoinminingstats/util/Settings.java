@@ -8,30 +8,47 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class Settings {
+	public static enum ActivePoolView {
+		Slush, WeMineLTC
+	};
+	
+	public final static String SLUSHS_ACCOUNT_URL = "https://mining.bitcoin.cz/accounts/profile/json/";
+	public final static String SLUSHS_BLOCK_URL = "https://mining.bitcoin.cz/stats/json/";
+	
+	public final static String WEMINELTC_ACCOUNT_URL = "https://www.wemineltc.com/api?api_key=";
+	
+	public final static String MT_GOX_API_URL = "http://data.mtgox.com/api/1/BTC~/ticker_fast"; // ~ is replaced with the desired currency.
+	
 	private static Context context;
 	private static SharedPreferences prefs;
 	public static String[] currencyType;
 	public static String[] currencySymbol;
 	public static boolean[] currencyIsPrefix;
 	
-	private boolean showingBlocks;
+	private ActivePoolView activeView = ActivePoolView.WeMineLTC;
 	
-	private boolean autoConnect;
-	private int connectionDelay;
-	private boolean showHashrateUnit;
-	private boolean showParseMessage;
+	// Slush's Pool
+	private String slushsAPIKey;
+	private boolean slushShowingBlocks;
+	private boolean slushAutoConnect;
+	private int slushConnectionDelay;
+	private boolean slushShowHashrateUnit;
+	private boolean slushShowParseMessage;
+	
+	// WeMineLTC's Pool
+	private String wemineltcAPIKey;
+	private boolean wemineltcAutoConnect;
+	private int wemineltcConnectionDelay;
+	private boolean wemineltcShowHashrateUnit;
+	private boolean wemineltcShowParseMessage;
+	
 	private boolean canCheckConnectionDelays;
 	
 	private boolean shouldUseBackupHttpUserAgent;
 	private String httpUserAgent;
 	
-	private String slushsAccountDomain;
-	private String slushsBlockDomain;
-	private String slushsAPIKey;
-	
 	private boolean mtGoxFetchEnabled;
 	private int mtGoxFetchDelay;
-	private String mtGoxAPIDomain;
 	private String mtGoxCurrencyType;
 	private boolean mtGoxEffectBlockTable;
 	private boolean mtGoxBTCTOCurrencySymbolPrefix;
@@ -50,26 +67,38 @@ public class Settings {
 	}
 	
 	public void load(Resources r) {
-		showingBlocks = prefs.getBoolean("showing_blocks", false);
-		autoConnect = prefs.getBoolean("settings_auto_connect", r.getBoolean(R.bool.auto_connect));
+		
+		// Slush's Pool
+		slushsAPIKey = prefs.getString("settings_slush_api_key", "");
+		slushShowingBlocks = prefs.getBoolean("showing_slush_blocks", false);
+		slushAutoConnect = prefs.getBoolean("settings_slush_auto_connect", r.getBoolean(R.bool.auto_connect));
 		try {
-			connectionDelay = Integer.parseInt(prefs.getString("settings_connect_delay", r.getString(R.string.connection_delay)));
+			slushConnectionDelay = Integer.parseInt(prefs.getString("settings_slush_connect_delay", r.getString(R.string.connection_delay)));
 		} catch(Exception e) {
-			setConnectionDelay(Integer.parseInt(r.getString(R.string.connection_delay)));
+			setSlushConnectionDelay(Integer.parseInt(r.getString(R.string.connection_delay)));
 			Toast.makeText(context, R.string.problem_connection_delay_invalid, Toast.LENGTH_LONG).show();
 		}
-		showHashrateUnit = prefs.getBoolean("settings_show_hashrates", r.getBoolean(R.bool.show_hashrates));
-		showParseMessage = prefs.getBoolean("settings_show_messages_when_parsed", r.getBoolean(R.bool.show_parsing_messages));
-		canCheckConnectionDelays = prefs.getBoolean("settings_check_connection_delays", r.getBoolean(R.bool.check_connection_delays));
+		slushShowHashrateUnit = prefs.getBoolean("settings_slush_show_hashrates", r.getBoolean(R.bool.show_hashrates));
+		slushShowParseMessage = prefs.getBoolean("settings_slush_show_messages_when_parsed", r.getBoolean(R.bool.show_parsing_messages));
 		
+		// WeMineLTC's Pool
+		wemineltcAPIKey = prefs.getString("settings_wemineltc_api_key", "");
+		wemineltcAutoConnect = prefs.getBoolean("settings_wemineltc_auto_connect", r.getBoolean(R.bool.auto_connect));
+		try {
+			wemineltcConnectionDelay = Integer.parseInt(prefs.getString("settings_wemineltc_connect_delay", r.getString(R.string.connection_delay)));
+		} catch(Exception e) {
+			setSlushConnectionDelay(Integer.parseInt(r.getString(R.string.connection_delay)));
+			Toast.makeText(context, R.string.problem_connection_delay_invalid, Toast.LENGTH_LONG).show();
+		}
+		wemineltcShowHashrateUnit = prefs.getBoolean("settings_wemineltc_show_hashrates", r.getBoolean(R.bool.show_hashrates));
+		wemineltcShowParseMessage = prefs.getBoolean("settings_wemineltc_show_messages_when_parsed", r.getBoolean(R.bool.show_parsing_messages));
+		//
+		
+		canCheckConnectionDelays = prefs.getBoolean("settings_check_connection_delays", r.getBoolean(R.bool.check_connection_delays));
 		shouldUseBackupHttpUserAgent = prefs.getBoolean("settings_force_use_backup_user_agent", r.getBoolean(R.bool.force_custom_user_agent));
 		String userAgent = prefs.getString("settings_backup_user_agent", "");
 		userAgent = userAgent.equals("") ? null : userAgent;
 		httpUserAgent = shouldUseBackupHttpUserAgent ? userAgent : System.getProperty("http.agent", userAgent);
-		
-		slushsAccountDomain = prefs.getString("settings_slushs_account_api_domain", r.getString(R.string.slushs_block_domain));
-		slushsBlockDomain = prefs.getString("settings_slushs_block_api_domain", r.getString(R.string.slushs_miner_domain));
-		slushsAPIKey = prefs.getString("settings_slushs_api_key", "");
 		
 		mtGoxFetchEnabled = prefs.getBoolean("settings_mtgox_enabled", r.getBoolean(R.bool.mtgox_enabled));
 		try {
@@ -78,7 +107,6 @@ public class Settings {
 			setMtGoxFetchDelay(Integer.parseInt(r.getString(R.string.mtgox_currency_exchange_fetch_rate)));
 			Toast.makeText(context, R.string.problem_mtgox_connection_rate_invalid, Toast.LENGTH_LONG).show();
 		}
-		mtGoxAPIDomain = prefs.getString("settings_mtgox_api_domain", r.getString(R.string.mtgox_api_domain));
 		mtGoxCurrencyType = prefs.getString("settings_mtgox_currency_type", r.getString(R.string.mtgox_currency_type));
 		mtGoxEffectBlockTable = prefs.getBoolean("settings_mtgox_effect_block_table", r.getBoolean(R.bool.mtgox_effect_block_table));
 		
@@ -92,34 +120,71 @@ public class Settings {
 			}
 	}
 	
-	public boolean isShowingBlocks() {
-		return showingBlocks;
+	public ActivePoolView getActiveView() {
+		return activeView;
 	}
 	
-	public boolean canAutoConnect() {
-		return autoConnect;
+	public void setActiveView(ActivePoolView activeView) {
+		this.activeView = activeView;
 	}
 	
-	public int getConnectionDelay() {
-		return connectionDelay;
+	public String getSlushsAPIKey() {
+		return slushsAPIKey;
 	}
 	
-	public void setConnectionDelay(int connectionDelay) {
-		this.connectionDelay = connectionDelay;
-		prefs.edit().putString("settings_connect_delay", Integer.toString(connectionDelay)).commit();
+	public boolean isSlushShowingBlocks() {
+		return slushShowingBlocks;
 	}
 	
-	public void setShowingBlocks(boolean showingBlocks) {
-		this.showingBlocks = showingBlocks;
-		prefs.edit().putBoolean("showing_blocks", showingBlocks).commit();
+	public boolean canSlushAutoConnect() {
+		return slushAutoConnect;
 	}
 	
-	public boolean canShowHashrateUnit() {
-		return showHashrateUnit;
+	public int getSlushConnectionDelay() {
+		return slushConnectionDelay;
 	}
 	
-	public boolean canShowParseMessage() {
-		return showParseMessage;
+	public void setSlushConnectionDelay(int slushConnectionDelay) {
+		this.slushConnectionDelay = slushConnectionDelay;
+		prefs.edit().putString("settings_slush_connect_delay", Integer.toString(slushConnectionDelay)).commit();
+	}
+	
+	public void setSlushShowingBlocks(boolean slushShowingBlocks) {
+		this.slushShowingBlocks = slushShowingBlocks;
+		prefs.edit().putBoolean("showing_slush_blocks", slushShowingBlocks).commit();
+	}
+	
+	public boolean canSlushShowHashrateUnit() {
+		return slushShowHashrateUnit;
+	}
+	
+	public boolean canSlushShowParseMessage() {
+		return slushShowParseMessage;
+	}
+	
+	public String getWeMineLTCAPIKey() {
+		return wemineltcAPIKey;
+	}
+	
+	public boolean canWeMineLTCAutoConnect() {
+		return wemineltcAutoConnect;
+	}
+	
+	public int getWeMineLTCConnectionDelay() {
+		return wemineltcConnectionDelay;
+	}
+	
+	public void setWeMineLTCConnectionDelay(int wemineltcConnectionDelay) {
+		this.wemineltcConnectionDelay = wemineltcConnectionDelay;
+		prefs.edit().putString("settings_wemineltc_connect_delay", Integer.toString(wemineltcConnectionDelay)).commit();
+	}
+	
+	public boolean canWeMineLTCShowHashrateUnit() {
+		return wemineltcShowHashrateUnit;
+	}
+	
+	public boolean canWeMineLTCShowParseMessage() {
+		return wemineltcShowParseMessage;
 	}
 	
 	public boolean canCheckConnectionDelays() {
@@ -129,18 +194,6 @@ public class Settings {
 	public void setCheckConnectionDelays(boolean canCheckConnectionDelays) {
 		this.canCheckConnectionDelays = canCheckConnectionDelays;
 		prefs.edit().putBoolean("settings_check_connection_delays", canCheckConnectionDelays).commit();
-	}
-	
-	public String getSlushsAccountDomain() {
-		return slushsAccountDomain;
-	}
-	
-	public String getSlushsBlockDomain() {
-		return slushsBlockDomain;
-	}
-	
-	public String getSlushsAPIKey() {
-		return slushsAPIKey;
 	}
 	
 	public boolean shouldUseBackupHttpUserAgent() {
@@ -167,10 +220,6 @@ public class Settings {
 	public void setMtGoxFetchDelay(int mtGoxFetchDelay) {
 		this.mtGoxFetchDelay = mtGoxFetchDelay;
 		prefs.edit().putString("settings_mtgox_fetch_rate", Integer.toString(mtGoxFetchDelay)).commit();
-	}
-	
-	public String getMtGoxAPIDomain() {
-		return mtGoxAPIDomain;
 	}
 	
 	public String getMtGoxCurrencyType() {

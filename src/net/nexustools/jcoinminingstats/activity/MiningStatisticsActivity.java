@@ -112,8 +112,8 @@ public class MiningStatisticsActivity extends Activity {
 		if(minerBlockFetchTask != null)
 			minerBlockFetchTask.cancel();
 		progressBar.setProgress(0);
-		progressBar.setMax(settings.getConnectionDelay());
-		elapsedTime = settings.getConnectionDelay();
+		progressBar.setMax(settings.getSlushConnectionDelay());
+		elapsedTime = settings.getSlushConnectionDelay();
 		
 		if(settings.getSlushsAPIKey() == null || settings.getSlushsAPIKey().trim().length() == 0) {
 			Toast.makeText(this, R.string.problem_json_no_api_key_set, Toast.LENGTH_LONG).show();
@@ -126,11 +126,11 @@ public class MiningStatisticsActivity extends Activity {
 				if(dialogHelper.areAnyDialogsShowing())
 					return;
 				elapsedTime += TIME_STEP;
-				progressBar.setProgress(elapsedTime > settings.getConnectionDelay() ? settings.getConnectionDelay() : elapsedTime);
-				if(elapsedTime >= settings.getConnectionDelay()) {
+				progressBar.setProgress(elapsedTime > settings.getSlushConnectionDelay() ? settings.getSlushConnectionDelay() : elapsedTime);
+				if(elapsedTime >= settings.getSlushConnectionDelay()) {
 					final int result = fetchMinerJSONData();
 					
-					final int result2 = settings.isShowingBlocks() ? fetchBlockJSONData() : 0;
+					final int result2 = settings.isSlushShowingBlocks() ? fetchBlockJSONData() : 0;
 					String pb = null;
 					switch(result) {
 						case JSON_FETCH_PARSE_ERROR:
@@ -178,7 +178,7 @@ public class MiningStatisticsActivity extends Activity {
 								unconfirmedReward.setValue(unconfirmedRewardVal);
 								estimatedReward.setValue(estimatedRewardVal);
 								potentialReward.setValue(potentialRewardVal);
-								if(settings.isShowingBlocks()) {
+								if(settings.isSlushShowingBlocks()) {
 									ArrayList<String> blocksFound = new ArrayList<String>();
 									blocksFound.add(getString(R.string.label_block_table_header_block));
 									for(BlockStub block : blocks) {
@@ -251,7 +251,7 @@ public class MiningStatisticsActivity extends Activity {
 											createdBlockRows.remove(entry);
 										}
 									}
-									if(settings.canShowParseMessage())
+									if(settings.canSlushShowParseMessage())
 										Toast.makeText(context, R.string.miner_json_parsed, Toast.LENGTH_SHORT).show();
 								} else {
 									ArrayList<String> workersFound = new ArrayList<String>();
@@ -314,7 +314,7 @@ public class MiningStatisticsActivity extends Activity {
 											createdMinerRows.remove(entry);
 										}
 									}
-									if(settings.canShowParseMessage())
+									if(settings.canSlushShowParseMessage())
 										Toast.makeText(context, R.string.block_json_parsed, Toast.LENGTH_SHORT).show();
 								}
 							}
@@ -410,12 +410,12 @@ public class MiningStatisticsActivity extends Activity {
 								unconfirmedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								estimatedReward.setMultiplier(mtGoxBTCToCurrencyVal);
 								potentialReward.setMultiplier(mtGoxBTCToCurrencyVal);
-								if(settings.canShowParseMessage())
+								if(settings.canSlushShowParseMessage())
 									Toast.makeText(context, R.string.mtgox_json_parsed, Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
-					if(!settings.canAutoConnect() || !settings.isMtGoxFetchEnabled())
+					if(!settings.canSlushAutoConnect() || !settings.isMtGoxFetchEnabled())
 						stopFetch(false, true);
 				}
 			}, 0, settings.getMtGoxFetchDelay());
@@ -447,24 +447,46 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMinerJSONData() {
 		try {
-			String content = ContentGrabber.fetch(settings.getSlushsAccountDomain() + settings.getSlushsAPIKey());
-			if(content.equals("Invalid token"))
-				return JSON_FETCH_INVALID_TOKEN;
 			try {
-				JSONObject jsonContent = new JSONObject(content);
-				JSONArray workerNames = jsonContent.getJSONObject("workers").names();
-				JSONObject workerList = jsonContent.getJSONObject("workers");
-				workers = new ArrayList<MiningWorkerStub>();
-				for(int i = 0; i < workerNames.length(); i++) {
-					JSONObject worker = workerList.getJSONObject(workerNames.getString(i));
-					workers.add(new MiningWorkerStub(workerNames.getString(i), worker.getBoolean("alive"), worker.getInt("hashrate"), worker.getInt("shares"), worker.getDouble("score")));
+				switch(settings.getActiveView()) {
+					case Slush:
+						String contentSlush = ContentGrabber.fetch(Settings.SLUSHS_ACCOUNT_URL + settings.getSlushsAPIKey());
+						if(contentSlush.equals("Invalid token"))
+							return JSON_FETCH_INVALID_TOKEN;
+						JSONObject jsonContentSlush = new JSONObject(contentSlush);
+						JSONArray workerNamesSlush = jsonContentSlush.getJSONObject("workers").names();
+						JSONObject workerListSlush = jsonContentSlush.getJSONObject("workers");
+						workers = new ArrayList<MiningWorkerStub>(workerNamesSlush.length());
+						for(int i = 0; i < workerNamesSlush.length(); i++) {
+							JSONObject worker = workerListSlush.getJSONObject(workerNamesSlush.getString(i));
+							workers.add(new MiningWorkerStub(workerNamesSlush.getString(i), worker.getBoolean("alive"), worker.getInt("hashrate"), worker.getInt("shares"), worker.getDouble("score")));
+						}
+						hashRateVal = jsonContentSlush.getDouble("hashrate");
+						confirmedRewardVal = jsonContentSlush.getDouble("confirmed_reward");
+						confirmedNamecoinRewardVal = jsonContentSlush.getDouble("confirmed_nmc_reward");
+						unconfirmedRewardVal = jsonContentSlush.getDouble("unconfirmed_reward");
+						estimatedRewardVal = jsonContentSlush.getDouble("estimated_reward");
+						potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
+					break;
+					case WeMineLTC:
+						String contentWeMineLTC = ContentGrabber.fetch(Settings.WEMINELTC_ACCOUNT_URL + settings.getWeMineLTCAPIKey());
+						System.out.println(contentWeMineLTC);
+						if(contentWeMineLTC.equals("Invalid token"))
+							return JSON_FETCH_INVALID_TOKEN;
+						JSONObject jsonContentWeMineLTC = new JSONObject(contentWeMineLTC);
+						JSONArray workerNamesWeMineLTC = jsonContentWeMineLTC.getJSONObject("workers").names();
+						JSONObject workerListWeMineLTC = jsonContentWeMineLTC.getJSONObject("workers");
+						workers = new ArrayList<MiningWorkerStub>(workerNamesWeMineLTC.length());
+						for(int i = 0; i < workerNamesWeMineLTC.length(); i++) {
+							JSONObject worker = workerListWeMineLTC.getJSONObject(workerNamesWeMineLTC.getString(i));
+							workers.add(new MiningWorkerStub(workerNamesWeMineLTC.getString(i), worker.getInt("alive") == 1, worker.getInt("hashrate")));
+						}
+						hashRateVal = jsonContentWeMineLTC.getDouble("total_hashrate");
+						confirmedRewardVal = jsonContentWeMineLTC.getDouble("confirmed_rewards");
+						estimatedRewardVal = jsonContentWeMineLTC.getDouble("round_estimate");
+						potentialRewardVal = confirmedRewardVal + estimatedRewardVal;
+					break;
 				}
-				hashRateVal = jsonContent.getDouble("hashrate");
-				confirmedRewardVal = jsonContent.getDouble("confirmed_reward");
-				confirmedNamecoinRewardVal = jsonContent.getDouble("confirmed_nmc_reward");
-				unconfirmedRewardVal = jsonContent.getDouble("unconfirmed_reward");
-				estimatedRewardVal = jsonContent.getDouble("estimated_reward");
-				potentialRewardVal = confirmedRewardVal + unconfirmedRewardVal + estimatedRewardVal;
 				return JSON_FETCH_SUCCESS;
 			} catch(JSONException e) {
 				e.printStackTrace();
@@ -478,7 +500,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchBlockJSONData() {
 		try {
-			String content = ContentGrabber.fetch(settings.getSlushsBlockDomain() + settings.getSlushsAPIKey());
+			String content = ContentGrabber.fetch(Settings.SLUSHS_BLOCK_URL + settings.getSlushsAPIKey());
 			if(content.equals("Invalid token"))
 				return JSON_FETCH_INVALID_TOKEN;
 			try {
@@ -503,7 +525,7 @@ public class MiningStatisticsActivity extends Activity {
 	
 	public int fetchMtGoxJSONData() {
 		try {
-			String content = ContentGrabber.fetch(settings.getMtGoxAPIDomain().replaceAll("~", settings.getMtGoxCurrencyType()));
+			String content = ContentGrabber.fetch(Settings.MT_GOX_API_URL.replaceAll("~", settings.getMtGoxCurrencyType()));
 			try {
 				mtGoxBTCToCurrencyVal = new JSONObject(content).getJSONObject("return").getJSONObject("last_local").getDouble("value");
 				return JSON_FETCH_SUCCESS;
@@ -550,8 +572,8 @@ public class MiningStatisticsActivity extends Activity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.action_show_blocks).setVisible(!settings.isShowingBlocks());
-		menu.findItem(R.id.action_show_miners).setVisible(settings.isShowingBlocks());
+		menu.findItem(R.id.action_show_blocks).setVisible(!settings.isSlushShowingBlocks());
+		menu.findItem(R.id.action_show_miners).setVisible(settings.isSlushShowingBlocks());
 		return true;
 	}
 	
@@ -563,12 +585,12 @@ public class MiningStatisticsActivity extends Activity {
 				return true;
 				
 			case R.id.action_show_blocks:
-				settings.setShowingBlocks(true);
+				settings.setSlushShowingBlocks(true);
 				switchTable();
 				return true;
 				
 			case R.id.action_show_miners:
-				settings.setShowingBlocks(false);
+				settings.setSlushShowingBlocks(false);
 				switchTable();
 				return true;
 				
@@ -582,17 +604,7 @@ public class MiningStatisticsActivity extends Activity {
 	}
 	
 	public void applySettings() {
-		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
-		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
-		if(settings.canShowHashrateUnit()) {
-			workerRate.setSuffix(getString(R.string.label_hashrate_suffix));
-			rateColumn.setText(R.string.label_worker_table_header_rate_suffixed);
-			rateColumnStub.setText(R.string.label_worker_table_header_rate_suffixed);
-		} else {
-			workerRate.setSuffix("");
-			rateColumn.setText(R.string.label_worker_table_header_rate);
-			rateColumnStub.setText(R.string.label_worker_table_header_rate);
-		}
+		switchPoolView();
 		
 		((TextView) ((TableRow) blockTableHeader.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
 		((TextView) ((TableRow) blockTableEntries.getChildAt(0)).getChildAt(2)).setText(R.string.label_block_table_header_reward);
@@ -609,12 +621,12 @@ public class MiningStatisticsActivity extends Activity {
 		estimatedReward.setMultiplier(0);
 		potentialReward.setMultiplier(0);
 		
-		if(settings.canAutoConnect()) {
-			if(settings.canCheckConnectionDelays() && settings.getConnectionDelay() < CONNECTION_DELAY_WARNING_CAP) {
+		if(settings.canSlushAutoConnect()) {
+			if(settings.canCheckConnectionDelays() && settings.getSlushConnectionDelay() < CONNECTION_DELAY_WARNING_CAP) {
 				dialogHelper.create(R.string.problem_low_connection_delay, R.string.label_connection_rate_warning, true, true, true, R.string.problem_low_connection_delay_positive, R.string.problem_low_connection_delay_neutral, R.string.problem_low_connection_delay_negative, new Runnable() {
 					@Override
 					public void run() {
-						settings.setConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
+						settings.setSlushConnectionDelay(Integer.parseInt(resources.getString(R.string.connection_delay)));
 					}
 				}, null, new Runnable() {
 					@Override
@@ -652,6 +664,36 @@ public class MiningStatisticsActivity extends Activity {
 		switchTable();
 	}
 	
+	public void switchPoolView() {
+		TextView rateColumn = ((TextView) ((TableRow) workerTableHeader.getChildAt(0)).getChildAt(2));
+		TextView rateColumnStub = ((TextView) ((TableRow) workerTableEntries.getChildAt(0)).getChildAt(2));
+		switch(settings.getActiveView()) {
+			case Slush:
+				if(settings.canSlushShowHashrateUnit()) {
+					rateColumn.setText(getString(R.string.label_worker_table_header_rate) + " (mh/s)");
+					rateColumnStub.setText(getString(R.string.label_worker_table_header_rate) + " (mh/s)");
+					workerRate.setSuffix(" kh/s");
+				} else {
+					rateColumn.setText(R.string.label_worker_table_header_rate);
+					rateColumnStub.setText(R.string.label_worker_table_header_rate);
+					workerRate.setSuffix("");
+				}
+			break;
+			
+			case WeMineLTC:
+				if(settings.canWeMineLTCShowHashrateUnit()) {
+					rateColumn.setText(getString(R.string.label_worker_table_header_rate) + " (kh/s)");
+					rateColumnStub.setText(getString(R.string.label_worker_table_header_rate) + " (kh/s)");
+					workerRate.setSuffix(" kh/s");
+				} else {
+					rateColumn.setText(R.string.label_worker_table_header_rate);
+					rateColumnStub.setText(R.string.label_worker_table_header_rate);
+					workerRate.setSuffix("");
+				}
+			break;
+		}
+	}
+	
 	public void switchTable() {
 		for(String entry : createdMinerRows.keySet()) {
 			workerTableEntries.removeView(createdMinerRows.get(entry));
@@ -667,7 +709,7 @@ public class MiningStatisticsActivity extends Activity {
 			blocks.clear();
 		createdMinerRows.clear();
 		createdBlockRows.clear();
-		if(settings.isShowingBlocks()) {
+		if(settings.isSlushShowingBlocks()) {
 			((TableLayout) findViewById(R.id.worker_table_header)).setVisibility(View.GONE);
 			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.GONE);
 			((TableLayout) findViewById(R.id.block_table_header)).setVisibility(View.VISIBLE);
@@ -680,7 +722,7 @@ public class MiningStatisticsActivity extends Activity {
 			((ScrollView) findViewById(R.id.worker_table_view)).setVisibility(View.VISIBLE);
 			((TextView) findViewById(R.id.tabel_label)).setText(R.string.label_worker_list_title);
 		}
-		if(settings.canAutoConnect()) {
+		if(settings.canSlushAutoConnect()) {
 			startMinerBlockFetch();
 			startMtGoxFetch();
 		} else

@@ -19,7 +19,6 @@
     <string name="label_worker_table_header_status">Alive</string>
     <string name="label_worker_table_header_name">Name</string>
     <string name="label_worker_table_header_rate">Rate</string>
-    <string name="label_worker_table_header_rate_suffixed">Rate (mh/s)</string>
     <string name="label_worker_table_header_share">Shares</string>
     <string name="label_worker_table_header_score">Score</string>
     <string name="label_block_list_title">Blocks:</string>
@@ -30,7 +29,6 @@
     <string name="label_block_table_header_score">Score</string>
     <string name="label_block_table_header_share">Share</string>
     <string name="label_number_stub">N/A</string>
-    <string name="label_hashrate_suffix">mh/s</string>
     <string name="problem_json_no_api_key_set">Slush\'s API key has not been set, it\'s required to fetch JSON data. Please set the API key in the settings.</string>
     <string name="problem_json">Connection Error</string>
     <string name="problem_json_positive">Yes</string>
@@ -65,10 +63,15 @@
     <string name="problem_mtgox_now_disabled">Mt.Gox has been disabled, you can re-enable it anytime in the settings.</string>
     <!-- Settings Activity -->
     <!-- Slush's Pool Settings -->
-    <string name="label_option_category_slushs_pool">Slush\'s Pool</string>
-    <string name="label_option_slushs_api_key">API key</string>
-    <string name="label_option_slushs_api_key_summary">The API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
-    <string name="label_option_slush">Additional Settings</string>
+    <string name="label_option_category_slush_pool">Slush\'s Pool</string>
+    <string name="label_option_slush_api_key">API key</string>
+    <string name="label_option_slush_api_key_summary">The API key supplied to you by Slush\'s pool in order to fetch JSON data.</string>
+    <!-- WeMineLTC Pool Settings -->
+    <string name="label_option_category_wemineltc_pool">WeMineLTC\'s Pool</string>
+    <string name="label_option_wemineltc_api_key">API key</string>
+    <string name="label_option_wemineltc_api_key_summary">The API key supplied to you by WeMineLTC\'s pool in order to fetch JSON data.</string>
+   <!-- Settings that apply to all pools -->
+    <string name="label_option_pool_additional_settings">Additional Settings</string>
     <string name="label_option_auto_connect">Auto connect</string>
     <string name="label_option_connection_delay">Connection delay</string>
     <string name="label_option_suffix_hashrates_text">Show hashrate units</string>
